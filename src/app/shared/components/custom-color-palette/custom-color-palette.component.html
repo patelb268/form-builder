@@ -1,0 +1,20 @@
+<div
+	(click)="openColorPalette()"
+	class="d-flex flex-row justify-content-center color-label"
+>
+	<div
+		class="selected-color my-1 ml-2"
+		[ngStyle]="{ 'background-color': selectedColor }"
+	></div>
+	<mat-label class="mx-2 mat-label-style">{{label}}</mat-label>
+</div>
+<div *ngIf="showColorPalette" class="color-palette pl-1" #menu>
+	<div
+		#menu
+		*ngFor="let item of colorPalleteColors"
+		title="{{item.colorName}}"
+		class="mr-1 mt-1 color-boxes"
+		[ngStyle]="{ 'background-color': item.hexCode }"
+		(click)="selectColor(item)"
+	></div>
+</div>

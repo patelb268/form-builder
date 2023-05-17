@@ -1,0 +1,20 @@
+:host {
+	display: flex;
+}
+input {
+	display: flex;
+	width: 100%;
+	font-family: inherit;
+	font-size: inherit;
+	outline: none;
+	border: 0;
+	flex: 1 1 auto;
+
+	&.disabled + .mat-icon {
+		color: #ddd;
+	}
+}
+.mat-icon {
+	position: relative;
+	flex: 0 0 auto;
+}

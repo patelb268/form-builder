@@ -1,0 +1,49 @@
+@use 'sass:math';
+@import 'variables';
+
+$expanded: #f7f7f7;
+
+.container {
+	
+	padding: (math.div($padding, 4)) 0;
+
+	.section {
+		background-color: $expanded;
+
+		&:not(.expanded) {
+			display: none;
+		}
+	}
+
+	button.expanded {
+		background-color: $expanded;
+	}
+}
+
+.w-normal-anchor {
+	a {
+		white-space: normal;
+	}
+}
+
+.container,
+.section {
+	display: grid;
+	grid-template-columns: 1fr;
+
+	a, button {
+		text-align: left;
+		text-decoration: none !important;
+	}
+
+}
+
+.has-delete {
+	display: flex;
+	a, button {
+		&:not(.delete) {
+			flex: 1 1 auto;
+		}
+	}
+	align-items: center;
+}

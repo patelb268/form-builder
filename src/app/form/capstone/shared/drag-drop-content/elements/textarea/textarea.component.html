@@ -1,0 +1,39 @@
+<div
+	class="input-textbox-element"
+	[ngClass]="{
+		'hide-display': component.hideElement === 'yes'
+	}"
+	[ngStyle]="{
+		'padding-top': component.componentSettings.padding_top + 'px',
+		'padding-right': component.componentSettings.padding_right + 'px',
+		'padding-bottom': component.componentSettings.padding_bottom + 'px',
+		'padding-left': component.componentSettings.padding_left + 'px',
+		'border-radius': component.componentSettings.rounded_corners + 'px',
+		height:
+			component.componentSettings.height > 0
+				? component.componentSettings.height + 'px'
+				: 'auto'
+	}"
+>
+	<mat-form-field appearance="outline">
+		<mat-label class="setting-element-label">
+			<span *ngIf="component.element.show_label">{{
+				component.element.label
+			}}</span>
+			<span
+				*ngIf="component.element.is_required"
+				class="text-danger d-inline-block ms-1"
+				>*</span
+			>
+		</mat-label>
+		<textarea
+			matInput
+			[placeholder]="component.element.placeholder_text || ''"
+			[matTooltip]="component.element.hover_text"
+			[ngStyle]="{
+				color: component.element.textColor
+			}"
+		></textarea>
+	</mat-form-field>
+	<div>{{ component.element.sub_label }}</div>
+</div>

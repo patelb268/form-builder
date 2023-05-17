@@ -1,0 +1,61 @@
+<div  class="d-inline-flex align-items-center">
+    <mat-form-field style="min-width: 200px">
+        
+        <input
+            type="text"
+            matInput
+            [matAutocomplete]="auto"
+            [formControl]="control"
+            
+            #trigauto="matAutocompleteTrigger"
+        />
+        <mat-autocomplete
+            panelClass="custom-panel-extra-item-class"
+            placeholder=""
+            class="c-custom"
+            #auto="matAutocomplete"
+            [displayWith]="displayFn"
+        >
+            <mat-option [hidden]="true"></mat-option>
+            <mat-optgroup
+                *ngFor="let field of allFields; let i = index"
+                class="empty-label"
+            >
+                <ng-container
+                    *ngTemplateOutlet="
+                        opts;
+                        context: { field: field,  i: i }
+                    "
+                ></ng-container>
+            </mat-optgroup>
+        </mat-autocomplete>
+    </mat-form-field>
+  
+</div>
+
+<ng-template #opts let-field="field" let-i="i">
+	
+	<mat-option *ngIf="!field.relateToSlice" [value]="field" (click)="onSelectionFormulaField(field)" >
+		<div
+			class="d-flex flex-row align-items-center"
+			
+		>
+			<div class="item-display-height w-100">
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(field) }"
+				></span>
+				{{ field.Label }}
+			</div>
+		</div></mat-option
+	>
+
+	<ng-container *ngFor="let sub of field.children; let id = index">
+		<ng-container
+			*ngTemplateOutlet="
+				opts;
+				context: { field: sub,  i: i }
+			"
+		></ng-container>
+	</ng-container>
+</ng-template>

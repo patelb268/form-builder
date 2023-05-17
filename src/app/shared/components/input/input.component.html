@@ -1,0 +1,115 @@
+<!-- <pre style="font-size: 11px; border: 1px solid #ddd; padding: 4px;">
+hideDate: {{ fid?.hideDate | json }}
+hideTime: {{ fid?.hideTime | json }}
+renderHint: {{ fid?.renderHint | json }}
+</pre> -->
+
+<ng-container [ngSwitch]="fid?.editor">
+
+	<ng-container *ngSwitchCase="'checkbox'">
+		<ng-container *ngTemplateOutlet="tplCheckbox"></ng-container>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'date'">
+		<ng-container *ngTemplateOutlet="tplDate"></ng-container>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'datetime'">
+		<ng-container *ngTemplateOutlet="tplDateTime"></ng-container>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'time'">
+		<ng-container *ngTemplateOutlet="tplTime"></ng-container>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'textarea'">
+		<ng-container *ngTemplateOutlet="tplTextarea"></ng-container>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'textbox'">
+		<ng-container *ngTemplateOutlet="tplTextbox"></ng-container>
+	</ng-container>
+
+	<ng-container *ngSwitchCase="'dropdown'">
+		<ng-container *ngTemplateOutlet="tplDropdown"></ng-container>
+	</ng-container>
+
+</ng-container>
+
+
+
+
+<!-- dropdowns -->
+<ng-template #tplDropdown>
+	<mat-form-field>
+		<mat-label *ngIf="!hideLabel">{{ label || fid?.label }}</mat-label>
+		<mat-select #dropdown [formControl]="control" (openedChange)="$event ? autocomplete.focus() : null">
+			<input #autocomplete matInput type="search" autocomplete="off" spellcheck="false" [placeholder]="'find' | translate" [formControl]="autocompleteControl" class="autocomplete" (keydown)="dropdownKeyDown($event)">
+			<mat-option *ngFor="let r of dropdownRows | async" [value]="r.value">{{ r.label }}</mat-option>
+		</mat-select>
+		<mat-hint *ngIf="!hideHint">{{ fid?.hintText }}</mat-hint>
+	</mat-form-field>
+</ng-template>
+
+
+
+<!-- checkbox -->
+<ng-template #tplCheckbox>
+	<mat-checkbox [formControl]="control">{{ booleanLabel }}</mat-checkbox>
+</ng-template>
+
+
+
+
+<!-- textbox -->
+<ng-template #tplTextbox>
+	<mat-form-field class="input text">
+		<mat-label *ngIf="!hideLabel">{{ label || fid?.label }}</mat-label>
+		<input matInput type="text" autocomplete="off" spellcheck="false" [formControl]="control">
+		<mat-hint *ngIf="!hideHint">{{ fid?.hintText }}</mat-hint>
+	</mat-form-field>
+</ng-template>
+
+
+
+<!-- textarea -->
+<ng-template #tplTextarea>
+	<mat-form-field class="input text">
+		<mat-label *ngIf="!hideLabel">{{ label || fid?.label }}</mat-label>
+		<textarea matInput [formControl]="control" autocomplete="off" spellcheck="false" cdkTextareaAutosize [cdkAutosizeMinRows]="fid.textarea.minRows" [cdkAutosizeMaxRows]="fid.textarea.maxRows"></textarea>
+		<mat-hint *ngIf="!hideHint">{{ fid?.hintText }}</mat-hint>
+	</mat-form-field>
+</ng-template>
+
+
+
+<!-- date -->
+<ng-template #tplDate>
+	<mat-form-field class="input date">
+		<mat-label *ngIf="!hideLabel">{{ label || fid?.label }}</mat-label>
+		<dl-date-time hideTime [formControl]="control"></dl-date-time>
+		<mat-hint *ngIf="!hideHint">{{ fid?.hintText }}</mat-hint>
+	</mat-form-field>
+</ng-template>
+
+
+
+<!-- time -->
+<ng-template #tplTime>
+	<mat-form-field class="input time">
+		<mat-label *ngIf="!hideLabel">{{ label || fid?.label }}</mat-label>
+		<dl-date-time hideDate [formControl]="control"></dl-date-time>
+		<mat-hint *ngIf="!hideHint">{{ fid?.hintText }}</mat-hint>
+	</mat-form-field>
+</ng-template>
+
+
+
+<!-- date+time -->
+<ng-template #tplDateTime>
+	<mat-form-field class="input datetime">
+		<mat-label *ngIf="!hideLabel">{{ label || fid?.label }}</mat-label>
+		<dl-date-time [formControl]="control"></dl-date-time>
+		<mat-hint *ngIf="!hideHint">{{ fid?.hintText }}</mat-hint>
+	</mat-form-field>
+</ng-template>

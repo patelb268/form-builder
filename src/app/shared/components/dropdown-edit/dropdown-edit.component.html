@@ -1,0 +1,27 @@
+<mat-form-field appearance="fill" *ngIf="enableNotInList">
+    <!-- <mat-label>Favorite food</mat-label> -->
+
+    <mat-select  (selectionChange)="onChange()" ngDefaultControl [(ngModel)]="selectedValue" placeholder="Select" id="inputGroupSelect01">
+        <option  hidden selected>{{selectedValue}}</option>
+        <mat-option *ngFor="let data of columnData" [value]="data[columnName]">
+            {{data[columnName]}} </mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill" *ngIf="!enableNotInList && columnData">
+    <!-- <mat-label>Favorite food</mat-label> -->
+
+    <mat-select  (selectionChange)="onChange()" ngDefaultControl [(ngModel)]="selectedValue" placeholder="Select" id="inputGroupSelect01">
+        <option  hidden selected>{{selectedValue}}</option>
+        <mat-option *ngFor="let data of columnData" [value]="data._v">
+            {{data._l}} </mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill" *ngIf="!enableNotInList && optionsData">
+    <!-- <mat-label>Favorite food</mat-label> -->
+
+    <mat-select  (selectionChange)="onChange()" ngDefaultControl [(ngModel)]="selectedValue" placeholder="Select" id="inputGroupSelect01">
+        <option  hidden selected>{{selectedValue}}</option>
+        <mat-option *ngFor="let data of optionsData" [value]="data.value">
+            {{data.label}} </mat-option>
+    </mat-select>
+</mat-form-field>

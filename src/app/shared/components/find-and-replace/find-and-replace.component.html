@@ -1,0 +1,169 @@
+<mat-dialog-content *ngIf="fid | async as f">
+	<!-- selected: {{ form?.value?.selected | json }}<br> -->
+
+	<form [formGroup]="form">
+		<!-- <pre>{{ form.value | json }}</pre> -->
+		<mat-form-field>
+			<mat-label>{{ "find" | translate }}</mat-label>
+			<input matInput class="hidden" />
+			<mat-radio-group
+				formControlName="findMatch"
+				class="options no-wrap"
+			>
+				<mat-radio-button value="all">{{
+					"all" | translate
+				}}</mat-radio-button>
+				<mat-radio-button value="exact">{{
+					"exact" | translate
+				}}</mat-radio-button>
+				<mat-radio-button
+					value="partial"
+					[disabled]="disablePartial | async"
+					>{{ "partial" | translate }}</mat-radio-button
+				>
+			</mat-radio-group>
+		</mat-form-field>
+
+		<dl-input
+			[fid]="f"
+			[control]="form.get('find')"
+			novalidate
+			nofiltering
+			[label]="'value' | translate"
+			hideHint
+		></dl-input>
+
+		<div class="buttons">
+			<button
+				type="button"
+				mat-raised-button
+				color="primary"
+				(click)="doFind()"
+				[disabled]="disableFind | async"
+			>
+				{{ "find" | translate }}
+			</button>
+		</div>
+
+		<mat-form-field>
+			<mat-label>{{ "replace" | translate }}</mat-label>
+			<input matInput class="hidden" />
+			<mat-radio-group
+				formControlName="replaceMatch"
+				class="options no-wrap"
+			>
+				<mat-radio-button value="exact">{{
+					"exact" | translate
+				}}</mat-radio-button>
+				<mat-radio-button
+					value="partial"
+					[disabled]="disablePartial | async"
+					>{{ "partial" | translate }}</mat-radio-button
+				>
+				<mat-radio-button value="expression">{{
+					"formula" | translate
+				}}</mat-radio-button>
+				<mat-radio-button
+					*ngIf="(renderHint | async) === 'string'"
+					value="transform"
+					>{{ "transform" | translate }}</mat-radio-button
+				>
+			</mat-radio-group>
+		</mat-form-field>
+
+		<ng-container [ngSwitch]="form?.value?.replaceMatch">
+			<mat-form-field *ngSwitchCase="'expression'">
+				<mat-label>{{ "formula" | translate }}</mat-label>
+				<textarea
+					#ta
+					formControlName="replaceExpr"
+					matInput
+					cdkTextareaAutosize
+					cdkAutosizeMinRows="1"
+					cdkAutosizeMaxRows="10"
+				></textarea>
+				<app-fields-dropdown
+					matSuffix
+					[slice]="slice"
+					[textarea]="ta"
+					(change)="formulaChange($event)"
+				></app-fields-dropdown>
+			</mat-form-field>
+
+			<mat-form-field *ngSwitchCase="'transform'">
+				<mat-label>{{ "transform" | translate }}</mat-label>
+				<input matInput class="hidden" />
+				<mat-radio-group formControlName="replaceTransform">
+					<mat-radio-button value="uppercase">{{
+						"transform_uppercase" | translate
+					}}</mat-radio-button>
+					<mat-radio-button value="lowercase">{{
+						"transform_lowercase" | translate
+					}}</mat-radio-button>
+					<mat-radio-button value="capitalize">{{
+						"transform_capitalize" | translate
+					}}</mat-radio-button>
+				</mat-radio-group>
+			</mat-form-field>
+
+			<!-- else -->
+			<dl-input
+				*ngSwitchDefault
+				[fid]="f"
+				[control]="form.get('replace')"
+				novalidate
+				nofiltering
+				[label]="'value' | translate"
+				hideHint
+			></dl-input>
+		</ng-container>
+
+		<div class="buttons">
+			<button
+				type="button"
+				mat-raised-button
+				color="accent"
+				[disabled]="!form?.value?.selected?.length"
+				(click)="doReplace(true)"
+				[matBadge]="form?.value?.selected?.length"
+				[matBadgeHidden]="!form?.value?.selected?.length"
+			>
+				{{ "replace_selected" | translate }}
+			</button>
+			<button
+				type="button"
+				mat-raised-button
+				color="primary"
+				(click)="doReplace()"
+			>
+				{{ "replace_all" | translate }}
+			</button>
+		</div>
+
+		<div class="stub"></div>
+		<div class="stub"></div>
+		<div class="buttons">
+			<br />
+			<button
+				type="button"
+				mat-raised-button
+				color="warn"
+				(click)="close()"
+			>
+				{{ "close" | translate }}
+			</button>
+		</div>
+
+		<!-- <mat-expansion-panel #advanced>
+
+			<mat-expansion-panel-header>
+				<mat-panel-title>{{ 'cloning' | translate }}</mat-panel-title>
+				<mat-panel-description>{{ (advancedDescription | async) ? ('options_selected' | translate) : '' }}</mat-panel-description>
+			</mat-expansion-panel-header>
+
+			<mat-checkbox formControlName="cloneBefore">{{ 'clone_before_replacement' | translate }}</mat-checkbox>
+			<mat-checkbox formControlName="cloneAfter">{{ 'clone_after_replacement' | translate }}</mat-checkbox>
+			<mat-checkbox formControlName="cloneReplaceOnly">{{ 'replace_cloned_only' | translate }}</mat-checkbox>
+		</mat-expansion-panel> -->
+	</form>
+</mat-dialog-content>

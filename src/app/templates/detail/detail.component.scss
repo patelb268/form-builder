@@ -1,0 +1,80 @@
+::ng-deep .template-details {
+	.t-name {
+		width: 250px;
+		::placeholder {
+			color: #ffffff;
+			opacity: 0.8;
+		}
+	}
+
+
+	margin-left: 2px;
+	padding-top: 1px;
+	.ck-source-editing-button {
+		display: none;
+	}
+	.ck-editor__editable.ck-editor__editable_inline,
+	.ck-source-editing-area,
+	.pdf-preview {
+		min-height: calc(100vh - 190px);
+	}
+	.ck.ck-dropdown__panel {
+		max-height: 180px; /* or anything else, more likely ~300px or so */
+		overflow-y: auto;
+	}
+
+	.left-side {
+		width: calc(100% - 300px);
+	}
+	.right-side {
+		width: 300px;
+	}
+
+	.available-cols-table {
+		width: 300px;
+		max-width: 300px;
+		overflow: hidden;
+		max-height: calc(100vh - 152px);
+		min-height: 500px;
+		overflow-y: auto;
+
+		table {
+			width: 300px;
+			max-width: 300px;
+			tr {
+				display: block;
+				max-width: 290px;
+				&:hover {
+					background-color: #ff4081;
+					div {
+						color: #ffffff;
+					}
+				}
+			}
+
+			th {
+				min-width: 300px;
+				min-height: 40px;
+				display: flex;
+				align-items: center;
+			}
+			.mat-cell {
+				user-select: none;
+				display: flex;
+				height: inherit;
+				align-items: center;
+			}
+		}
+	}
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+::ng-deep .c-custom {
+	.mat-option {
+		height: 42px;
+		font-size: 14px;
+	}
+}

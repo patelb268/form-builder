@@ -1,0 +1,35 @@
+@use 'sass:math';
+@import 'variables';
+
+:host {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	grid-template-rows: auto;
+	width: inherit;
+	height: inherit;
+	overflow: hidden;
+	background-color: $no-color;
+}
+
+.navigate-jumper {
+	padding: $padding 0 $padding (math.div($padding, 2));
+	height: inherit;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.navigate-content {
+	flex: 1 1 auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding: $padding;
+}
+.navigate-actions {
+	padding: $padding $padding $padding 0;
+}
+
+@media screen and (max-width: $target-form-width) {
+	.navigate-jumper {
+		display: none;
+	}
+}

@@ -1,0 +1,14 @@
+<mat-card class="wrapper">
+	<h3 mat-card-title>{{ 'an_error_occurred' | translate }}</h3>
+	<mat-card-content>
+		<p class="message">
+			{{ error | translate: data || {} }}
+		</p>
+		<div class="actions" *ngIf="showLoginDialog">
+			<button mat-raised-button color="accent" (click)="app.showLogin()">{{ 'login' | translate }}</button>
+		</div>
+	</mat-card-content>
+	<!-- <mat-card-actions>
+
+	</mat-card-actions> -->
+</mat-card>

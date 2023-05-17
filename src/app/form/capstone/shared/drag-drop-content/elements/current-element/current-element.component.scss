@@ -1,0 +1,72 @@
+.dropdown-menu.show {
+	width: 100%;
+}
+
+// ===================CARDS===================
+.mat-card {
+	border-radius: 0;
+}
+
+.mat-card-content {
+	padding-top: 16px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+}
+// =========================================================
+
+// ===================INNER PADDING===================
+.background-color-outer-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: stretch;
+}
+
+.background-color-span {
+	width: 20%;
+	margin-right: 0.5em;
+	margin-bottom: 1.34375em;
+	border-radius: 4px;
+}
+
+.background-color-input {
+	width: 80%;
+	padding-left: 0.5em;
+}
+// =========================================================
+
+// ===================INNER PADDING===================
+.inner-paading-inputs-outer-div {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+}
+
+.inner-paading-inputs-top-bottom-div,
+.inner-paading-inputs-right-left-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.top-inner-padding,
+.left-inner-padding {
+	padding-right: 0.5em;
+}
+
+.bottom-inner-padding,
+.right-inner-padding {
+	padding-left: 0.5em;
+}
+
+.top-inner-padding,
+.bottom-inner-padding,
+.left-inner-padding,
+.right-inner-padding {
+	width: 50%;
+}
+// =========================================================

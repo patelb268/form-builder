@@ -1,0 +1,68 @@
+<span class="d-flex align-items-baseline ml-2" [ngClass]="params.labelAlign !=='Top'? 'flex-row': 'flex-column'" *ngIf="control['show'] != false && (result.length || !firstFetch)">
+	<mat-label class="fixed-label-width mr-1" [ngClass]="params.labelAlign ==='Right'? 'text-right': 'text-left'" [style]="params.labelCss"
+		>{{ params.label
+		}}<span
+			*ngIf="
+				params.required ||
+				(control?.errors && control?.errors['required'])
+			"
+			class="text-danger"
+		>
+			*</span
+		></mat-label
+	>
+	<mat-form-field
+		class="root"
+		[style]="params.labelCss"
+		[ngStyle]="{ width: params.width }"
+		
+	>
+		<input
+			matInput
+			[formControl]="control"
+			[matAutocomplete]="auto"
+			[readonly]="
+				mode === FORM_MODE.VIEW ||
+				params.readonly ||
+				control['readonly']
+			"
+			(focus)="onFocus()"
+			[class]="mode === FORM_MODE.VIEW ? 'related-underline' : ''"
+			(click)="routeToRelatedForm(control)"
+			[style]="params.textCss"
+		/>
+		<mat-autocomplete
+			#auto="matAutocomplete"
+			autoActiveFirstOption
+			[displayWith]="displayFn.bind(this)"
+			(optionSelected)="onSelectedOptionChange($event)"
+		>
+			<mat-option
+				*ngFor="let row of filteredRows | async"
+				[value]="row._v"
+				><span [style]="params.textCss">{{ row._l }}</span></mat-option
+			>
+			<mat-option
+				disabled
+				*ngIf="
+					!(filteredRows | async)?.length &&
+					(fetching | async) === false
+				"
+				>{{ 'no_matches_found' | translate }}</mat-option
+			>
+			<mat-option class="working" *ngIf="fetching | async"
+				><mat-progress-bar mode="query"></mat-progress-bar
+			></mat-option>
+			<mat-option *ngIf="control.value && !params.required"></mat-option>
+		</mat-autocomplete>
+		<mat-icon
+			matSuffix
+			*ngIf="mode !== FORM_MODE.VIEW || !params.readonly"
+			>{{ 'icon_dropdown' | translate }}</mat-icon
+		>
+		<mat-error *ngIf="!control.value &&  (control.invalid || !control.valid)">{{
+			getTranslatedErrorMessage()
+		}}</mat-error>
+		<!-- <mat-hint *ngIf="!!params.hint">{{ params.hint }}</mat-hint> -->
+	</mat-form-field>
+</span>

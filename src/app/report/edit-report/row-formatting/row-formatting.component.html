@@ -1,0 +1,854 @@
+<mat-icon
+	class="text-success mx-1 pointer"
+	*ngIf="!rowFormatting.length"
+	(click)="addFormattingRow()"
+	>add_circle</mat-icon
+>
+<div
+	class="where-container"
+	*ngFor="let rft of rowFormatting; let rftId = index"
+>
+	<div class="d-flex flex-row">
+		<div class="d-flex">
+			<i
+				*ngIf="rowFormatting.length > rftId && rftId > 0"
+				(click)="moveItem(rftId, rftId - 1)"
+				style="margin-left: -1em"
+				[ngClass]="
+					rftId + 1 == rowFormatting.length
+						? 'material-icons mt-2 pointer text-success mr-4'
+						: 'material-icons mt-2 pointer text-success'
+				"
+				>arrow_upward</i
+			>
+			<i
+				*ngIf="
+					rowFormatting.length > rftId + 1 && rowFormatting.length > 1
+				"
+				class="material-icons mt-2 pointer text-success"
+				(click)="moveItem(rftId, rftId + 1)"
+				>arrow_downward</i
+			>
+
+			<mat-icon
+				class="text-danger ml-2 pointer"
+				(click)="deleteSortRow(rftId)"
+				>remove_circle</mat-icon
+			>
+			<mat-icon
+				class="text-success mx-1 pointer"
+				(click)="addFormattingRow()"
+				>add_circle</mat-icon
+			>
+		</div>
+		<div class="ml-2 mt-2" style="width: 132px;">
+			<app-custom-color-palette [colorControl]="rft.backgroundColorCtrl" [label]="'Background'"></app-custom-color-palette>
+			<!-- <mat-form-field style="width: 100px"> -->
+				<!-- <mat-label>Background</mat-label> -->
+				<!-- <input
+					[formControl]="rft.backgroundColorCtrl"
+					style="height: 1rem"
+					placeholder="Background"
+					matInput
+					type="color"
+					id="head"
+					name="head"
+				/> -->
+			<!-- </mat-form-field> -->
+		</div>
+		<div class="ml-2 mt-2" style="width: 85px">
+			<app-custom-color-palette [colorControl]="rft.textColorCtrl" [label]="'Text'"></app-custom-color-palette>
+
+			<!-- <mat-form-field style="width: 100px"> -->
+				<!-- <mat-label>Text</mat-label> -->
+				<!-- <input
+					[formControl]="rft.textColorCtrl"
+					style="height: 1rem"
+					placeholder="text"
+					matInput
+					type="color"
+					id="head"
+					name="head"
+				/> -->
+			<!-- </mat-form-field> -->
+		</div>
+		<div class="ml-2">
+			<mat-form-field class="input text" style="width: 80px">
+				<mat-label>Size </mat-label>
+				<input
+					matInput
+					type="text"
+					autocomplete="off"
+					spellcheck="false"
+					[formControl]="rft.fontSizeCtrl"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="ml-2">
+			<mat-form-field style="width: 100px">
+				<mat-select [formControl]="rft.fontWeightCtrl">
+					<mat-option
+						*ngFor="let item of fontWeightValues"
+						[value]="item.modelName"
+						[ngClass]="item.class"
+						>{{ item.value }}</mat-option
+					>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="ml-2">
+			<mat-form-field style="width: 100px">
+				<mat-select [formControl]="rft.fontStyleCtrl">
+					<mat-option
+						*ngFor="let item of fontStyleValues"
+						[value]="item.modelName"
+						[ngClass]="item.class"
+						>{{ item.value }}</mat-option
+					>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="ml-2">
+			<mat-form-field style="width: 100px">
+				<mat-select [formControl]="rft.textDecorationCtrl">
+					<mat-option
+						*ngFor="let item of textDecorationValues"
+						[value]="item.modelName"
+						[ngClass]="item.class"
+						>{{ item.value }}</mat-option
+					>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="ml-2">
+			<mat-form-field style="width: 100px">
+				<mat-select [formControl]="rft.animationCtrl">
+					<mat-option
+						*ngFor="let item of animationValues"
+						[value]="item.modelName"
+						>{{ item.value }}</mat-option
+					>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="ml-2">
+			<mat-label class="d-flex align-items-center mb-1"
+				>Show All records, where
+
+				<mat-form-field appearance="outline" class="mx-1">
+					<mat-select [(ngModel)]="rft.mainCondition">
+						<mat-option *ngFor="let op of andOrOpts" [value]="op">{{
+							op.value
+						}}</mat-option>
+					</mat-select>
+				</mat-form-field>
+				are true:
+				<mat-icon
+					class="text-success mx-1 pointer"
+					(click)="addIterationParent(rftId)"
+					>add_circle</mat-icon
+				>
+				<img
+					src="assets/img/indent_right.png"
+					class="pointer"
+					(click)="addConditionDropDown(null, rftId)"
+				/>
+			</mat-label>
+		</div>
+	</div>
+
+	<div>
+		<ul
+			class="mb-0"
+			*ngFor="let itr of rft.whereIterations; let idx = index"
+		>
+			<ng-container
+				*ngTemplateOutlet="
+					wh;
+					context: { group: itr, i: idx, parentIdx: rftId }
+				"
+			></ng-container>
+		</ul>
+	</div>
+</div>
+
+<ng-template
+	#opts
+	let-field="field"
+	let-group="group"
+	let-parent="parent"
+	let-trigauto="trigauto"
+	let-i="i"
+>
+	<mat-option *ngIf="field.relateToSlice" [value]="field">
+		<div class="d-flex flex-row align-items-center">
+			<div class="item-display-height">
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(field) }"
+				></span>
+				<mat-icon
+					class="pointer my-0 mr-0 m-left-icon-in-extra"
+					(click)="
+						onExpandForRelatedDropdownForExtraField(
+							field,
+							i,
+							$event
+						)
+					"
+					>{{
+						field.expanded ? 'arrow_drop_down' : 'arrow_right'
+					}}</mat-icon
+				>
+			</div>
+			<div class="w-100">
+				{{ field.Label }}
+			</div>
+		</div></mat-option
+	>
+	<mat-option
+		*ngIf="!field.relateToSlice"
+		[value]="field"
+		(click)="onSelectionFormulaField(field, group, trigauto)"
+	>
+		<div class="d-flex flex-row align-items-center">
+			<div class="item-display-height w-100">
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(field) }"
+				></span>
+				{{ !onShift ? field.Label : field.idWithType }}
+			</div>
+		</div></mat-option
+	>
+
+	<ng-container *ngFor="let sub of field.children; let id = index">
+		<ng-container
+			*ngTemplateOutlet="
+				opts;
+				context: { field: sub, group: group, trigauto: trigauto, i: i }
+			"
+		></ng-container>
+	</ng-container>
+</ng-template>
+
+<ng-template
+	#wh
+	let-group="group"
+	let-parent="parent"
+	let-i="i"
+	let-parentIdx="parentIdx"
+>
+	<div *ngIf="group && !group.isCondition" class="d-flex align-items-center">
+		<div class="where-condition-div">
+			<mat-form-field style="min-width: 300px" class="mr-1">
+				<input
+					type="text"
+					matInput
+					matInput
+					[matAutocomplete]="auto"
+					[formControl]="group.controlValue"
+					#trigauto="matAutocompleteTrigger"
+					(keydown)="onKeydown($event)"
+					(keyup)="onKeydown($event)"
+				/>
+				<mat-autocomplete
+					panelClass="custom-panel-extra-item-class"
+					placeholder=""
+					class="c-custom"
+					#auto="matAutocomplete"
+				>
+					<mat-option [hidden]="true"></mat-option>
+					<mat-optgroup
+						*ngFor="let field of allFields; let i = index"
+						class="empty-label"
+					>
+						<ng-container
+							*ngTemplateOutlet="
+								opts;
+								context: {
+									field: field,
+									group: group,
+									trigauto: trigauto,
+									i: i
+								}
+							"
+						></ng-container>
+					</mat-optgroup>
+				</mat-autocomplete>
+				<!-- </mat-select> -->
+			</mat-form-field>
+			<ng-container [ngSwitch]="group.control.value?.f?.type">
+				<ng-container *ngSwitchCase="'control_textbox'">
+					<ng-container
+						*ngTemplateOutlet="
+							textTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="'control_formula_html'">
+					<ng-container
+						*ngTemplateOutlet="
+							textTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'customFormula'">
+					<ng-container
+						*ngTemplateOutlet="
+							textTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_dropdown'">
+					<ng-container
+						*ngTemplateOutlet="
+							dropdownTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_related_dropdown'">
+					<ng-container
+						*ngTemplateOutlet="
+							dropdownTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="'control_formula_text'">
+					<ng-container
+						*ngTemplateOutlet="
+							textTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_number'">
+					<ng-container
+						*ngTemplateOutlet="
+							numberTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_textarea'">
+					<ng-container
+						*ngTemplateOutlet="
+							textTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="'control_radio'">
+					<ng-container
+						*ngTemplateOutlet="
+							textTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_date'">
+					<ng-container
+						*ngTemplateOutlet="
+							dateTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_new_datetime'">
+					<ng-container
+						*ngTemplateOutlet="
+							dateTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_formula_date'">
+					<ng-container
+						*ngTemplateOutlet="
+							dateTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_formula_date_time'">
+					<ng-container
+						*ngTemplateOutlet="
+							dateTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+				<ng-container *ngSwitchCase="'control_checkbox'">
+					<ng-container
+						*ngTemplateOutlet="
+							checkBoxTemplate;
+							context: {
+								group: group,
+								i: i
+							}
+						"
+					></ng-container>
+				</ng-container>
+			</ng-container>
+		</div>
+		<div class="d-flex align-items-center">
+			<mat-icon
+				class="text-danger mx-2 pointer"
+				(click)="removeIteration(group, parent, parentIdx)"
+				>remove_circle</mat-icon
+			>
+
+			<img
+				src="assets/img/indent_left.png"
+				class="mr-2 pointer"
+				*ngIf="parent && parent.isCondition"
+				(click)="moveUpConditionDropDown(group, parentIdx)"
+			/>
+			<img
+				src="assets/img/indent_right.png"
+				class="pointer"
+				(click)="addConditionDropDown(group, parentIdx)"
+			/>
+		</div>
+	</div>
+	<div *ngIf="group?.isCondition" class="d-flex align-items-center">
+		<mat-form-field appearance="outline">
+			<mat-select [formControl]="group.conditionControl">
+				<mat-option *ngFor="let op of andOrOpts" [value]="op">{{
+					op.value
+				}}</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-icon
+			class="text-success mx-2 pointer"
+			(click)="addIteration(group, i,parentIdx)"
+			>add_circle</mat-icon
+		>
+		<img
+			src="assets/img/indent_right.png"
+			class="pointer"
+			(click)="addConditionDropDown(group, parentIdx)"
+		/>
+	</div>
+	<ul class="mb-0">
+		<ng-container *ngFor="let sub of group.children; let id = index">
+			<ng-container
+				*ngTemplateOutlet="
+					wh;
+					context: {
+						group: sub,
+						parent: group,
+						i: i,
+						parentIdx: parentIdx
+					}
+				"
+			></ng-container>
+		</ng-container>
+	</ul>
+</ng-template>
+
+<ng-template #textTemplate let-group="group" let-i="i">
+	<mat-form-field
+		*ngIf="group.control.value"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<mat-select
+			[formControl]="group.expression"
+			(selectionChange)="onExpressionSelectionChange($event, group)"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionsByType(group)"
+				[value]="op"
+				>{{ op.label }}</mat-option
+			>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field
+		*ngIf="group.expression.value && !group.expression.value?.noValue"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<input
+			type="text"
+			matInput
+			matInput
+			[matAutocomplete]="auto"
+			[formControl]="group.expressionOpts"
+			#trigauto="matAutocompleteTrigger"
+		/>
+		<mat-autocomplete
+			panelClass="custom-panel-extra-item-class"
+			placeholder=""
+			class="c-custom"
+			#auto="matAutocomplete"
+			[displayWith]="displayFn"
+			(selectionChange)="onExpressionOptsSelectionChange($event, group)"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionOptsByType(group)"
+				[value]="op"
+				>{{ op.name }}</mat-option
+			>
+		</mat-autocomplete>
+	</mat-form-field>
+	<app-field-selector
+		[control]="group.selectField"
+		class="mr-1"
+		*ngIf="group.expressionOpts?.value?.name === 'select field...'"
+	></app-field-selector>
+	<app-parameter-selector
+		[control]="group.selectParameter"
+		class="mr-1"
+		*ngIf="group.expressionOpts?.value?.name === 'select parameter...'"
+	></app-parameter-selector>
+	<ng-container
+		*ngIf="group.expressionOpts?.value?.name === 'prompt user...'"
+	>
+		<mat-form-field style="width: 200px" class="mr-1">
+			<input
+				type="text"
+				matInput
+				matInput
+				placeholder="Message"
+				[formControl]="group.messageControl"
+			/>
+		</mat-form-field>
+		<mat-form-field style="width: 200px" class="mr-1">
+			<input
+				type="text"
+				matInput
+				matInput
+				placeholder="Default Value"
+				[formControl]="group.defaultValueControl"
+			/>
+		</mat-form-field>
+	</ng-container>
+</ng-template>
+
+<ng-template #dropdownTemplate let-group="group" let-i="i">
+	<mat-form-field
+		*ngIf="group.control.value"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<mat-select
+			[formControl]="group.expression"
+			(selectionChange)="onExpressionSelectionChange($event, group)"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionsByType(group)"
+				[value]="op"
+				>{{ op.label }}</mat-option
+			>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field
+		*ngIf="group.expression.value && !group.expression.value?.noValue"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<mat-select
+			[formControl]="group.expressionOpts"
+			(selectionChange)="onExpressionOptsSelectionChange($event, group)"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionOptsByType(group)"
+				[value]="op"
+				>{{ op.name }}</mat-option
+			>
+			<mat-option
+				*ngFor="let op of getDefaultOptsByFieldMeta(group)"
+				[value]="op"
+				>{{ op }}</mat-option
+			>
+		</mat-select>
+	</mat-form-field>
+	<app-field-selector
+		[control]="group.selectField"
+		class="mr-1"
+		*ngIf="group.expressionOpts?.value?.name === 'select field...'"
+	></app-field-selector>
+	<app-parameter-selector
+		[control]="group.selectParameter"
+		class="mr-1"
+		*ngIf="group.expressionOpts?.value?.name === 'select parameter...'"
+	></app-parameter-selector>
+	<ng-container
+		*ngIf="group.expressionOpts?.value?.name === 'prompt user...'"
+	>
+		<mat-form-field style="width: 200px" class="mr-1">
+			<input
+				type="text"
+				matInput
+				matInput
+				placeholder="Message"
+				[formControl]="group.messageControl"
+			/>
+		</mat-form-field>
+		<mat-form-field style="width: 200px" class="mr-1">
+			<mat-select [formControl]="group.defaultValueControl">
+				<mat-option
+					*ngFor="let op of group.dropdownValues"
+					[value]="op"
+					>{{ op.name }}</mat-option
+				>
+			</mat-select>
+		</mat-form-field>
+	</ng-container>
+</ng-template>
+
+<ng-template #numberTemplate let-group="group" let-i="i">
+	<mat-form-field
+		*ngIf="group.control.value"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<mat-select
+			[formControl]="group.expression"
+			(selectionChange)="onExpressionSelectionChange($event, group)"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionsByType(group)"
+				[value]="op"
+				>{{ op.label }}</mat-option
+			>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field
+		*ngIf="group.expression.value && !group.expression.value?.noValue"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<mat-select
+			[formControl]="group.expressionOpts"
+			(selectionChange)="onExpressionOptsSelectionChange($event, group)"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionOptsByType(group)"
+				[value]="op"
+				>{{ op.name }}</mat-option
+			>
+		</mat-select>
+	</mat-form-field>
+	<app-field-selector
+		[control]="group.selectField"
+		class="mr-1"
+		*ngIf="group.expressionOpts?.value?.name === 'select field...'"
+	></app-field-selector>
+	<app-parameter-selector
+		[control]="group.selectParameter"
+		class="mr-1"
+		*ngIf="group.expressionOpts?.value?.name === 'select parameter...'"
+	></app-parameter-selector>
+	<ng-container
+		*ngIf="group.expressionOpts?.value?.name === 'prompt user...'"
+	>
+		<mat-form-field style="width: 200px" class="mr-1">
+			<input
+				type="text"
+				matInput
+				placeholder="Message"
+				[formControl]="group.messageControl"
+			/>
+		</mat-form-field>
+		<mat-form-field style="width: 200px" class="mr-1">
+			<input
+				type="number"
+				matInput
+				placeholder="Default Value"
+				[formControl]="group.defaultValueControl"
+			/>
+		</mat-form-field>
+	</ng-container>
+</ng-template>
+
+<ng-template #checkBoxTemplate let-group="group" let-i="i">
+	<mat-form-field
+		*ngIf="group.control.value"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<mat-select
+			[formControl]="group.expression"
+			(selectionChange)="onExpressionSelectionChange($event, group)"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionsByType(group)"
+				[value]="op"
+				>{{ op.label }}</mat-option
+			>
+		</mat-select>
+	</mat-form-field>
+</ng-template>
+<ng-template #dateTemplate let-group="group" let-i="i">
+	<mat-form-field
+		*ngIf="group.control.value"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<mat-select
+			[formControl]="group.expression"
+			(selectionChange)="onExpressionSelectionChange($event, group)"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionsByType(group)"
+				[value]="op"
+				>{{ op.label }}</mat-option
+			>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field
+		*ngIf="group.expression.value && !group.expression.value?.noValue"
+		class="mr-1"
+		style="width: 200px"
+	>
+		<mat-select
+			[formControl]="group.expressionOpts"
+			(selectionChange)="
+				onExpressionDateOptsSelectionChange($event, group)
+			"
+		>
+			<mat-option
+				*ngFor="let op of getExpressionOptsByType(group)"
+				[value]="op"
+				>{{ op.name }}</mat-option
+			>
+		</mat-select>
+	</mat-form-field>
+	<app-field-selector
+		[control]="group.selectField"
+		class="mr-1"
+		*ngIf="group.expressionOpts?.value?.name === 'select field...'"
+	></app-field-selector>
+
+	<ng-container
+		*ngIf="group.expressionOpts?.value?.name === 'select date...'"
+	>
+		<mat-radio-group
+			class="d-inline-flex flex-column align-items-start m-1"
+			[formControl]="group.dateAndPromptSelectorControl"
+			(change)="onDateAndPromptSelectionChange(group)"
+		>
+			<mat-radio-button
+				class="mb-3"
+				*ngFor="let d of dateAndPromptOpts"
+				[value]="d"
+			>
+				{{ d }}
+			</mat-radio-button>
+		</mat-radio-group>
+		<div class="d-inline-flex flex-column align-items-start">
+			<div>
+				<mat-form-field style="width: 200px" class="mr-1">
+					<input
+						type="text"
+						matInput
+						name="messageControl{{ i }}"
+						placeholder="Message"
+						[formControl]="group.messageControl"
+					/>
+				</mat-form-field>
+
+				<mat-form-field
+					style="width: 150px"
+					class="mr-1"
+					appearance="outline"
+				>
+					<input
+						matInput
+						name="defaultValueControl{{ i }}"
+						placeholder="Default Value"
+						[formControl]="group.defaultValueControl"
+						[matDatepicker]="picker"
+						readonly
+					/>
+					<mat-datepicker-toggle
+						matSuffix
+						[for]="picker"
+					></mat-datepicker-toggle>
+					<mat-datepicker #picker></mat-datepicker>
+				</mat-form-field>
+			</div>
+			<div>
+				<mat-form-field style="width: 150px" appearance="outline">
+					<input
+						matInput
+						placeholder="Pick a date"
+						[formControl]="group.selectedDate"
+						readonly
+						[matDatepicker]="picker2"
+					/>
+					<mat-datepicker-toggle
+						matSuffix
+						[for]="picker2"
+					></mat-datepicker-toggle>
+					<mat-datepicker #picker2></mat-datepicker>
+				</mat-form-field>
+			</div>
+		</div>
+	</ng-container>
+
+	<ng-container
+		*ngIf="
+			group.expressionOpts?.value?.name === 'day(s) in the future' ||
+			group.expressionOpts?.value?.name === 'day(s) in the past'
+		"
+	>
+		<mat-form-field style="width: 200px" class="mr-1">
+			<input
+				type="text"
+				matInput
+				type="number"
+				[formControl]="group.futureOrPastDaysControl"
+			/>
+		</mat-form-field>
+	</ng-container>
+</ng-template>

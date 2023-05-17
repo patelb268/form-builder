@@ -1,0 +1,15 @@
+@import 'variables';
+
+:host {
+	display: flex;
+	align-items: center;
+	padding: $padding;
+	flex: 1 1 auto;
+	justify-content: center;
+}
+.wrapper {
+	max-width: 400px;
+}
+.actions {
+	margin-top: $padding;
+}

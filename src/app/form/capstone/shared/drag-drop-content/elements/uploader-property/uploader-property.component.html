@@ -1,0 +1,137 @@
+<mat-accordion>
+	<mat-expansion-panel
+		class="general-settings-expansion-panel expansion-panel"
+		[expanded]="true"
+	>
+		<mat-expansion-panel-header>
+			<mat-panel-title> General Settings </mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="general-settings-content-div settings-content-div">
+			<div class="settings-div form-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Upload URL</mat-label
+						>
+						<input matInput 
+            type="text"
+            name="upload_url" 
+            placeholder="https://example.com/upload-handler"
+            [(ngModel)]="component.element.upload_url" />
+					</mat-form-field>
+				</div>
+				<!-- <div class="pin-form-element">
+					<mat-icon
+						class="material-icons-outlined"
+						[ngClass]="{
+							disabledIcon: radioPinColor.FormLabelPin,
+							enabledIcon: !radioPinColor.FormLabelPin
+						}"
+						>push_pin
+					</mat-icon>
+					<mat-checkbox
+						[(ngModel)]="!radioPinColor.FormLabelPin"
+						(change)="pinSetting($event, 'label name')"
+					></mat-checkbox>
+				</div> -->
+			</div>
+			
+			<div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+            
+						<mat-label class="setting-element-label"
+							>Accepted Files</mat-label
+						>
+						<input
+							matInput
+							[(ngModel)]="component.element.accepted_files"
+						/>
+					</mat-form-field>
+				</div>
+        
+				<!-- <div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div> -->
+			</div>
+      <div class="form-text">
+        This is a comma separated list of mime types or file extensions. Eg.:
+        image/*,application/pdf,.psd
+      </div>
+
+
+      <div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Max file size</mat-label
+						>
+						<input
+              type="number"
+              name="max_file_size"
+							matInput
+							[(ngModel)]="component.element.max_file_size"
+              min="0"
+						/>
+					</mat-form-field>
+				</div>
+				<!-- <div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div> -->
+			</div>
+      <div class="form-text">
+        The maximum filesize (in MiB) that is allowed to be uploaded.
+      </div>
+
+      <div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Placeholder text</mat-label
+						>
+						<input
+							matInput
+							[(ngModel)]="component.element.placeholder"
+						/>
+					</mat-form-field>
+				</div>
+				<!-- <div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div> -->
+			</div>
+
+			
+			
+		</div>
+	</mat-expansion-panel>
+	<mat-expansion-panel class="styles-expansion-panel expansion-panel">
+		<mat-expansion-panel-header>
+			<mat-panel-title> Styles </mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="styles-content-div settings-content-div">	
+			<div class="settings-div css-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label">CSS</mat-label>
+						<textarea matInput></textarea>
+					</mat-form-field>
+				</div>
+				<!-- <div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div> -->
+			</div>
+		</div>
+	</mat-expansion-panel>
+	<mat-expansion-panel
+		class="advanced-settings-expansion-panel expansion-panel"
+	>
+	</mat-expansion-panel>
+</mat-accordion>

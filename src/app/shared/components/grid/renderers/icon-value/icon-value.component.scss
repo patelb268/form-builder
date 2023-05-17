@@ -1,0 +1,25 @@
+@import 'variables';
+
+:host {
+	display: block;
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+}
+
+[color]:not(.disable) {
+	&[color="warn"] {
+		color: $warn;
+	}
+	&[color="accent"] {
+		color: $accent;
+	}
+	&[color="primary"] {
+		color: $primary;
+	}
+}
+
+// this comes last for priority
+.disable {
+	color: $disabled-fore;
+}

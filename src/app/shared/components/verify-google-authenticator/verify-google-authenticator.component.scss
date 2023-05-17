@@ -1,0 +1,20 @@
+@import 'variables';
+
+:host {
+	max-width: 599px;
+	display: block;
+}
+
+form {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+
+	.mat-form-field {
+		padding: $padding;
+		width: 100%;
+	}
+}
+.image-wrapper {
+	text-align: center;
+}

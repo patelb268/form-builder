@@ -1,0 +1,39 @@
+.custom-icon {
+
+	display: inline-block;
+
+	background-repeat: no-repeat;
+	background-size: contain;
+
+	width: 32px;
+	height: 32px;
+
+	&.small {
+		height: 16px;
+		width: 16px;
+	}
+
+	&.firefox {
+		background-image: url('/assets/img/mozilla.png');
+	}
+
+	&.chrome {
+		background-image: url('/assets/img/chrome.png');
+	}
+
+	&.safari {
+		background-image: url('/assets/img/safari.png');
+	}
+
+	&.edge {
+		background-image: url('/assets/img/edge.png');
+	}
+
+	&.ie {
+		background-image: url('/assets/img/internet-explorer.png');
+	}
+
+	&.opera {
+		background-image: url('/assets/img/opera.png');
+	}
+}

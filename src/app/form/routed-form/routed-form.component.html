@@ -1,0 +1,18 @@
+<mat-progress-bar mode="indeterminate" class="loading blue-progress" *ngIf="loading | async"></mat-progress-bar>
+
+<ng-container *ngIf="!error; else tplError">
+	<ng-container *ngIf="formParams;">
+		<form-form [params]="formParams"></form-form>
+	</ng-container>
+</ng-container>
+
+<ng-template #tplError>
+	<ng-container [ngSwitch]="error">
+		<ng-container *ngSwitchCase="ERRORS.LEGACY_NEEDS_RESAVE">
+			<a [href]="app.baseUrl + '/#editApplication=' + editAppSlice" target="_blank">{{ error | translate }}</a>
+		</ng-container>
+		<ng-container *ngSwitchDefault>
+			{{ error | translate }}
+		</ng-container>
+	</ng-container>
+</ng-template>

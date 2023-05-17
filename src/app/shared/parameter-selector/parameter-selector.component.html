@@ -1,0 +1,85 @@
+<div class="d-inline-flex align-items-center">
+	<mat-form-field style="min-width: 200px">
+		<!-- <fa-icon
+					[icon]="faArrowDown"
+					class="fa-arrow"
+				></fa-icon> -->
+		<input
+			type="text"
+			matInput
+			matInput
+			[matAutocomplete]="auto"
+			[formControl]="control"
+			#trigauto="matAutocompleteTrigger"
+			(keydown)="onKeydown($event)"
+			(keyup)="onKeydown($event)"
+		/>
+		<mat-autocomplete
+			panelClass="custom-panel-extra-item-class"
+			placeholder=""
+			class="c-custom"
+			[displayWith]="displayFn"
+			#auto="matAutocomplete"
+		>
+			<mat-option [hidden]="true"></mat-option>
+			<mat-optgroup
+				*ngFor="let field of allFields; let i = index"
+				class="empty-label"
+			>
+				<ng-container
+					*ngTemplateOutlet="opts; context: { field: field, i: i }"
+				></ng-container>
+			</mat-optgroup>
+		</mat-autocomplete>
+	</mat-form-field>
+</div>
+
+<ng-template #opts let-field="field" let-i="i">
+	<mat-option *ngIf="field.relateToSlice" [value]="field">
+		<div class="d-flex flex-row align-items-center">
+			<div class="item-display-height">
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(field) }"
+				></span>
+				<mat-icon
+					class="pointer my-0 mr-0 m-left-icon-in-extra"
+					(click)="
+						onExpandForRelatedDropdownForExtraField(
+							field,
+							i,
+							$event
+						)
+					"
+					>{{
+						field.expanded ? 'arrow_drop_down' : 'arrow_right'
+					}}</mat-icon
+				>
+			</div>
+			<div class="w-100">
+				{{ field.Label }}
+			</div>
+		</div></mat-option
+	>
+	<mat-option
+		*ngIf="!field.relateToSlice"
+		[value]="field"
+		(click)="onSelectionFormulaField(field)"
+	>
+		<div class="d-flex flex-row align-items-center">
+			<div class="item-display-height w-100">
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(field) }"
+				></span>
+				{{ !onShift ? field.Label : field.idWithType }}
+			</div>
+		</div></mat-option
+	>
+
+	<ng-container *ngFor="let sub of field.children; let id = index">
+		<ng-container
+			*ngTemplateOutlet="opts; context: { field: sub, i: i }"
+		></ng-container>
+	</ng-container>
+</ng-template>

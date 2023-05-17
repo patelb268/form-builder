@@ -1,0 +1,45 @@
+<div class="mat-form-field">
+  <label class="mat-form-field-label">Text color</label>
+  <mat-form-field appearance="fill" class="mat-form-field-infix">
+      <!-- put code for color picker here -->
+  </mat-form-field>
+</div>
+
+<div class="mat-form-field">
+  <label class="mat-form-field-label">Font</label>
+  <app-font-options [component]="component"></app-font-options>
+</div>
+
+<div class="mat-form-field">
+  <label class="mat-form-field-label">Line height</label>
+  <div class="mat-button-toggle-group">
+    <mat-button-toggle
+      value="1"
+      [ngClass]="{ 'mat-button-toggle-checked': component.element.line_height === 1 }"
+      (click)="component.element.line_height = 1"
+    >
+      <img src="../../../../../../../assets/img//lh1.svg" alt="" />
+    </mat-button-toggle>
+    <mat-button-toggle
+      value="1.2"
+      [ngClass]="{ 'mat-button-toggle-checked': component.element.line_height === 1.2 }"
+      (click)="component.element.line_height = 1.2"
+    >
+      <img src="../../../../../../../assets/img//lh12.svg" alt="" />
+    </mat-button-toggle>
+    <mat-button-toggle
+      value="1.5"
+      [ngClass]="{ 'mat-button-toggle-checked': component.element.line_height === 1.5 }"
+      (click)="component.element.line_height = 1.5"
+    >
+      <img src="../../../../../../../assets/img//lh15.svg" alt="" />
+    </mat-button-toggle>
+    <mat-button-toggle
+      value="2"
+      [ngClass]="{ 'mat-button-toggle-checked': component.element.line_height === 2 }"
+      (click)="component.element.line_height = 2"
+    >
+      <img src="../../../../../../../assets/img//lh2.svg" alt="" />
+    </mat-button-toggle>
+  </div>
+</div>

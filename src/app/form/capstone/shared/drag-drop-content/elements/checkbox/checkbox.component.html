@@ -1,0 +1,26 @@
+<div class="checkbox-label-align-left-auto">
+  <div>
+    <section class="example-section">
+      <label
+        id="checkbox-group-label"
+        *ngIf="component.element.show_label"
+        [ngStyle]="{
+          width: component.element.label_width + 'px'
+        }"
+      >
+        {{ component.element.label }}
+        <span *ngIf="component.element.is_required" class="text-danger">*</span
+        >
+      </label>
+      <mat-checkbox
+        *ngFor="let option of component.element.options"
+        id="checkbox_{{ option.id }}"
+        inputId="input_checkbox_{{ option.id }}"
+        [value]="option.value"
+        [checked]="option.is_selected"
+      >
+        {{ option.text }}
+      </mat-checkbox>
+    </section>
+  </div>
+</div>

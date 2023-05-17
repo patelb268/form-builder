@@ -1,0 +1,65 @@
+/*
+ * Global application theme.
+ * Framework overrides and customization goes here.
+ */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  background: #f5f5f5;
+  padding-top: 80px;
+
+  &.bg-white {
+    margin-bottom: 0;
+  }
+
+  &.login {
+    background: $white;
+  }
+}
+
+.hr-form-builder {
+  opacity: 1;
+  background-color: transparent;
+}
+
+.bs-popover-end {
+  max-width: 400px;
+  min-height: 216px;
+
+  .img-fluid {
+    cursor: move;
+  }
+
+  a.fa-times {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}
+
+.separator-style {
+  border-top-width: 0;
+  width: 100%;
+  margin-bottom: 4px;
+  line-height: 1px;
+  display: inline-block;
+
+  &.solid {
+    border-style: solid;
+  }
+
+  &.dashed {
+    border-style: dashed;
+  }
+
+  &.dotted {
+    border-style: dotted;
+  }
+}

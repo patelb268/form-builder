@@ -1,0 +1,21 @@
+::ng-deep {
+	.c-custom {
+		.mat-option {
+			font-size: 14px;
+			line-height: 1 !important;
+			height: auto !important;
+			min-height: 25px;
+		}
+	}
+	.mat-optgroup-label {
+		display: none !important;
+	}
+	.empty-label {
+		.mat-option {
+			padding-left: 1rem !important;
+		}
+	}
+}
+::ng-deep .sorting-grouping-container .mat-form-field-wrapper {
+	margin-bottom: -1rem !important;
+}

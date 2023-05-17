@@ -1,0 +1,4 @@
+<span class="routed-link" [attr.data-value]="value">
+	<ng-container *ngIf="!!url && !noLink; else tplNoLink"><a [routerLink]="url">{{ label }}</a></ng-container>
+	<ng-template #tplNoLink>{{ label }}</ng-template>
+</span>

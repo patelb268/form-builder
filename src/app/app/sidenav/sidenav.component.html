@@ -1,0 +1,242 @@
+<mat-progress-bar
+	dir="ltr"
+	mode="indeterminate"
+	class="loading blue-progress"
+	*ngIf="loading | async"
+></mat-progress-bar>
+<ng-container *ngIf="isReady"
+	><!-- this is needed so we dont mess up the selected index -->
+	<mat-tab-group
+		#tabGroup
+		class="tabs icon-tab-labels last-icon-action"
+		color="accent"
+		(selectedTabChange)="tabSelectedChange($event)"
+		[selectedIndex]="selectedTabIndex"
+	>
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon (click)="routeToHome()">{{
+					'icon_home' | translate
+				}}</mat-icon>
+			</ng-template>
+			<ng-template matTabContent>
+				<ng-container *ngFor="let item of items">
+					<ng-container
+						*ngTemplateOutlet="
+							tplContainer;
+							context: { $implicit: item, depth: 0 }
+						"
+					></ng-container>
+				</ng-container>
+			</ng-template>
+		</mat-tab>
+		<mat-tab *ngIf="rawItems.length">
+			<ng-template mat-tab-label>
+				<mat-icon>{{ 'icon_all' | translate }}</mat-icon>
+			</ng-template>
+			<ng-template matTabContent>
+				<ng-container *ngFor="let item of rawItems">
+					<ng-container
+						*ngTemplateOutlet="
+							tplContainer;
+							context: { $implicit: item, depth: 0 }
+						"
+					></ng-container>
+				</ng-container>
+			</ng-template>
+		</mat-tab>
+		<mat-tab *ngIf="items.length || rawItems.length">
+			<ng-template mat-tab-label>
+				<mat-icon>{{ 'icon_search' | translate }}</mat-icon>
+			</ng-template>
+			<ng-template matTabContent>
+				<div class="search">
+					<div class="header">
+						<mat-form-field floatLabel="always" class="no-hint">
+							<mat-label>{{ 'search' | translate }}</mat-label>
+							<input
+								matInput
+								autofocus
+								[formControl]="searchControl"
+							/>
+							<mat-icon class="clickable" matSuffix>{{
+								'icon_clear' | translate
+							}}</mat-icon>
+						</mat-form-field>
+					</div>
+					<div class="results">
+						<ng-container
+							*ngFor="let item of searchResults | async"
+						>
+							<ng-container
+								*ngTemplateOutlet="
+									tplSearchResultItem;
+									context: { $implicit: item }
+								"
+							></ng-container>
+						</ng-container>
+					</div>
+				</div>
+			</ng-template>
+		</mat-tab>
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon [matTooltip]="'settings' | translate">{{
+					'icon_settings' | translate
+				}}</mat-icon>
+			</ng-template>
+			<ng-template matTabContent>
+				<app-settings-home></app-settings-home>
+			</ng-template>
+		</mat-tab>
+		<mat-tab disabled class="action-button">
+			<ng-template mat-tab-label>
+				<mat-icon
+					class="close-sidenav"
+					(click)="app.toggleLeftSidenav()"
+					color="#3F6F85"
+					[matTooltip]="'close_left_nav' | translate"
+					>{{ 'icon_close_sidenav' | translate }}</mat-icon
+				>
+			</ng-template>
+		</mat-tab>
+	</mat-tab-group>
+</ng-container>
+
+<ng-template #tplContainer let-item let-depth="depth">
+	<mat-expansion-panel
+		class="sidenav"
+		(opened)="containerStateChange(item, true, depth)"
+		[expanded]="expanded.has(item.id) || expanded.has(item.dashboard)"
+	>
+		<mat-expansion-panel-header
+			collapsedHeight="auto"
+			expandedHeight="auto"
+			class="nav-header"
+		>
+			<mat-panel-title class="nav-title">{{
+				item.label
+			}}</mat-panel-title>
+		</mat-expansion-panel-header>
+
+		<ng-template matExpansionPanelContent *ngIf="item.id > 0">
+			<ng-container *ngIf="item.quickActions?.length">
+				<div class="container-toolbar p-1">
+					<ng-container *ngFor="let action of item.quickActions">
+						<ng-container
+							*ngTemplateOutlet="
+								tplChild;
+								context: {
+									$implicit: action,
+									depth: depth,
+									isQuickAction: true
+								}
+							"
+						></ng-container>
+					</ng-container>
+					<div class="push"></div>
+					<ng-container *ngIf="item.moreActions?.length">
+						<mat-icon [matMenuTriggerFor]="moreActions">{{
+							'icon_menu' | translate
+						}}</mat-icon>
+						<mat-menu #moreActions="matMenu">
+							<ng-template matMenuContent>
+								<ng-container
+									*ngFor="let action of item.moreActions"
+								>
+									<ng-container
+										*ngTemplateOutlet="
+											tplMenuItem;
+											context: { $implicit: action }
+										"
+									></ng-container>
+								</ng-container>
+							</ng-template>
+						</mat-menu>
+					</ng-container>
+				</div>
+			</ng-container>
+			<ng-container *ngFor="let child of item.children">
+				<ng-container
+					*ngTemplateOutlet="
+						tplChild;
+						context: { $implicit: child, depth: depth }
+					"
+				></ng-container>
+			</ng-container>
+		</ng-template>
+	</mat-expansion-panel>
+</ng-template>
+
+<ng-template
+	#tplChild
+	let-item
+	let-depth="depth"
+	let-isQuickAction="isQuickAction"
+>
+	<ng-container [ngSwitch]="item.type" *ngIf="!item.hideOnLeftNav">
+		<ng-container *ngSwitchCase="'link'" >
+			<a
+				class="link"
+				*ngIf="isQuickAction; else tplLinkRegular"
+				[routerLink]="item.link"
+				[matTooltip]="item.hint"
+				[ngStyle]="{ color: item.color }"
+				
+				[ngClass]="{ 'font-weight-bold': item.bold }"
+				><mat-icon *ngIf="item.icon">{{ item.icon | translate }}</mat-icon></a
+			>
+			<ng-template #tplLinkRegular>
+				<a
+					class="link link-option"
+					[routerLink]="item.link"
+					mat-button
+					
+					(click)="selectedNav = item;"
+					[ngClass]="{
+						'opa-full': isNavContainsSlice(item)
+						
+					}"
+					[ngStyle]="{ color: item.color }"
+					[matTooltip]="item.hint"
+					><mat-icon *ngIf="item.icon">{{ item.icon | translate }}</mat-icon
+					><span [ngClass]="{'font-weight-bold': item.bold}">{{ item.label }}</span>
+				</a>
+			</ng-template>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'container'">
+			<ng-container
+				*ngTemplateOutlet="
+					tplContainer;
+					context: { $implicit: item, depth: depth + 1 }
+				"
+			></ng-container>
+		</ng-container>
+	</ng-container>
+</ng-template>
+
+<ng-template #tplMenuItem let-item>
+	<ng-container [ngSwitch]="item.type">
+		<ng-container *ngSwitchCase="'link'">
+			<a mat-menu-item [routerLink]="item.link"
+				><mat-icon *ngIf="item.icon">{{
+					item.icon | translate
+				}}</mat-icon
+				>{{ item.label }}</a
+			>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'action'">
+			@@TODO tplMenuItem.action: {{ item | json }}
+		</ng-container>
+	</ng-container>
+</ng-template>
+
+<ng-template #tplSearchResultItem let-item>
+	<div class="result-row">
+		<mat-icon *ngIf="item.icon">{{ item.icon | translate }}</mat-icon>
+		<a [routerLink]="item.link">{{ item.label }}</a>
+		<label class="in">{{ item.parent }}</label>
+	</div>
+</ng-template>

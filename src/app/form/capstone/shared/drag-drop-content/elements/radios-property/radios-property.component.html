@@ -1,0 +1,599 @@
+<mat-accordion>
+	<mat-expansion-panel
+		class="general-settings-expansion-panel expansion-panel"
+		[expanded]="true"
+	>
+		<mat-expansion-panel-header>
+			<mat-panel-title> General Settings </mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="general-settings-content-div settings-content-div">
+			<div class="settings-div form-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Form Label</mat-label
+						>
+						<input matInput [(ngModel)]="component.element.label" />
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon
+						class="material-icons-outlined"
+						[ngClass]="{
+							disabledIcon: radioPinColor.FormLabelPin,
+							enabledIcon: !radioPinColor.FormLabelPin
+						}"
+						>push_pin
+					</mat-icon>
+					<mat-checkbox
+						[(ngModel)]="!radioPinColor.FormLabelPin"
+						(change)="pinSetting($event, 'label name')"
+					></mat-checkbox>
+				</div>
+			</div>
+			<div class="settings-div show-label-outer-div no-top-label">
+				<div class="setting-form-element">
+					<mat-slide-toggle
+						[(ngModel)]="component.element.show_label"
+						id="show_label"
+					>
+						Show Label
+					</mat-slide-toggle>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon
+						class="material-icons-outlined"
+						[ngClass]="{
+							disabledIcon: radioPinColor.ShowLabelPin,
+							enabledIcon: !radioPinColor.ShowLabelPin
+						}"
+						>push_pin
+					</mat-icon>
+					<mat-checkbox
+						[(ngModel)]="!radioPinColor.ShowLabelPin"
+						(change)="pinSetting($event, 'show label')"
+					></mat-checkbox>
+				</div>
+			</div>
+			<div class="settings-div required-outer-div no-top-label">
+				<div class="setting-form-element">
+					<mat-slide-toggle
+						[(ngModel)]="component.element.is_required"
+						id="is_required"
+					>
+						Required
+					</mat-slide-toggle>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon
+						class="material-icons-outlined"
+						[ngClass]="{
+							disabledIcon: radioPinColor.RequiredPin,
+							enabledIcon: !radioPinColor.RequiredPin
+						}"
+						>push_pin
+					</mat-icon>
+					<mat-checkbox
+						[(ngModel)]="!radioPinColor.RequiredPin"
+						(change)="pinSetting($event, 'show_required')"
+					></mat-checkbox>
+				</div>
+			</div>
+			<div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Report Label</mat-label
+						>
+						<input
+							matInput
+							[(ngModel)]="component.element.report_label"
+						/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div id-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label">ID</mat-label>
+						<input matInput />
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div options-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Options</mat-label
+						>
+						<textarea
+							matInput
+							[value]="component.element.optionsTextarea"
+							(blur)="updateOptionList()"
+							[(ngModel)]="component.optionsTextarea"
+						></textarea>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon
+						class="material-icons-outlined"
+						[ngClass]="{
+							disabledIcon: radioPinColor.RadioOptionPin,
+							enabledIcon: !radioPinColor.RadioOptionPin
+						}"
+						>push_pin
+					</mat-icon>
+					<mat-checkbox
+						[(ngModel)]="!radioPinColor.RadioOptionPin"
+						(change)="pinSetting($event, 'radio_option')"
+					></mat-checkbox>
+				</div>
+			</div>
+			<div class="settings-div special-options-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Special Options</mat-label>
+						<mat-select
+							([value])="(selectedSpecialOption)"
+							(selectionChange)="
+								handleSpecialOptionsChange($event)
+							"
+						>
+							<mat-option value="none" selected>
+								None
+							</mat-option>
+							<mat-option value="gender"> Gender </mat-option>
+							<mat-option value="days"> Days </mat-option>
+							<mat-option value="months"> Months </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div default-value-type-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Default Value Type</mat-label>
+						<mat-select
+							[(ngModel)]="component.element.default_value_type"
+							(ngModelChange)="onDefaultValueTypeChange()"
+						>
+							<mat-option value="constant"> Constant </mat-option>
+							<mat-option value="formula"> Formula </mat-option>
+							<mat-option value="previous">
+								Previous Submission Value
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon
+						class="material-icons-outlined"
+						[ngClass]="{
+							disabledIcon: radioPinColor.DefaultTypePin,
+							enabledIcon: !radioPinColor.DefaultTypePin
+						}"
+						>push_pin
+					</mat-icon>
+					<mat-checkbox
+						[(ngModel)]="!radioPinColor.DefaultTypePin"
+						(change)="pinSetting($event, 'Default Type')"
+					></mat-checkbox>
+				</div>
+			</div>
+			<div class="settings-div default-value-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Default Value</mat-label>
+						<textarea
+							matInput
+							[(ngModel)]="component.element.default_value"
+						></textarea>
+					</mat-form-field>
+				</div>
+
+				<div class="pin-form-element">
+					<mat-icon
+						class="material-icons-outlined"
+						[ngClass]="{
+							disabledIcon: radioPinColor.DefaultValuePin,
+							enabledIcon: !radioPinColor.DefaultValuePin
+						}"
+						>push_pin
+					</mat-icon>
+					<mat-checkbox
+						[(ngModel)]="!radioPinColor.DefaultValuePin"
+						(change)="pinSetting($event, 'Default Value')"
+					></mat-checkbox>
+				</div>
+			</div>
+			<div class="settings-div selected-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Selected Option</mat-label>
+						<mat-select
+							[(ngModel)]="component.element.selectedOptionId"
+							(selectionChange)="changeSelectedOption($event)"
+						>
+							<mat-option
+								*ngFor="let option of component.element.options"
+								[value]="option.id"
+							>
+								{{ option.text }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon
+						class="material-icons-outlined"
+						[ngClass]="{
+							disabledIcon: radioPinColor.SelectedOptionPin,
+							enabledIcon: !radioPinColor.SelectedOptionPin
+						}"
+						>push_pin
+					</mat-icon>
+					<mat-checkbox
+						[(ngModel)]="!radioPinColor.SelectedOptionPin"
+						(change)="pinSetting($event, 'selected_option')"
+					></mat-checkbox>
+				</div>
+			</div>
+			<div class="settings-div hover-text-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Hover Text</mat-label
+						>
+						<textarea matInput></textarea>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+		</div>
+	</mat-expansion-panel>
+	<mat-expansion-panel class="styles-expansion-panel expansion-panel">
+		<mat-expansion-panel-header>
+			<mat-panel-title> Styles </mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="styles-content-div settings-content-div">
+			
+			<div class="settings-div label-align-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Label Align</mat-label
+						>
+						<mat-select [(ngModel)]="formDesign.label_alignment">
+							<mat-option value="auto"> Auto </mat-option>
+							<mat-option value="left"> Left </mat-option>
+							<mat-option value="right"> Right </mat-option>
+							<mat-option value="top"> Top </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<div class="pin-form-element">
+						<mat-icon
+							class="material-icons-outlined"
+							[ngClass]="{
+								disabledIcon: radioPinColor.LabelAlignPin,
+								enabledIcon: !radioPinColor.LabelAlignPin
+							}"
+							>push_pin
+						</mat-icon>
+						<mat-checkbox
+							[(ngModel)]="!radioPinColor.LabelAlignPin"
+							(change)="pinSetting($event, 'label_align')"
+						></mat-checkbox>
+					</div>
+
+				</div>
+			</div>
+			
+			
+			
+			<div class="settings-div allow_other-outer-div no-top-label">
+				<div class="setting-form-element">
+					<mat-slide-toggle
+						[(ngModel)]="component.element.allow_other"
+						id="allow_other"
+					>
+						Allow Other
+					</mat-slide-toggle>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div spread-to-cols-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Spread To Columns</mat-label
+						>
+						<input
+							matInput
+							[(ngModel)]="formDesign.spread_columns"
+							type="number"
+						/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div add-css-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Add CSS</mat-label
+						>
+						<mat-select>
+							<mat-option value="yes"> Yes </mat-option>
+							<mat-option value="no"> No </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div css-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label">CSS</mat-label>
+						<textarea matInput></textarea>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<!-- <div class="settings-div hide-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Hide</mat-label>
+						<mat-select
+						[(ngModel)]="component.hideElement"
+						(ngModelChange)="onAttributeChange($event)"
+						>
+							<mat-option value="yes"> Yes </mat-option>
+							<mat-option value="no"> No </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+				</div>
+			</div> -->
+			<div class="settings-div show-label-outer-div no-top-label">
+				<div class="setting-form-element">
+					<mat-slide-toggle
+						[(ngModel)]="component.element.show_element"
+						id="show_element"
+					>
+						Hide
+					</mat-slide-toggle>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div check-align-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Check Align</mat-label>
+						<mat-select
+							[(ngModel)]="component.element.check_align"
+							[value]="component.element.check_align"
+						>
+							<mat-option value="after"> Left </mat-option>
+							<mat-option value="before"> Right </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div adjust-label-width-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Adjust Label Width</mat-label
+						>
+						<input
+							matInput
+							[(ngModel)]="component.element.label_width"
+							type="number"
+						/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div checkmark-style-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Checkmark Style</mat-label>
+						<mat-select>
+							<mat-option value="checkbox_default"
+								>checkbox_default</mat-option
+							>
+							<mat-option value="checkbox_axe"
+								>checkbox_axe</mat-option
+							>
+							<mat-option value="checkbox_x"
+								>checkbox_x</mat-option
+							>
+							<mat-option value="checkbox_options_x_and_checkmark"
+								>checkbox_options_x_and_checkmark</mat-option
+							>
+							<mat-option value="checkbox_flame"
+								>checkbox_flame</mat-option
+							>
+							<mat-option value="checkbox_checkmark"
+								>checkbox_checkmark</mat-option
+							>
+							<mat-option value="checkbox_siren"
+								>checkbox_siren</mat-option
+							>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+		</div>
+	</mat-expansion-panel>
+	<mat-expansion-panel
+		class="advanced-settings-expansion-panel expansion-panel"
+	>
+		<mat-expansion-panel-header>
+			<mat-panel-title> Advanced Settings </mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="advanced-settings-content-div settings-content-div">
+			<!-- <div class="settings-div read-only-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Read Only</mat-label>
+						<mat-select
+						[(ngModel)]="component.readonly"
+						(ngModelChange)="onAttributeChange($event)"
+						>
+						<mat-option value="true"> Yes </mat-option>
+						<mat-option value="false"> No </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+				</div>
+			</div> -->
+			<div class="settings-div show-label-outer-div no-top-label">
+				<div class="setting-form-element">
+					<mat-slide-toggle
+						[(ngModel)]="component.element.read_only"
+						id="read_only"
+					>
+						Read Only
+					</mat-slide-toggle>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div show-history-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Show History</mat-label
+						>
+						<mat-select>
+							<mat-option value="yes"> Yes </mat-option>
+							<mat-option value="no"> No </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div protected-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Protected</mat-label
+						>
+						<mat-select>
+							<mat-option value="yes"> Yes </mat-option>
+							<mat-option value="no"> No </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div encrypt-data-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Encrypt Data</mat-label
+						>
+						<mat-select>
+							<mat-option value="yes"> Yes </mat-option>
+							<mat-option value="no"> No </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+			<div class="settings-div do-not-duplicate-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Do not Duplicate?</mat-label
+						>
+						<mat-select>
+							<mat-option value="yes"> Yes </mat-option>
+							<mat-option value="no"> No </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						>push_pin</mat-icon
+					>
+				</div>
+			</div>
+		</div>
+	</mat-expansion-panel>
+</mat-accordion>

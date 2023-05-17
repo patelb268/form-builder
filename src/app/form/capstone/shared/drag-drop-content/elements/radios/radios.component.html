@@ -1,0 +1,134 @@
+<ng-template
+	[ngIf]="
+		formDesign.label_alignment === 'auto' ||
+		formDesign.label_alignment === 'left'
+	"
+>
+	<div class="radio-button-label-align-left-auto">
+		<label
+			id="radio-group-label"
+			*ngIf="component.element.show_label"
+			[ngStyle]="{
+				width: component.element.label_width + 'px'
+			}"
+		>
+			{{ component.element.label }}
+			<span *ngIf="component.element.is_required" class="text-danger"
+				>*</span
+			>
+		</label>
+		<div [ngStyle]="{ 'flex-grow': 1 }">
+			<mat-radio-group
+				class="radio-button-form-element-group-left-auto radio-button-form-element-group"
+				name="radio[{{ component.id }}]"
+				[ngStyle]="{
+					'grid-template-columns': 'auto '.repeat(
+						formDesign.spread_columns
+					)
+				}"
+				[labelPosition]="component.element.check_align"
+			>
+				<mat-radio-button
+					*ngFor="let option of component.element.options"
+					id="radio_{{ option.id }}"
+					inputId="input_radio_{{ option.id }}"
+					[value]="option.value"
+					[checked]="option.is_selected"
+				>
+					{{ option.text }}
+				</mat-radio-button>
+				<ng-template [ngIf]="component.element.allow_other">
+					<mat-radio-button id="radio_other" inputId="radio_other">
+						<input placeholder="other" disabled />
+					</mat-radio-button>
+				</ng-template>
+			</mat-radio-group>
+		</div>
+	</div>
+</ng-template>
+<ng-template [ngIf]="formDesign.label_alignment === 'right'">
+	<div class="radio-button-label-align-right">
+		<label
+			id="radio-group-label"
+			*ngIf="component.element.show_label"
+			[ngStyle]="{
+				width: component.element.label_width + 'px'
+			}"
+		>
+			{{ component.element.label }}
+			<span *ngIf="component.element.is_required" class="text-danger"
+				>*</span
+			>
+		</label>
+		<div [ngStyle]="{ 'flex-grow': 1 }">
+			<mat-radio-group
+				class="radio-button-form-element-group-right radio-button-form-element-group"
+				name="radio[{{ component.id }}]"
+				[ngStyle]="{
+					'grid-template-columns': 'auto '.repeat(
+						formDesign.spread_columns
+					)
+				}"
+				[labelPosition]="component.element.check_align"
+			>
+				<mat-radio-button
+					*ngFor="let option of component.element.options"
+					id="radio_{{ option.id }}"
+					inputId="input_radio_{{ option.id }}"
+					[value]="option.value"
+					[checked]="option.is_selected"
+				>
+					{{ option.text }}
+				</mat-radio-button>
+				<ng-template [ngIf]="component.element.allow_other">
+					<mat-radio-button id="radio_other" inputId="radio_other">
+						<input placeholder="other" disabled />
+					</mat-radio-button>
+				</ng-template>
+			</mat-radio-group>
+		</div>
+	</div>
+</ng-template>
+<ng-template [ngIf]="formDesign.label_alignment === 'top'">
+	<div class="radio-button-label-align-top">
+		<label
+			id="radio-group-label"
+			*ngIf="component.element.show_label"
+			[ngStyle]="{
+				width: component.element.label_width + 'px'
+			}"
+		>
+			{{ component.element.label }}
+			<span *ngIf="component.element.is_required" class="text-danger"
+				>*</span
+			>
+		</label>
+		<div [ngStyle]="{ 'flex-grow': 1 }">
+			<mat-radio-group
+				class="radio-button-form-element-group radio-button-form-element-group"
+				name="radio[{{ component.id }}]"
+				[ngStyle]="{
+					'grid-template-columns': 'auto '.repeat(
+						formDesign.spread_columns
+					)
+				}"
+				[labelPosition]="component.element.check_align"
+			>
+				<mat-radio-button
+					*ngFor="let option of component.element.options"
+					id="radio_{{ option.id }}"
+					inputId="input_radio_{{ option.id }}"
+					[value]="option.value"
+					[checked]="option.is_selected"
+				>
+					{{ option.text }}
+				</mat-radio-button>
+				<ng-template [ngIf]="component.element.allow_other">
+					<mat-radio-button id="radio_other" inputId="radio_other">
+						<input placeholder="other" disabled />
+					</mat-radio-button>
+				</ng-template>
+			</mat-radio-group>
+		</div>
+	</div>
+</ng-template>

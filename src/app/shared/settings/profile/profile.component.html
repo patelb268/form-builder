@@ -1,0 +1,131 @@
+<mat-progress-bar *ngIf="loading | async; else tplTheRest" mode="indeterminate"></mat-progress-bar>
+
+<!-- <form [formGroup]="form">
+	<navigate-container>
+
+		<navigate-section [title]="'account' | translate" description="the section description">
+			<mat-form-field>
+				<mat-label>{{ 'first_name' | translate }}</mat-label>
+				<input matInput formControlName="first_name" autocapitalize="words" spellcheck="false" autocomplete="off">
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>{{ 'last_name' | translate }}</mat-label>
+				<input matInput formControlName="last_name" autocapitalize="words" spellcheck="false" autocomplete="off">
+			</mat-form-field>
+		</navigate-section>
+
+		<navigate-section title="debug">
+			<pre>{{ form.value | json }}</pre>
+		</navigate-section>
+
+		<navigate-actions>
+			<button mat-raised-button color="accent" type="submit" disabled>{{ 'save' | translate }}</button>
+			<button mat-button color="primary" (click)="assume()" [disabled]="isSystemAdmin || !(app.auth | async).admin.system">{{ 'assume_user' | translate }}</button>
+		</navigate-actions>
+
+	</navigate-container>
+</form> -->
+
+
+<ng-template #tplTheRest>
+	<ng-container *ngIf="!error">
+
+		<form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!error">
+
+			<navigate-container>
+
+				<navigate-actions>
+					<button mat-raised-button [disabled]="!form.dirty || form.invalid || form.disabled" type="submit" color="accent">{{ 'save' | translate }}</button>
+				</navigate-actions>
+
+				<navigate-section [title]="'my_account' | translate">
+
+					<div class="row half-half">
+						<mat-form-field class="first">
+							<mat-label>{{ 'first_name' | translate }}</mat-label>
+							<input formControlName="first_name" matInput autocapitalize="words" autocomplete="given-name" required>
+						</mat-form-field>
+
+						<mat-form-field class="last">
+							<mat-label>{{ 'last_name' | translate }}</mat-label>
+							<input formControlName="last_name" matInput autocapitalize="words" autocomplete="family-name" required>
+						</mat-form-field>
+					</div>
+
+					<div class="row big-small">
+						<mat-form-field class="email">
+							<mat-label>{{ 'email' | translate }}</mat-label>
+							<input formControlName="email" matInput type="email" [required]="required.email">
+						</mat-form-field>
+
+						<mat-form-field class="login">
+							<mat-label>{{ 'username' | translate }}</mat-label>
+							<input formControlName="login" matInput autocapitalize="off" autocomplete="username" [required]="required.login">
+						</mat-form-field>
+					</div>
+
+					<mat-form-field class="mobile quarter">
+						<mat-label>{{ 'mobile_phone' | translate }}</mat-label>
+						<input formControlName="mobile_phone" matInput type="tel" [required]="required.mobile_phone">
+					</mat-form-field>
+				</navigate-section>
+
+
+				<navigate-section [title]="'additional_security' | translate" [description]="'2FA_description' | translate">
+
+					<mat-form-field class="multi">
+						<mat-label>{{ '2FA' | translate }}</mat-label>
+						<mat-select #twoFactor formControlName="2FA">
+							<mat-option [value]="TYPES.NONE">{{ '2FA_none' | translate }}</mat-option>
+							<mat-option [value]="TYPES.SMS">{{ '2FA_' + TYPES.SMS | translate }}</mat-option>
+							<mat-option [value]="TYPES.GOOGLE">{{ '2FA_' + TYPES.GOOGLE | translate }}</mat-option>
+						</mat-select>
+					</mat-form-field>
+
+					<div class="authenticator-links">
+						<ng-container *ngIf="form.get('2FA').value === TYPES.GOOGLE">
+							<a mat-button href="itms-apps://apps.apple.com/ca/app/google-authenticator/id388497605" rel="external">{{ 'app_store_apple' | translate }}</a>
+							<a mat-button href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" rel="external">{{ 'app_store_google' | translate }}</a>
+						</ng-container>
+					</div>
+				</navigate-section>
+
+				<navigate-section [title]="'change_password' | translate">
+
+					<mat-form-field class="pass-exist pass">
+						<mat-label>{{ 'existing_password' | translate }}</mat-label>
+						<input type="password" matInput formControlName="password_existing" autocomplete="current-password" [required]="required.passExist || required.passForMultiFactor">
+						<mat-error>{{ getErrorMessage('password_existing') }}</mat-error>
+					</mat-form-field>
+
+					<div class="row half-half">
+						<mat-form-field class="pass-new pass">
+							<mat-label>{{ 'new_password' | translate }}</mat-label>
+							<input type="password" matInput formControlName="password_new" autocomplete="new-password" [required]="required.passNew">
+						</mat-form-field>
+
+						<mat-form-field class="pass-confirm pass">
+							<mat-label>{{ 'new_password_confirm' | translate }}</mat-label>
+							<input type="password" matInput formControlName="password_confirm" autocomplete="off" [required]="required.passConfirm">
+							<mat-error>{{ getErrorMessage('password_confirm') }}</mat-error>
+						</mat-form-field>
+					</div>
+				</navigate-section>
+
+				<navigate-section [title]="'locale' | translate" [description]="'setting_in_localstorage' | translate">
+
+					<mat-form-field class="timezone">
+						<mat-label>{{ 'timezone' | translate }}</mat-label>
+						<filter-select formControlName="timezone" [options]="timezones" [placeholder]="'use_system_timezone' | translate: {x: this.systemTimezone}"></filter-select>
+					</mat-form-field>
+				</navigate-section>
+
+			</navigate-container>
+
+		</form>
+	</ng-container>
+</ng-template>
+
+<app-error *ngIf="!!error" [error]="error"></app-error>
+
+

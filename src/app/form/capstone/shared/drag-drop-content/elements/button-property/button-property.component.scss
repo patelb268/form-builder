@@ -1,0 +1,23 @@
+.button-style {
+  background-position: 50% 50%;
+  background-size: cover;
+  height: 500px;
+  opacity: 0.6;
+  outline: none;
+
+  &.active {
+    opacity: 1;
+  }
+
+  &.btn-gradient {
+    background-image: url(/assets/btn-gradient.svg);
+  }
+
+  &.btn-flat {
+    background-image: url(/assets/btn-flat.svg);
+  }
+
+  &.btn-raised {
+    background-image: url(/assets/btn-raised.svg);
+  }
+}

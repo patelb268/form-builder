@@ -1,0 +1,21 @@
+<mat-card [ngStyle]="{
+  color: component.element.text_color,
+  'padding-top': component.componentSettings.padding_top + 'px',
+  'padding-right': component.componentSettings.padding_right + 'px',
+  'padding-bottom': component.componentSettings.padding_bottom + 'px',
+  'padding-left': component.componentSettings.padding_left + 'px',
+  'background-color': component.componentSettings.background_color,
+  'border-radius': component.componentSettings.rounded_corners + 'px',
+  height: component.componentSettings.height > 0 ? component.componentSettings.height + 'px' : 'auto',
+  'line-height': component.element.line_height > 0 ? component.element.line_height : 'auto',
+  'font-family': component.element.font_family
+}">
+<ck-editor
+  name="content"
+  [(ngModel)]="component.element.content"
+  [config]="editorConfig"
+  [inline]="true"
+  [language]="currentLanguage"
+  #ckEditor="ckEditor"
+></ck-editor>
+</mat-card>

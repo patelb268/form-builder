@@ -1,0 +1,41 @@
+<mat-toolbar color="primary">
+	<ng-container >
+		<button class="nav-toggle" [class.show]="(app.leftNavOpen | async) === false || (app.leftNavMode | async) !== 'side'" mat-mini-fab (click)="app.toggleLeftSidenav()"><mat-icon>{{ 'icon_open_sidenav' |  translate }}</mat-icon></button>
+	</ng-container>
+	<div class="title multi-line">
+		{{ auth?.company }}
+		<span class="small">{{ 'Datalynk' | translate }} {{version}} </span>
+	</div>
+	<div class="push"></div>
+	<ng-container *ngIf="!auth || auth?.guest">
+		<button mat-button (click)="app.showLogin()">Login</button>
+		<button mat-icon-button [matMenuTriggerFor]="userMenu"><mat-icon>{{ 'icon_user_guest' | translate }}</mat-icon></button>
+	</ng-container>
+	<ng-container *ngIf="!!auth && !auth.guest">
+		<button mat-icon-button [matMenuTriggerFor]="userMenu"><mat-icon>{{ 'icon_user' | translate }}</mat-icon></button>
+	</ng-container>
+</mat-toolbar>
+
+<mat-menu #userMenu>
+	<ng-container *ngIf="!auth?.guest">
+		<button mat-menu-item disabled *ngIf="!!auth">{{ auth?.email }}</button>
+		<a mat-menu-item *ngIf="!auth.guest" routerLink="/settings/profile"><mat-icon>{{ 'icon_account' | translate }}</mat-icon>{{ 'my_account' | translate }}</a>
+	</ng-container>
+	<ng-container >
+		<button *ngIf="!auth" mat-menu-item (click)="app.showLogin()"><mat-icon>{{ 'icon_login' | translate }}</mat-icon>{{ 'login' | translate }}</button>
+	</ng-container>
+	<button mat-menu-item *ngIf="app.languages.length > 1" [matMenuTriggerFor]="languageMenu"><mat-icon>{{ 'icon_language' | translate }}</mat-icon>{{ 'language' | translate }}</button>
+	<ng-container *ngIf="!auth?.guest">
+		<button *ngIf="!!auth && !auth?.assumed" mat-menu-item (click)="logout()"><mat-icon>{{ 'icon_logout' | translate }}</mat-icon>{{ 'logout' | translate }}</button>
+		<button *ngIf="!!auth?.assumed" mat-menu-item [matMenuTriggerFor]="assumedLogoutMenu"><mat-icon>{{ 'icon_logout' | translate }}</mat-icon>{{ 'logout' | translate }}</button>
+	</ng-container>
+</mat-menu>
+
+<mat-menu #languageMenu>
+	<button mat-menu-item *ngFor="let l of app.languages" (click)="app.changeLanguage(l.id)" [disabled]="l.id === app.language">{{ l.label }}</button>
+</mat-menu>
+
+<mat-menu #assumedLogoutMenu>
+	<button mat-menu-item mat-menu-item (click)="logout()">{{ 'logout_assumed' | translate: auth }}</button>
+	<button mat-menu-item mat-menu-item (click)="logout(true)">{{ 'logout_all' | translate }}</button>
+</mat-menu>

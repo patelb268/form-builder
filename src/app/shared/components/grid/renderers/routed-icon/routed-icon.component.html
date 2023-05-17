@@ -1,0 +1,4 @@
+<ng-container *ngIf="!disabled">
+	<a [routerLink]="url" [matTooltip]="tooltip" ><mat-icon [color]="color" #iconTarget (click)="onClick(iconTarget)">{{ icon }}</mat-icon></a>
+</ng-container>
+

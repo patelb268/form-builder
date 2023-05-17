@@ -1,0 +1,17 @@
+<!-- <h1 mat-dialog-title>{{name}}</h1> -->
+<modal-content class="hd-custom"> 
+
+    <div class="box">
+        <div class="box-arrow-border">
+          <div class="box-arrow-background"></div>
+        </div>
+        <div class="box-content">
+            <div>
+
+            </div>
+        </div>
+      </div>
+      <div class="input-box">
+        <input matInput [(ngModel)]="name" (keydown.enter)="close($event)" (keydown.tab)="tabPressed($event)">
+    </div>
+</modal-content>

@@ -1,0 +1,590 @@
+<form
+	class="custom-form"
+	[formGroup]="formGroup"
+	*ngIf="formGroup && showAll"
+	[ngStyle]="{ width: 30 + +form?.layoutSize.width + 'px' }"
+>
+	<!-- <pre>{{ formGroup.value | json }}</pre> -->
+
+	<mat-toolbar class="header" *ngIf="showToolbar">
+		<div>
+			<div class="h-font-name">
+				{{ slice?.root?.name || slice?.name }}
+			</div>
+			<div class="s-h-font">
+				<span *ngIf="mode === FORM_MODE.ADD"> Add Record</span>
+				<span *ngIf="mode === FORM_MODE.EDIT">
+					Edit Record&nbsp;{{ record }}</span
+				>
+				<span *ngIf="mode === FORM_MODE.VIEW">
+					View Record&nbsp;#{{ record }}</span
+				>
+			</div>
+		</div>
+		<div class="push"></div>
+
+		<ng-container *ngIf="mode !== FORM_MODE.ADD">
+			<div class="ac-buttons">
+				<div class="d-flex flex-column align-items-center">
+					<div>
+						<button
+							class="ac-icon-btn"
+							mat-icon-button
+							(click)="refresh()"
+						>
+							<mat-icon class="header-color">{{
+								'icon_timeline' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Refresh</div>
+				</div>
+
+				<div class="d-flex flex-column align-items-center">
+					<div>
+						<button
+							class="ac-icon-btn"
+							mat-icon-button
+							(click)="onDuplicateClick()"
+						>
+							<mat-icon class="header-color">{{
+								'content_copy' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Duplicate</div>
+				</div>
+				<div
+					*ngIf="mode === FORM_MODE.VIEW"
+					class="d-flex flex-column align-items-center"
+				>
+					<div>
+						<button
+							mat-icon-button
+							class="ac-icon-btn"
+							(click)="onEditClick()"
+						>
+							<mat-icon class="header-color">{{
+								'edit' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Edit</div>
+				</div>
+
+				<div
+					*ngIf="mode === FORM_MODE.EDIT"
+					class="d-flex flex-column align-items-center"
+				>
+					<div>
+						<button
+							mat-icon-button
+							class="ac-icon-btn"
+							(click)="onViewClick()"
+						>
+							<mat-icon class="header-color">{{
+								'lock' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">View</div>
+				</div>
+			</div>
+			<!-- todo - read perms -->
+		</ng-container>
+
+		<ng-container *ngIf="mode === FORM_MODE.ADD || mode === FORM_MODE.EDIT">
+			<div class="ml-4 ac-buttons float-right text-right">
+				<!-- discard changes -->
+				<div class="d-flex flex-column align-items-center">
+					<div>
+						<button
+							class="ac-icon-btn"
+							mat-icon-button
+							(click)="onSave(true)"
+						>
+							<mat-icon class="header-color">{{
+								'icon_save' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Save</div>
+				</div>
+				<div class="d-flex flex-column align-items-center">
+					<div>
+						<button
+							mat-icon-button
+							class="ac-icon-btn"
+							(click)="onSave(false, true, false)"
+						>
+							<mat-icon class="header-color">{{
+								'icon_save' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Save & Next</div>
+				</div>
+				<div class="d-flex flex-column align-items-center">
+					<div>
+						<button
+							mat-icon-button
+							class="ac-icon-btn"
+							(click)="onSave(false, false, true)"
+						>
+							<mat-icon class="header-color">{{
+								'icon_save' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Save & Back</div>
+				</div>
+				<div class="d-flex flex-column align-items-center">
+					<div>
+						<button
+							mat-icon-button
+							class="ac-icon-btn"
+							(click)="formGroup.reset(); resetFile()"
+						>
+							<mat-icon class="header-color">{{
+								'do_not_disturb' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Clear</div>
+				</div>
+			</div>
+			<!-- todo - read perms -->
+		</ng-container>
+
+		<ng-container *ngIf="mode !== FORM_MODE.ADD">
+			<div class="ml-3 ac-buttons">
+				<div class="d-flex flex-column align-items-center">
+					<div>
+						<button
+							class="ac-icon-btn"
+							mat-icon-button
+							(click)="onTemplateClick()"
+						>
+							<mat-icon class="header-color"> list_alt </mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Template</div>
+				</div>
+				<div class="d-flex flex-column align-items-center">
+					<div>
+						<button
+							class="ac-icon-btn"
+							mat-icon-button
+							(click)="onDeleteClick()"
+						>
+							<mat-icon class="header-color">{{
+								'delete_forever' | translate
+							}}</mat-icon>
+						</button>
+					</div>
+					<div class="ac-label">Delete</div>
+				</div>
+			</div>
+			<!-- todo - read perms -->
+		</ng-container>
+	</mat-toolbar>
+	<div class="ml-1">
+		<div class="pre-next-toolbar w-100 p-2">
+			<span
+				(click)="goToFirst()"
+				[class]="
+					isFirstDisabled() ? 'mr-1 none-pointer' : 'pointer mr-1'
+				"
+			>
+				<button
+					mat-icon-button
+					class="pre-next-btn"
+					[disabled]="isFirstDisabled()"
+				>
+					<mat-icon class="header-color">{{
+						'skip_previous'
+					}}</mat-icon>
+				</button>
+			</span>
+			<span
+				(click)="goToPrevious()"
+				[class]="
+					isFirstDisabled() ? 'mr-1 none-pointer' : 'pointer mr-1'
+				"
+			>
+				<button
+					mat-icon-button
+					class="pre-next-btn"
+					[disabled]="isFirstDisabled()"
+				>
+					<mat-icon class="header-color">{{ 'arrow_left' }}</mat-icon>
+				</button>
+				<small>Previous</small>
+			</span>
+			<span
+				(click)="goToNext()"
+				[class]="
+					isNextDisabled() ? 'mr-1 none-pointer' : 'pointer mr-1'
+				"
+			>
+				<button
+					mat-icon-button
+					class="pre-next-btn"
+					[disabled]="isNextDisabled()"
+				>
+					<mat-icon class="header-color">{{
+						'arrow_right'
+					}}</mat-icon>
+				</button>
+				<small>Next</small>
+			</span>
+			<span
+				(click)="goToLast()"
+				[class]="
+					isNextDisabled() ? 'mr-1 none-pointer' : 'pointer mr-1'
+				"
+			>
+				<button
+					mat-icon-button
+					class="pre-next-btn"
+					[disabled]="isNextDisabled()"
+				>
+					<mat-icon class="header-color">{{ 'skip_next' }}</mat-icon>
+				</button>
+			</span>
+		</div>
+
+		<div class="form-stage p-1 b-right-default" *ngIf="!!form">
+			<ng-container
+				*ngTemplateOutlet="
+					tplShowChildren;
+					context: { $implicit: form }
+				"
+			></ng-container>
+		</div>
+	</div>
+	<!-- templates -->
+
+	<!-- our child loop -->
+	<ng-template #tplShowChildren let-obj>
+		<ng-container *ngFor="let child of obj.children || []">
+			<ng-container *ngIf="!child.tab">
+				<ng-container
+					*ngTemplateOutlet="tplChild; context: { $implicit: child }"
+				></ng-container>
+			</ng-container>
+
+			<mat-tab-group
+				class="custom-tab"
+				*ngIf="child.tab && child.data && clonedForm"
+				[selectedIndex]="selectedIndex"
+				(selectedTabChange)="onTabChanged($event)"
+				[animationDuration]="0"
+				[disableRipple]="true"
+			>
+				<mat-tab *ngFor="let ch of child.data">
+					<ng-template mat-tab-label
+						><span class="custom-tab-label" [style]="ch.css">{{
+							ch.label
+						}}</span></ng-template
+					>
+					<div class="my-4 mx-2 tab-content-border">
+						<ng-container
+							*ngTemplateOutlet="
+								tplShowChildren;
+								context: { $implicit: ch }
+							"
+						></ng-container>
+					</div>
+				</mat-tab>
+			</mat-tab-group>
+		</ng-container>
+	</ng-template>
+
+	<!-- a singular child item -->
+	<ng-template #tplChild let-r>
+		<div
+			[ngClass]="{
+				container: containerClass.has(r.type),
+				control: controlClass.has(r.type),
+
+				'form-line-column': r.isColumnClass,
+				'form-line-column-clear': r.clearBoth,
+				inline: !!r.inline,
+				readonly: !!r.readonly,
+				fitContent: !!r.fitContent
+			}"
+			[class]="
+				r.type === 'checkbox'
+					? r.spreadCols && r.idx === 0
+						? 'float-left clear-left'
+						: r.spreadCols && r.idx < r.spreadCols
+						? 'd-flex float-left'
+						: 'float-left clear-left'
+					: 'form-control-' + r.type + ' px-1 mx-0'
+			"
+			[ngStyle]="{
+				width: r.type === 'checkbox' ? r.labelWidth || '50px' : 'auto'
+			}"
+		>
+			<!--
+			 [style.flex]="def.flex"
+ class="control" [class.inline]="!!def.inline" [style.max-width]="def.maxWidth + 'px'"
+
+		-->
+			<ng-container [ngSwitch]="r.type" *ngIf="!r.hide">
+				<ng-container *ngSwitchCase="'div'">
+					<ng-container
+						*ngTemplateOutlet="
+							tplContainerDiv;
+							context: { $implicit: r }
+						"
+					></ng-container>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="'collapse'">
+					<ng-container
+						*ngTemplateOutlet="
+							tplContainerCollapse;
+							context: { $implicit: r }
+						"
+					></ng-container>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="'controlWrap'">
+					<ng-container *ngIf="r.subType === 'checkbox'">
+						<app-control-checkbox
+							class="control"
+							[params]="r"
+							[formGroup]="formGroup"
+							[mode]="mode"
+							[class.labelHack]="r.labelHack"
+						></app-control-checkbox>
+					</ng-container>
+					<ng-container *ngIf="r.subType !== 'checkbox'">
+						<ng-container
+							*ngTemplateOutlet="
+								tplControlWrap;
+								context: { $implicit: r }
+							"
+						></ng-container>
+					</ng-container>
+				</ng-container>
+
+				<!-- controls - standard -->
+				<app-control-dropdown
+					class="control"
+					*ngSwitchCase="'dropdown'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+				></app-control-dropdown>
+				<app-control-numberbox
+					class="control"
+					*ngSwitchCase="'numberbox'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+				></app-control-numberbox>
+				<app-control-textbox
+					class="control"
+					*ngSwitchCase="'textbox'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+				></app-control-textbox>
+				<app-control-textarea
+					class="control"
+					*ngSwitchCase="'textarea'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+				></app-control-textarea>
+
+				<app-control-history
+					class="control"
+					*ngSwitchCase="'control_history'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+				></app-control-history>
+
+				<app-control-related-dropdown
+					class="control"
+					*ngSwitchCase="'relatedDropdown'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+				></app-control-related-dropdown>
+				<app-control-checkbox
+					class="control"
+					*ngSwitchCase="'checkbox'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+					[class.labelHack]="r.labelHack"
+				></app-control-checkbox>
+
+				<app-control-radio
+					class="control"
+					*ngSwitchCase="'radio'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+					[class.labelHack]="r.labelHack"
+				></app-control-radio>
+				<app-control-file
+					#fileRef
+					class="control"
+					style="min-width: 100px"
+					*ngSwitchCase="'file'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+					(removeFile)="removeFiles()"
+					(fileChange)="onFileChange($event)"
+				></app-control-file>
+
+				<app-control-date-only
+					class="control"
+					*ngSwitchCase="'control_date'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+					[class.labelHack]="r.labelHack"
+				></app-control-date-only>
+
+				<app-control-time-only
+					class="control"
+					*ngSwitchCase="'control_timetextbox'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+					[class.labelHack]="r.labelHack"
+				></app-control-time-only>
+
+				<!-- date+time -->
+
+				<app-control-date-time
+					class="control"
+					*ngSwitchCase="'control_new_datetime'"
+					[params]="r"
+					[formGroup]="formGroup"
+					[mode]="mode"
+					[class.labelHack]="r.labelHack"
+				></app-control-date-time>
+
+				<ng-container *ngSwitchCase="'html'">
+					<div
+						*ngIf="
+							r.subType === 'control_formula_html'
+								? !hideFormulaHTMLInitial
+								: formGroup?.controls[r.id]['show'] != false
+						"
+						[innerHTML]="
+							formGroup?.controls[r.id]?.value || r.html
+								| safe : 'html'
+						"
+					></div>
+				</ng-container>
+
+				<app-embed-query-grid
+					*ngSwitchCase="'control_grid'"
+					style="height: 200px; display: block"
+					[sliceId]="r.embedRegularGrid"
+					[parameterName]="r.relatedGrid"
+					[parameterValue]="record"
+					[metaData]="r"
+				></app-embed-query-grid>
+
+				<ng-container *ngSwitchDefault>
+					<div>unhandled: {{ r.type }} {{ check(r) }}</div>
+				</ng-container>
+			</ng-container>
+		</div>
+	</ng-template>
+
+	<!-- container - div -->
+	<ng-template #tplContainerDiv let-def>
+		<mat-card class="overflow-auto box-shadow-none pb-0">
+			<mat-card-content
+				[ngStyle]="{ width: 30 + +form?.layoutSize.width + 'px' }"
+			>
+				<ng-container
+					*ngTemplateOutlet="
+						tplShowChildren;
+						context: { $implicit: def }
+					"
+				></ng-container>
+			</mat-card-content>
+		</mat-card>
+	</ng-template>
+
+	<!-- container - collapse -->
+	<ng-template #tplContainerCollapse let-def>
+		<mat-expansion-panel
+			[expanded]="def.expanded"
+			[style.flex]="def.flex"
+			*ngIf="!def.hidden && def.inTabControl === 'No'"
+		>
+			<mat-expansion-panel-header>
+				<mat-panel-title>{{ def.label }}</mat-panel-title>
+			</mat-expansion-panel-header>
+			<ng-container
+				*ngTemplateOutlet="tplShowChildren; context: { $implicit: def }"
+			></ng-container>
+		</mat-expansion-panel>
+	</ng-template>
+
+	<ng-template #tplControlWrap let-def>
+		<span
+			class="d-flex align-items-baseline ml-2"
+			[ngClass]="'flex-column'"
+			*ngIf="def['show'] != false"
+		>
+			<mat-label
+				class="fixed-label-width mr-1"
+				[ngClass]="
+					def.labelAlign === 'Right' ? 'text-right' : 'text-left'
+				"
+				[style]="def.labelCss"
+				>{{ def.label }}
+				<span *ngIf="def.required" class="text-danger">
+					*</span
+				></mat-label
+			>
+			<mat-form-field
+				#formField
+				*ngIf="!def.hidden"
+				[ngClass]="showFile(def) ? '' : 'd-none'"
+				class="control-wrap"
+				[style]="def.labelCss"
+			>
+				<input matInput style="display: none" />
+				<ng-container
+					*ngTemplateOutlet="
+						tplShowChildren;
+						context: { $implicit: def }
+					"
+				></ng-container>
+			</mat-form-field>
+		</span>
+	</ng-template>
+</form>
+
+<ng-template #tplError let-error>
+	{{ 'form_validation_fail_' + error[0] | translate : error[1] || {} }}
+</ng-template>
+
+<ng-template #errorRef>
+	<div class="text-danger" [innerHTML]="errorList | safe : 'html'"></div>
+	<button
+		class="float-right"
+		style="color: black"
+		mat-button
+		tabindex="0"
+		(click)="snakbar.dismiss()"
+	>
+		close
+	</button>
+</ng-template>

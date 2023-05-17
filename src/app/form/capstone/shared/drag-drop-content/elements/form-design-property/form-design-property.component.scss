@@ -1,0 +1,104 @@
+@import 'src/theme/theme-variables';
+
+$setting-element-label-font-size: 16px;
+
+.form-desig-outer-div {
+	padding: 5px 7px;
+}
+
+.settings-div {
+	display: flex;
+	flex-direction: row;
+	margin-top: 15px;
+
+	.pin-form-element {
+		width: 25px;
+		position: relative;
+
+		.mat-icon {
+			rotate: 45deg;
+			margin-top: 5px;
+			margin-left: 3px;
+		}
+		.mat-icon.enabledIcon {
+			color: #3f6f85;
+		}
+
+		.mat-icon.disabledIcon {
+			text-decoration: line-through;
+			color: #d6dddd;
+		}
+
+		.mat-checkbox {
+			opacity: 0;
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 0;
+			transform: scale(1.9, 1.8);
+			margin-left: 5px;
+			margin-top: 13px;
+		}
+	}
+	.setting-form-element {
+		display: flex;
+		flex: 1;
+
+		.app-font-options {
+			flex-grow: 1;
+		}
+
+		.mat-form-field {
+			width: 100%;
+
+			::ng-deep {
+				.setting-element-label {
+					font-size: $setting-element-label-font-size;
+				}
+			}
+		}
+	}
+
+	::ng-deep {
+		.mat-form-field.mat-form-field-appearance-outline
+			.mat-form-field-wrapper {
+			margin-bottom: 0px;
+			padding-bottom: 0px;
+		}
+	}
+
+	.pin-form-element {
+		width: 25px;
+		position: relative;
+
+		.mat-icon {
+			rotate: 45deg;
+			margin-top: 5px;
+			margin-left: 3px;
+		}
+		.mat-icon.enabledIcon {
+			color: #3f6f85;
+		}
+
+		.mat-icon.disabledIcon {
+			text-decoration: line-through;
+			color: #d6dddd;
+		}
+	}
+}
+
+.color-element-outer-div {
+	height: 2rem;
+	margin-top: 9px;
+}
+
+.toggle-div {
+	margin-top: 5px;
+}
+
+.toggle-form-element {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+}

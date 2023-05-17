@@ -1,0 +1,28 @@
+.templates-viewer {
+	height: calc(100vh - 149px);
+	width: 100%;
+	overflow: auto;
+	padding: 1rem;
+	display: flex;
+	gap: 1rem;
+	::ng-deep .template {
+		mat-card {
+			mat-card-header {
+				text-align: center;
+				.mat-card-header-text {
+					width: 100%;
+					margin: 0;
+				}
+			}
+			mat-card-content {
+				overflow: auto;
+				height: 200px;
+				width: 200px;
+				cursor: pointer;
+				&:hover {
+					background-color: #c0dae6;
+				}
+			}
+		}
+	}
+}

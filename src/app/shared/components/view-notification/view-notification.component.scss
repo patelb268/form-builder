@@ -1,0 +1,43 @@
+@use 'sass:math';
+@import 'variables';
+
+.padded {
+	padding: $padding;
+}
+
+.multi-line {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+
+	.meta {
+		line-height: $font-size-small;
+		font-size: 0.8rem;
+		opacity: 0.75;
+		display: inline-flex;
+
+		& > *:not(:last-child) {
+			padding-right: $padding;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+.html {
+	min-width: 300px;
+	width: 100vw;
+	max-width: 100%;
+}
+
+.label {
+	color: $disabled-fore;
+	font-size: $font-size-small;
+	padding-right: math.div($font-size-small, 2);
+}
+.clickable {
+	cursor: pointer;
+}
+

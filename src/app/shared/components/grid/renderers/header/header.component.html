@@ -1,0 +1,13 @@
+<div class="c-header" (click)="sort($event)" (contextmenu)="onMenuClicked($event)">
+	<div #menuButton class="customHeaderMenuButton"></div>
+
+	<!-- <div class="sub-div"> -->
+		<div class="customHeaderLabel">
+			{{ params.displayName }}
+			<span (click)="onSortRequested('asc', $event)" [ngClass]="ascSort" class="ag-icon ag-icon-asc"></span>
+			<span (click)="onSortRequested('desc', $event)" [ngClass]="descSort" class="ag-icon ag-icon-desc"></span>
+		</div>
+
+	<!-- </div> -->
+
+</div>

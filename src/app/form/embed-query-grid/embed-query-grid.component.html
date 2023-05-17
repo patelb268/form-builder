@@ -1,0 +1,205 @@
+<div class="full-view px-1" [class.add-full-viewport]="addFullViewport">
+	<div style="height: 4px" class="row">
+		<mat-progress-bar dir="ltr" mode="indeterminate" class="loading blue-progress" *ngIf="loading | async">
+		</mat-progress-bar>
+	</div>
+	<div *ngIf="description && !disable?.description" [innerHTML]="description | safe: 'html'"></div>
+	<ng-container *ngIf="!!slice">
+		<!-- <div class="h-font my-2" *ngIf="!disable?.header && !disable.hideHeaderTitle">
+			<span *ngIf="!namedSlice">{{ slice?.root?.name }}</span>
+		</div> -->
+
+			<mat-toolbar *ngIf="!disable?.header" class="header-ag sub-header">
+				<div class="d-flex align-items-center" *ngIf="!disable.hideHeaderTitle">
+					<div class="s-h-font mr-2">
+						<a (click)="refreshCache()" style="color: #3f6f85">{{
+							metaData?.text
+							}}</a>
+					</div>
+					<mat-icon *ngIf="!!icon" [color]="iconColor">{{
+						iconTranslate ? (icon | translate) : icon
+						}}</mat-icon>
+					<div class="multi-line">
+						<ng-container *ngTemplateOutlet="
+								tplRecordCount;
+								context: { $implicit: totalCount | async }
+							"></ng-container>
+					</div>
+					<div class="d-flex align-items-center w-250">
+						<span class="d-flex align-items-center w-250" (clickOutside)="
+								!searchText ? (showSearchText = false) : ''
+							" clickoutside>
+							<button *ngIf="!readonly" mat-icon-button (click)="
+									showFilter = !showFilter;
+									showSearchText = true;
+									autoFocusSearch()
+								" [hidden]="showSearchText">
+								<mat-icon>{{ 'icon_search' | translate }}</mat-icon>
+							</button>
+							<span class="d-flex align-items-center w-250">
+								<input id="searchTextId" *ngIf="showSearchText" class="form form-control search-ctrl"
+									[(ngModel)]="searchText" autofocus (keyup)="onKeyUp()" type="search" />
+								<mat-icon *ngIf="showSearchText" (click)="searchText = null; onKeyUp()"
+									style="margin-left: -2rem">close</mat-icon>
+							</span>
+						</span>
+					</div>
+				</div>
+				<div class="push"></div>
+				<div *ngIf="((!readonly && !disable?.hideHeaderButtons) || isAdmin) && !namedSlice"
+					[ngClass]="disable?.hideHeaderButtons ? 'low-opacity' : ''">
+					<button mat-icon-button *ngIf="!disable?.hideAddRecord && slice.perms?.insert"
+						[matTooltip]="'add_record' | translate: slice" (click)="addRow()">
+						<mat-icon [matBadge]="datasource?.addingData?.length - 1"
+							[matBadgeHidden]="datasource?.addingData?.length < 2" matBadgePosition="before"
+							matBadgeColor="accent">{{ 'icon_add_record' | translate }}</mat-icon>
+					</button>
+					<button mat-icon-button [matTooltip]="'Edit Report'" (click)="editReport()">
+						<mat-icon>settings</mat-icon>
+					</button>
+					<button mat-icon-button *ngIf="selectedEntity.length > 0" [matTooltip]="'Delete Rows'"
+						(click)="deleteRecords()">
+						<mat-icon>delete</mat-icon>
+					</button>
+					<button mat-icon-button *ngIf="!disable?.hidePrint" [matTooltip]="'Print' | translate"
+						(click)="print()">
+						<mat-icon>{{ 'icon_print' | translate }}</mat-icon>
+					</button>
+					<button mat-icon-button *ngIf="selectedEntity.length > 0" [matTooltip]="'Templates'"
+						(click)="openTemplates()">
+						<mat-icon>list_alt</mat-icon>
+					</button>
+					<button mat-raised-button color="accent" [disabled]="
+							!(
+								(datasource?.dirty | async) ||
+								(datasource?.saving | async)
+							)
+						" (click)="save()">
+						{{ 'save' | translate }}
+					</button>
+				</div>
+			</mat-toolbar>
+			<!-- user/system params -->
+				<ag-grid-angular #grid class="ag-theme-material grid primary-grid"
+				[class.hidden-headers]="disable?.columnHeaders" [columnDefs]="columns" [defaultColDef]="defaultColumn"
+				[overlayNoRowsTemplate]="noRowsTemplate" [components]="agCustomComponents" [rowData]="rowData"
+				[isGroupOpenByDefault]="isGroupOpenByDefault" [gridOptions]="{
+					floatingFilter: true,
+					getChildCount: getChildCount.bind(this),
+					getRowNodeId: getRowNodeId.bind(this),
+					groupHeaderHeight: 25,
+					groupRowInnerRenderer: groupRowInnerRenderer.bind(this),
+					groupUseEntireRow: true,
+					headerHeight: disable?.columnHeaders ? 0 : headerHeight,
+					pivotHeaderHeight: 25,
+					pivotGroupHeaderHeight: 25,
+					rememberGroupStateWhenNewData: true,
+					enterMovesDownAfterEdit: false,
+					getRowHeight: getRowHeight,
+					getRowClass: getRowClass.bind(this),
+					rowSelection: 'single',
+					cacheBlockSize: 500,
+					maxBlocksInCache: 1,
+					maxConcurrentDatasourceRequests: 1,
+					debounceHorizontalScrollbar: true,
+					debounceVerticalScrollbar: true,
+					rowModelType: 'infinite',
+					pagination: false,
+					paginationAutoPageSize: false
+				}" [sideBar]="sideBar" [rowGroupPanelShow]="rowGroupPanelShow" [groupIncludeTotalFooter]="true"
+				[allowContextMenuWithControlKey]="true" (firstDataRendered)="onGridFirstDataRendered($event)"
+				(gridReady)="onGridReady($event)" [getMainMenuItems]="getMainMenuItems"
+				(cellValueChanged)="cellValueChanged($event)" (focusout)="focusOut($event)"
+				(cellClicked)="cellClicked($event)" (cellDoubleClicked)="cellDoubleClicked($event)"
+				(columnMoved)="onColumnMoved($event)" [getRowStyle]="getRowStyle" [rowHeight]="rowHeight"
+				[rowSelection]="rowSelection" [suppressMenuHide]="true" (rowClicked)="onRowClick($event)"
+				(columnResized)="onColumnResized($event)" [editType]="editType" (sortChanged)="printSortState($event)">
+			</ag-grid-angular>
+		
+
+
+
+
+		<!-- can we create a secondary grid, but, without headers, and make it larger? -->
+		<div class="adding-grid" *ngIf="adding && !readonly" #addContainerNode>
+			<!-- <div class="drag-bar" cdkDrag cdkDragLockAxis="y" #addResizer></div> -->
+			<mat-toolbar class="sub-header" #addHeaderBar>
+				{{ 'add_new_records' | translate: slice }}
+				<div class="push"></div>
+				<button mat-icon-button disabled [matTooltip]="'import_records' | translate: slice">
+					<mat-icon>{{ 'icon_import' | translate }}</mat-icon>
+				</button>
+				<button mat-icon-button disabled [matTooltip]="'paste_from_clipboard' | translate">
+					<mat-icon>{{
+						'icon_clipboard_paste' | translate
+						}}</mat-icon>
+				</button>
+				<button mat-icon-button (click)="addFullViewport = !addFullViewport">
+					<mat-icon>unfold_more</mat-icon>
+				</button>
+				<!-- <button mat-icon-button (click)="adding = false" [matTooltip]="'hide_this' | translate"><mat-icon>{{ 'icon_close' | translate }}</mat-icon></button> -->
+			</mat-toolbar>
+			<ag-grid-angular #addGrid class="ag-theme-material grid hidden-headers add-grid" [columnDefs]="columns"
+				[defaultColDef]="defaultColumn" [gridOptions]="{
+					getRowNodeId: getRowNodeId.bind(this),
+					enterMovesDownAfterEdit: false,
+					getRowHeight: getRowHeight.bind(this),
+					getRowClass: getRowClass.bind(this),
+					headerHeight: 0
+				}" (gridReady)="onAddGridReady($event)" (cellEditingStarted)="cellEditingStarted($event)"
+				(cellEditingStopped)="cellEditingStopped($event)" (cellValueChanged)="cellValueChanged($event)">
+			</ag-grid-angular>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="errors.has(noReportError)">{{
+		noReportError | translate
+		}}</ng-container>
+</div>
+
+<!-- @@todo - not currently connected to routing endpoints -->
+<!-- <mat-menu #addMenu="matMenu">
+	<button mat-menu-item>
+		<mat-icon>{{ 'icon_add_record_form' | translate }}</mat-icon>
+		<span>{{ 'add_record_via_form' | translate:slice }} </span>
+	</button>
+	<button mat-menu-item>
+		<mat-icon>{{ 'icon_add_record_grid' | translate }}</mat-icon>
+		<span>{{ 'add_record_via_grid' | translate:slice }}</span>
+	</button>
+	<button mat-menu-item>
+		<mat-icon>{{ 'icon_import' | translate }}</mat-icon>
+		<span>{{ 'import_records' | translate:slice}}</span>
+	</button>
+</mat-menu> -->
+
+<ng-template #tplRecordCount let-c>
+	<div class="small count">
+		<ng-container *ngIf="c === 0">{{
+			'no_records' | translate: slice
+			}}</ng-container>
+		<ng-container *ngIf="c === 1">{{
+			'one_record' | translate: slice
+			}}</ng-container>
+		<ng-container *ngIf="c > 1">{{
+			'x_records' | translate: { plural: slice.plural, x: (c | number) }
+			}}</ng-container>
+		<ng-container *ngIf="!c && c !== 0">{{
+			'?_records' | translate: slice
+			}}</ng-container>
+	</div>
+</ng-template>
+
+<ng-template #overlayRelatedAdd>
+	<div class="bg-white related-menu">
+		<table>
+			<tr style="opacity: 0.5">
+				<td>Add a record to a related report</td>
+			</tr>
+			<tr *ngFor="let r of relations">
+				<td class="pointer" (click)="openRelatedSlice(r)">
+					{{ r.fromSliceName }}
+				</td>
+			</tr>
+		</table>
+	</div>
+</ng-template>

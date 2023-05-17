@@ -1,0 +1,45 @@
+.where-container {
+	::ng-deep .mat-form-field-wrapper {
+		margin-bottom: -1rem;
+	}
+	.ft-16 {
+		font-size: 16px;
+	}
+	.where-condition-div {
+		border: 1px solid #e0e0e0;
+		padding: 0 0 0.25em 0.25em;
+		border-radius: 5px;
+		margin-bottom: 10px;
+	}
+	ul {
+		margin-top: 2px;
+	}
+}
+::ng-deep {
+	.c-custom {
+		.mat-option {
+			font-size: 14px;
+			line-height: 1 !important;
+			height: auto !important;
+			min-height: 25px;
+		}
+	}
+	.mat-optgroup-label {
+		display: none !important;
+	}
+	.empty-label {
+		.mat-option {
+			padding-left: 1rem !important;
+		}
+	}
+
+	  .fa-arrow {
+		position: relative;
+		// top: -10px;
+		margin-right: 6px;
+		font-size: 25px;
+		justify-content: flex-end;
+		display:flex
+	}
+	
+}

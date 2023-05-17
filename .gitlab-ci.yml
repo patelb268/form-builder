@@ -1,0 +1,90 @@
+image: gitlab.auxiliumgroup.com:4567/devops/docker/dockerbase_ci:master
+
+stages:
+  - dependencies
+  - build
+  - assemble
+  - deploy
+  - notify
+  
+install_dependencies:
+  image: node:12
+  stage: dependencies
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - node_modules/
+  script:
+    - npm ci
+  only:
+    changes:
+      - package-lock.json
+
+build:
+  image: node:12
+  stage: build
+  only:
+     - master
+  tags:
+    - docker
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - node_modules/
+    policy: pull
+  script:
+    - npm cache clean --force
+    - npx ng build --prod --base-href=/modules/
+
+dockerize:
+  stage: assemble
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME} .
+    - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}
+  tags:
+    - docker
+
+deploy-to-montreal:
+  stage: deploy
+  variables:
+    DOCKER_HOST: ssh://manager.swarm.montreal.auxilium.world
+  script:
+    - docker login -u swarm -p hKpGnz_mr2MJK71SQpQx $CI_REGISTRY
+    - docker stack deploy --with-registry-auth --compose-file=docker-compose.yml ${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}
+  environment:
+    name: master
+  only:
+    - master
+  tags:
+    - docker
+
+deploy-to-toronto:
+  stage: deploy
+  variables:
+    DOCKER_HOST: ssh://manager.swarm.toronto.auxilium.world
+  script:
+    - docker login -u swarm -p hKpGnz_mr2MJK71SQpQx $CI_REGISTRY
+    - docker stack deploy --with-registry-auth --compose-file=docker-compose.yml ${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}
+  environment:
+    name: master
+  only:
+    - master
+  tags:
+    - docker
+
+trigger_build:
+  image: alpine
+  stage: notify
+  script:
+    - apk add --no-cache curl
+# republish api-cronjobs project
+    - "curl -X POST -F token=cf9bbcfb2e480f9241627ade9908c2 -F ref=master https://gitlab.auxiliumgroup.com/api/v4/projects/15/trigger/pipeline"
+  only:
+    - master
+
+

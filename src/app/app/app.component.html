@@ -1,0 +1,207 @@
+<div class="assumed" *ngIf="(app?.auth | async)?.assumed">
+	<span class="label" (click)="endAssumed()">{{
+		'assumed_auth' | translate: (app.auth | async)
+	}}</span>
+</div>
+
+<app-header class="header no-print" *ngIf="(app.hideUi | async) === false"></app-header>
+
+<mat-sidenav-container #sidenav class="container mx-0 w-100 mw-100 no-print">
+	<mat-sidenav
+		#leftNav
+		[mode]="app.leftNavMode | async"
+		[opened]="(app.leftNavOpen | async) && (app.hideUi | async) === false"
+		class="left-nav"
+	>
+		<app-sidenav
+			(showChildEnviornmentByParent)="
+				onShowChildEnviornmentByParent($event)
+			"
+			*ngIf="leftNavRender && (app.hideUi | async) === false"
+			(requiresResize)="sidenav.updateContentMargins()"
+		>
+		</app-sidenav>
+		<div
+			class="resizer"
+			#resizer
+			cdkDragLockAxis="x"
+			cdkDrag
+			(cdkDragStarted)="sidenavDragStart($event)"
+			(cdkDragReleased)="sidenavDragReleased($event)"
+		></div>
+	</mat-sidenav>
+	<mat-sidenav-content class="stage p-0">
+		<div
+			style="border-bottom: 1px solid #e0e0e0"
+			*ngIf="showEnvironments"
+			class="d-flex"
+		>
+			<div (clickoutside)="clearExpansion()" class="d-flex wrap-container">
+				<ng-container *ngTemplateOutlet="tplContainer"></ng-container>
+			</div>
+		</div>
+		<div class="h-100" [ngClass]="environmentItems?.children?.length ? 'h-97' : ''" (click)="clearExpansion()">
+			<div class="h-100" [ngClass]="showEnvironments ? '' : ''" [ngClass]="environmentItems?.children?.length ? 'h-97' : ''">
+				<router-outlet></router-outlet>
+			</div>
+		</div>
+	</mat-sidenav-content>
+</mat-sidenav-container>
+
+<ng-template #tplContainer let-depth="depth">
+	<mat-expansion-panel
+		class="sidenav child-env"
+		*ngFor="let item of environmentItems.children"
+		(opened)="containerStateChange(item, true, depth)"
+		[expanded]="
+			(expanded.has(item.id) || expanded.has(item.dashboard)) &&
+			item.id > 0 &&
+			!collapseExpanded
+		"
+	>
+		<mat-expansion-panel-header
+			collapsedHeight="auto"
+			expandedHeight="auto"
+			class="nav-header"
+			[ngClass]="expanded.has(item.id) ? 'mat-expanded-color' : ''"
+			>
+			<mat-panel-title class="nav-title">
+				<div class="d-flex align-items-end" (clickoutside)="clearExpansion()" clickoutside>
+					<div style="height: 24px; margin-top: 3px">
+						<mat-icon class="material-icons" color="primary"
+						[ngClass]="expanded.has(item.id) ? 'icon-expanded-color' : ''">list_alt</mat-icon
+						>
+					</div>
+					<div class="mx-2">{{ item.label }}</div>
+				</div>
+			</mat-panel-title>
+		</mat-expansion-panel-header>
+
+		<ng-template matExpansionPanelContent  *ngIf="item.id > 0">
+			<div class="mo-test" (clickoutside)="clearExpansion()" clickoutside>
+				<ng-container  *ngIf="item.quickActions?.length">
+					<div class="container-toolbar p-1">
+						<ng-container *ngFor="let action of item.quickActions">
+							<ng-container
+								*ngTemplateOutlet="
+									tplChild;
+									context: {
+										$implicit: action,
+										depth: depth,
+										isQuickAction: true
+									}
+								"
+							></ng-container>
+						</ng-container>
+						<div class="push"></div>
+						<ng-container *ngIf="item.moreActions?.length">
+							<mat-icon
+								class="mt-2"
+								[matMenuTriggerFor]="moreActions"
+								>{{ 'icon_menu' | translate }}
+							</mat-icon>
+							<mat-menu #moreActions="matMenu">
+								<ng-template matMenuContent>
+									<ng-container
+										*ngFor="let action of item.moreActions"
+									>
+										<ng-container
+											*ngTemplateOutlet="
+												tplMenuItem;
+												context: {
+													$implicit: action
+												}
+											"
+										></ng-container>
+									</ng-container>
+								</ng-template>
+							</mat-menu>
+						</ng-container>
+					</div>
+				</ng-container>
+				<ng-container *ngFor="let child of item.children">
+					<ng-container
+						*ngTemplateOutlet="
+							tplChild;
+							context: {
+								$implicit: child,
+								depth: depth,
+								iId: item.id
+							}
+						"
+					></ng-container>
+				</ng-container>
+			</div>
+		</ng-template>
+	</mat-expansion-panel>
+</ng-template>
+<ng-template
+	#tplChild
+	let-item
+	let-depth="depth"
+	let-iId
+	let-isQuickAction="isQuickAction"
+>
+	<ng-container [ngSwitch]="item.type" *ngIf="!item.hideOnLeftNav">
+		<ng-container *ngSwitchCase="'link'">
+			<a
+				class="link mt-2"
+				*ngIf="isQuickAction; else tplLinkRegular"
+				[routerLink]="item.link"
+				(click)="clearExpansion(); setExpandedColor(iId)"
+				[ngStyle]="{ color: item.color }"
+				[ngClass]="{ 'font-weight-bold': item.bold }"
+				color=""
+			>
+				<mat-icon>{{ item.icon | translate }}</mat-icon>
+			</a>
+			<ng-template #tplLinkRegular>
+				<a
+					class="link link-option"
+					[routerLink]="item.link"
+					[ngStyle]="{ color: item.color }"
+					[ngClass]="isNavContainsSlice(item) ? 'opa-full' : '' || item?.color == null ? 'default-text-color' :''"
+					(click)="clearExpansion(); setExpandedColor(iId)"
+					mat-button
+				>
+					<mat-icon>{{ item.icon | translate }}</mat-icon
+					><span [ngClass]="{ 'font-weight-bold': item.bold }">{{
+						item.label
+					}}</span>
+				</a>
+			</ng-template>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'container'">
+			<ng-container
+				*ngTemplateOutlet="
+					tplContainer;
+					context: { $implicit: item, depth: depth + 1 }
+				"
+			></ng-container>
+		</ng-container>
+	</ng-container>
+</ng-template>
+
+<ng-template #tplMenuItem let-item>
+	<ng-container [ngSwitch]="item.type">
+		<ng-container *ngSwitchCase="'link'">
+			<a
+				class="mt-2"
+				mat-menu-item
+				[ngStyle]="{ color: item.color }"
+				[routerLink]="item.link"
+				(click)="clearExpansion()"
+			>
+				<mat-icon *ngIf="item.icon">{{
+					item.icon | translate
+				}}</mat-icon
+				>{{ item.label }}
+			</a>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'action'">
+			@@TODO tplMenuItem.action: {{ item | json }}
+		</ng-container>
+	</ng-container>
+</ng-template>

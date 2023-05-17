@@ -1,0 +1,32 @@
+<mat-card [ngStyle]="{
+    'padding': component.componentSettings.padding_top + 'px ' + component.componentSettings.padding_right + 'px ' + component.componentSettings.padding_bottom + 'px ' + component.componentSettings.padding_left + 'px',
+    'background-color': component.componentSettings.background_color,
+    'border-radius': component.componentSettings.rounded_corners + 'px',
+    'height': component.componentSettings.height > 0 ? component.componentSettings.height + 'px' : 'auto',
+    'text-align': component.element.alignment,
+    'overflow': 'hidden'
+  }">
+  <div>
+    <label>Image</label>
+  </div>
+
+    <div class="text-center" *ngIf="component.element.image_url === ''">
+      <p><mat-icon>image</mat-icon></p>  
+      <label>{{ component.element.label}}</label>
+      <span *ngIf="component.element.is_required" class="text-danger">*</span>
+    </div>
+
+  <a href="" (click)="$event.preventDefault()" *ngIf="component.element.image_url !== ''">
+    <img 
+      class="image"
+      [src]="component.element.image_url"
+      alt=""
+      [ngStyle]="{
+        'width': component.element.width === 0 ? 'auto' : component.element.width + 'px',
+        'height': component.element.height === 0 ? 'auto' : component.element.height + 'px',
+        'max-width': '100%',
+        'max-height': '100%'
+      }"
+    />
+  </a>
+</mat-card>

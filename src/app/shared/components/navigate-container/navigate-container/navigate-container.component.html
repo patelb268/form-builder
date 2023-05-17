@@ -1,0 +1,13 @@
+<div class="navigate-jumper" #jumper>
+
+	<mat-action-list dense class="jumper">
+		<button mat-list-item class="slim" *ngFor="let c of containers" (click)="moveTo(c)">{{ c.title }}</button>
+		<button mat-list-item class="slim" (click)="moveTop()">{{ 'top_of_page' | translate }}</button>
+	</mat-action-list>
+</div>
+<div class="navigate-content" #navigateContentContainer>
+	<ng-content select="navigate-section"></ng-content>
+</div>
+<div class="navigate-actions">
+	<ng-content select="navigate-actions"></ng-content>
+</div>

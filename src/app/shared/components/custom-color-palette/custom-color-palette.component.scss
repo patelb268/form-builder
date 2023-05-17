@@ -1,0 +1,39 @@
+.color-label {
+	cursor: pointer;
+	border: 1px solid black;
+	width: auto;
+	position: absolute;
+	height: 24px;
+
+}
+.selected-color {
+	width: 23px;
+	height: 14px;
+	border: 1px solid black;
+}
+.color-palette {
+	width: 15vw;
+	height: 20vh;
+	margin-top: 26px;
+	position: fixed;
+	display: flex;
+	flex-wrap: wrap;
+	border: 1px solid grey;
+	background-color: white;
+	z-index: 9;
+	margin-left: 0%;
+}
+.color-boxes {
+	width: 8.5%;
+	height: 10%;
+	border: 1px double grey;
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+}
+.color-boxes:hover {
+	border:2px double black;
+}
+.mat-label-style{
+	font-size: 14px;
+}

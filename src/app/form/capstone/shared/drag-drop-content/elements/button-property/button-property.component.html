@@ -1,0 +1,320 @@
+<mat-accordion>
+
+  <mat-expansion-panel
+  class="general-settings-expansion-panel expansion-panel"
+  [expanded]="true"
+>
+  <mat-expansion-panel-header>
+    <mat-panel-title> General Settings </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="general-settings-content-div settings-content-div">
+    <div class="row mb-2">
+      <div class="col-sm-12">
+        <mat-form-field appearance="outline" class="input-field">
+          <mat-label>Button text</mat-label>
+          <input matInput [(ngModel)]="component.element.content" [value]="component.element.change_to_reset ? 'Reset' : component.element.content" (ngModelChange)="component.element.content = $event"/>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    .input-field {
+      margin-top: 10px; /* change the margin-top value to whatever you prefer */
+    }
+  </style>
+  <div class="row mb-2">
+  <label for="" class="col-sm-6">Alignment</label>
+  <div class="col-sm-6">
+    <select class="form-select form-select-sm" [(ngModel)]="component.element.alignment">
+      <option value="left">Left</option>
+      <option value="center">Center</option>
+      <option value="right">Right</option>
+      <option value="auto">Auto</option>
+    </select>
+
+  </div>
+</div>
+
+<div class="row mb-2">
+  <label class="mb-2 col-sm-6">Change to Reset?</label>
+  <div class="col-sm-6">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        [(ngModel)]="component.element.change_to_reset"
+        id="resetSwitch"
+      />
+      <label class="form-check-label" for="resetSwitch">
+        Yes
+      </label>
+    </div>
+  </div>
+</div>
+</mat-expansion-panel>
+<mat-expansion-panel class="styles-expansion-panel expansion-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title> Styles </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="settings-div add-css-outer-div">
+    <div class="setting-form-element">
+      <mat-form-field appearance="outline">
+        <mat-label class="setting-element-label"
+          >Add CSS</mat-label
+        >
+        <mat-select>
+          <mat-option value="yes"> Yes </mat-option>
+          <mat-option value="no"> No </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="pin-form-element">
+      <mat-icon class="material-icons-outlined"
+        >push_pin</mat-icon
+      >
+      <!-- <mat-checkbox (change)="pinSetting($event, 'label name')" [hidden]="true" ></mat-checkbox> -->
+    </div>
+  </div>
+  <div class="settings-div css-outer-div">
+    <div class="setting-form-element">
+      <mat-form-field appearance="outline">
+        <mat-label class="setting-element-label">CSS</mat-label>
+        <textarea matInput></textarea>
+      </mat-form-field>
+    </div>
+    <div class="pin-form-element">
+      <mat-icon class="material-icons-outlined"
+        >push_pin</mat-icon
+      >
+      <!-- <mat-checkbox (change)="pinSetting($event, 'label name')" [hidden]="true" ></mat-checkbox> -->
+    </div>
+  </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+
+
+
+<!-- <div class="row mb-2">
+  <label class="mb-2 col-12" translate>Button type</label>
+  <div class="col-12">
+    <select
+      class="form-select form-select-sm"
+      [(ngModel)]="component.element.button_type"
+    >
+      <option value="submit" translate>Submit</option>
+      <option value="button" translate>Button</option>
+    </select>
+  </div>
+</div>
+<div class="row mb-2">
+  <label class="mb-2 col-sm-12" translate>Button text</label>
+  <div class="col-sm-12">
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      [(ngModel)]="component.element.content"
+    />
+  </div>
+</div>
+<div class="row mb-2">
+  <label class="mb-2 col-sm-12" translate>Link to</label>
+  <div class="col-sm-12">
+    <input
+      text="text"
+      class="form-control form-control-sm"
+      [(ngModel)]="component.element.link_to"
+    />
+  </div>
+</div>
+<div class="row mb-2">
+  <label class="mb-2 col-sm-12" translate>Button style</label>
+  <div class="col-sm-12 mb-2">
+    <div class="row g-0">
+      <button
+        class="col button-style btn-flat"
+        [ngClass]="{
+          active:
+            !component.element.box_shadow_color &&
+            !component.element.gradient_top_color
+        }"
+        (click)="setButtonStyle('flat')"
+        [ngbTooltip]="'Flat button' | translate"
+        container="body"
+      ></button>
+      <button
+        class="col button-style btn-raised"
+        [ngClass]="{ active: component.element.box_shadow_color }"
+        (click)="setButtonStyle('raised')"
+        [ngbTooltip]="'Raised button' | translate"
+        container="body"
+      ></button>
+      <button
+        class="col button-style btn-gradient"
+        [ngClass]="{ active: component.element.gradient_top_color }"
+        [ngbTooltip]="'Gradient button' | translate"
+        (click)="setButtonStyle('gradient')"
+        container="body"
+      ></button>
+    </div>
+  </div>
+</div>
+<div class="row mb-2">
+  <label class="col-sm-6" translate>Button color</label>
+  <div class="col-sm-6">
+    <div class="input-group">
+      <span
+        class="input-group-text"
+        [style.background]="component.element.button_color"
+      ></span>
+      <input
+        class="form-control form-control-sm"
+        [(colorPicker)]="component.element.button_color"
+        (colorPickerChange)="onColorPickerChange($event)"
+        [cpPosition]="'bottom'"
+        [cpDisableInput]="true"
+        [cpAlphaChannel]="'disabled'"
+        [cpPositionOffset]="'-100%'"
+        [value]="component.element.button_color"
+      />
+    </div>
+  </div>
+</div>
+<div class="row mb-2">
+  <label for="" class="col-sm-6" translate>Round corners</label>
+  <div class="col-sm-6">
+    <input
+      type="number"
+      min="0"
+      class="form-control form-control-sm"
+      [(ngModel)]="component.element.rounded_corners"
+    />
+  </div>
+</div>
+<div class="row mb-2">
+  <label for="" class="col-sm-6" translate>Button height</label>
+  <div class="col-sm-6">
+    <input
+      type="number"
+      min="0"
+      class="form-control form-control-sm"
+      [(ngModel)]="component.element.height"
+    />
+  </div>
+</div>
+<div class="row mb-2">
+  <label for="" class="col-sm-6" translate>Button size</label>
+  <div class="col-sm-6">
+    <select
+      class="form-select form-select-sm"
+      [(ngModel)]="component.element.button_size_type"
+    >
+      <option value="auto" translate>Auto</option>
+      <option value="full-width" translate>The full width</option>
+      <option value="fixed" translate>Fixed size</option>
+    </select>
+  </div>
+</div>
+<div class="row mb-2" *ngIf="component.element.button_size_type === 'fixed'">
+  <div class="col-sm-6 offset-6">
+    <input
+      type="number"
+      min="0"
+      class="form-control form-control-sm"
+      [(ngModel)]="component.element.button_size"
+    />
+  </div>
+</div>
+<div class="row mb-2">
+  <label for="" class="col-sm-6" translate>Alignment</label>
+  <div class="col-sm-6">
+    <div class="row g-0">
+      <button
+        class="col btn btn-primary btn-sm rounded-0"
+        [ngClass]="{ active: component.element.alignment === 'left' }"
+        (click)="component.element.alignment = 'left'"
+      >
+        <i class="fas fa-align-left"></i>
+      </button>
+      <button
+        class="col btn btn-primary btn-sm rounded-0"
+        [ngClass]="{ active: component.element.alignment === 'center' }"
+        (click)="component.element.alignment = 'center'"
+      >
+        <i class="fas fa-align-center"></i>
+      </button>
+      <button
+        class="col btn btn-primary btn-sm rounded-0"
+        [ngClass]="{ active: component.element.alignment === 'right' }"
+        (click)="component.element.alignment = 'right'"
+      >
+        <i class="fas fa-align-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<hr />
+<div>
+  <label for="" class="mb-2" translate>The font of inscription</label>
+  <div class="mb-2 d-flex justify-content-between">
+    <input
+      type="number"
+      class="form-control form-control-sm"
+      [(ngModel)]="component.element.font_size"
+      min="8"
+      style="width: 60px"
+    />
+
+    <app-font-options [component]="component"></app-font-options>
+    <div>
+      <button
+        class="btn btn-primary btn-sm rounded-0"
+        [ngClass]="{ active: component.element.font_bold }"
+        (click)="component.element.font_bold = !component.element.font_bold"
+      >
+        <i class="fas fa-bold"></i>
+      </button>
+      <button
+        class="btn btn-primary btn-sm rounded-0"
+        [ngClass]="{ active: component.element.font_italic }"
+        (click)="component.element.font_italic = !component.element.font_italic"
+      >
+        <i class="fas fa-italic"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="row mb-2">
+  <label for="" class="col-sm-6" translate>Text color</label>
+  <div class="col-sm-6">
+    <div class="input-group">
+      <span
+        class="input-group-text"
+        [style.background]="component.element.text_color"
+      ></span>
+      <input
+        class="form-control form-control-sm"
+        [(colorPicker)]="component.element.text_color"
+        [cpPosition]="'bottom'"
+        [cpDisableInput]="true"
+        [cpPositionOffset]="'-100%'"
+        [cpAlphaChannel]="'disabled'"
+        [value]="component.element.text_color"
+      />
+    </div>
+  </div>
+</div>
+<div class="row mb-2">
+  <label for="" class="col-sm-6" translate>Alignment</label>
+  <div class="col-sm-6">
+    <select
+      class="form-control form-control-sm"
+      [(ngModel)]="component.element.vertical_align"
+    >
+      <option value="top" translate>Top</option>
+      <option value="middle" translate>Center</option>
+      <option value="bottom" translate>Bottom</option>
+    </select>
+  </div>
+</div> -->

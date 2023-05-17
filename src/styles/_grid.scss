@@ -1,0 +1,132 @@
+@use 'sass:math';
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-material.css";
+@import './variables';
+
+$cell-padding-lr: (math.div($padding, 4)) - 1px;
+
+.ag-theme-material {
+
+	font-size: $font-size;
+
+	.ag-header-cell {
+		font-weight: normal;
+	}
+
+	.ag-header-cell {
+		padding-left: math.div($padding, 4);
+		padding-right: math.div($padding, 4);
+	}
+
+	.ag-cell { // these have to be
+		padding-left: $cell-padding-lr;
+		padding-right: $cell-padding-lr;
+		display: flex;
+		align-items: center;
+	}
+
+	.ag-group-checkbox.ag-invisible {
+		display: none;
+	}
+
+	.ag-cell,
+	.ag-header-cell {
+		&.icon-cell {
+			line-height: 24px;
+			display: flex;
+			align-items: center;
+		}
+	}
+
+	.ag-watermark {
+		display: none !important;
+	}
+
+	:not(.hidden-headers) .ag-overlay {
+		top: 55px;
+		height: calc(100% - 55px);
+	}
+
+	.ag-row.marked-for-deletion {
+
+		// background-color: lighten($warn, 25%);
+		background-color: scale-color($color: $warn, $lightness: 85%);
+
+		.ag-cell:not(.delete-column) {
+			opacity: 0.35;
+		}
+	}
+
+	&.hidden-headers {
+		.ag-header {
+			display: none;
+		}
+	}
+
+}
+
+// this attempts to fix the material form-field wrappers on the inline editor
+.ag-theme-material .ag-cell.ag-cell-inline-editing {
+
+	height: 100%;
+	padding: 0 $cell-padding-lr;
+	background-color: #fff;
+
+	.inline.control-base {
+
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+
+		.mat-form-field-wrapper {
+			padding-bottom: 0;
+
+			.mat-form-field-flex {
+				padding-top: 0;
+			}
+			.mat-form-field-infix {
+				padding: 0;
+				border: 0;
+			}
+			.mat-form-field-underline,
+			.mat-form-field-subscript-wrapper,
+			.mat-form-field-label-wrapper {
+				display: none;
+			}
+		}
+	}
+	// certain controls shouldn't stretch..
+	app-control-checkbox {
+
+		&.inline.control-base {
+			display: inline-flex;
+			width: unset;
+			height: unset;
+		}
+	}
+}
+
+.ag-cell.row-number {
+	font-size: $font-size-small;
+	background-color: #eee;
+	color: #666;
+}
+
+.column-align-center {
+
+	.ag-header-cell-label,
+	&.ag-cell {
+		justify-content: center;
+	}
+}
+.column-align-right {
+	.ag-header-cell-label,
+	&.ag-cell {
+		justify-content: flex-end;
+	}
+}
+
+.ag-status-bar {
+	display: none;
+}

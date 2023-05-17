@@ -1,0 +1,14 @@
+@import 'variables';
+
+:host, .mat-icon {
+	display: block;
+	width: 24px;
+	height: 24px;
+}
+.mat-icon {
+	cursor: pointer;
+}
+.disabled {
+	color: $disabled;
+	cursor: not-allowed;
+}

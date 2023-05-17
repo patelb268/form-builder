@@ -1,0 +1,116 @@
+<div
+class="input-textbox-element"
+  [ngClass]="{
+    'hide-display': component.hideElement === 'yes'
+  }"
+  [ngStyle]="{
+  'padding-top': component.componentSettings.padding_top + 'px',
+  'padding-right': component.componentSettings.padding_right + 'px',
+  'padding-bottom': component.componentSettings.padding_bottom + 'px',
+  'padding-left': component.componentSettings.padding_left + 'px',
+  'border-radius': component.componentSettings.rounded_corners + 'px',
+    height:
+      component.componentSettings.height > 0
+        ? component.componentSettings.height + 'px'
+        : 'auto'
+  }"
+>
+  <mat-form-field>
+    <mat-label
+      [ngClass]="{
+        'fw-bold': formDesign.label_font_bold,
+        'fst-italic': formDesign.label_font_italic
+      }"
+      [ngStyle]="{
+        color: formDesign.label_font_color,
+        'font-size': formDesign.label_font_size + 'px'
+      }"
+    >
+      <span *ngIf="component.element.show_label">{{ component.element.label }}</span>
+      <span *ngIf="component.element.is_required" class="text-danger">*</span>
+    </mat-label>
+    <input
+        [type]="component.type || 'text'"
+        [readonly]="component.readonly"
+    matInput
+    [placeholder]="component.element.placeholder_text || ''"
+    [ngClass]="{
+      'form-control-lg': formDesign.field_size === 'l',
+      'form-control-sm': formDesign.field_size === 's'
+    }"
+    [ngStyle]="{
+      'background-color': formDesign.background_color,
+          color: component.componentSettings.background_color,
+          border:
+            'solid ' +
+            formDesign.field_border_width +
+            'px' +
+            formDesign.field_border_color,
+      'border-radius': formDesign.field_rounded_corners + 'px'
+    }"
+  />
+      
+    <div>{{component.element.sub_label}}</div>
+  </mat-form-field>
+
+  <mat-form-field
+    *ngIf="component.type === 'date' || component.type === 'datetime'"
+  >
+    <mat-label
+      [ngClass]="{
+        'fw-bold': formDesign.label_font_bold,
+        'fst-italic': formDesign.label_font_italic
+      }"
+      [ngStyle]="{
+        color: formDesign.label_font_color,
+        'font-size': formDesign.label_font_size + 'px'
+      }"
+    >
+      {{ component.element.label }}
+      <span *ngIf="component.element.is_required" class="text-danger">*</span>
+    </mat-label>
+    <input
+      matInput
+      [placeholder]="component.element.placeholder_text"
+      [matDatepicker]="picker"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field *ngIf="component.type === 'number'">
+    <mat-label
+      [ngClass]="{
+        'fw-bold': formDesign.label_font_bold,
+        'fst-italic': formDesign.label_font_italic
+      }"
+      [ngStyle]="{
+        color: formDesign.label_font_color,
+        'font-size': formDesign.label_font_size + 'px'
+      }"
+    >
+      {{ component.element.label }}
+      <span *ngIf="component.element.is_required" class="text-danger">*</span>
+    </mat-label>
+    <input
+      matInput
+      [placeholder]="component.element.placeholder_text"
+      type="number"
+    />
+  </mat-form-field>
+  <mat-form-field *ngIf="component.type === 'email'">
+    <mat-label 
+      [class.fw-bold]="formDesign.label_font_bold" 
+      [class.fst-italic]="formDesign.label_font_italic"
+      [style.color]="formDesign.label_font_color"
+      [style.font-size.px]="formDesign.label_font_size">
+      {{ component.element.label }}
+      <span *ngIf="component.element.is_required" class="text-danger">*</span>
+    </mat-label>
+    <input 
+      matInput 
+      [placeholder]="component.element.placeholder_text" 
+      type="email" 
+    />
+  </mat-form-field>
+  
+</div>

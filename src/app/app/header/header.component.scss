@@ -1,0 +1,21 @@
+@import 'variables';
+
+.nav-toggle {
+
+	width: 0;
+	opacity: 0;
+
+	transition:
+		opacity 100ms linear,
+		width 250ms ease-in-out;
+
+	&.show {
+		width: 40px;
+		opacity: 1;
+		margin-right: $padding;
+	}
+}
+.mat-toolbar.mat-primary {
+    background: #3F6F85 !important;
+    color: white;
+}

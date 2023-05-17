@@ -1,0 +1,22 @@
+@use 'sass:math';
+@import 'variables';
+
+:host {
+	display: flex;
+	width: 100%;
+	overflow: hidden;
+	background-color: $disabled;
+	color: $disabled-fore;
+	padding: math.div($padding, 2);
+	font-size: $font-size-small;
+}
+
+.cell {
+	display: inline-flex;
+	padding-right: math.div($font-size-small , 3);
+
+	label::after,
+	.by::before {
+		content: "\00a0";
+	}
+}

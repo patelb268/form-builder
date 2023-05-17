@@ -1,0 +1,16 @@
+@import 'variables';
+
+:host {
+	display: block;
+}
+.container {
+	width: 100%;
+	display: flex;
+	position: relative;
+}
+.mat-form-field {
+	flex: 1 1 auto;
+}
+.fields {
+	position: absolute;
+}

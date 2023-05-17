@@ -1,0 +1,28 @@
+<ng-container *ngIf="!!data">
+
+	<span class="cell id" *ngIf="data[idField]">
+		<label>{{ 'ID:' | translate }}</label>
+		{{ data[idField] }}
+	</span>
+
+	<ng-container *ngIf="data.created">
+		<span class="cell created">
+			<label>{{ 'Created:' | translate }}</label>
+			{{ data.created | date:('format_datetime' | translate) }}
+			<label class="by">{{ 'by' | translate }}</label>
+			<a [routerLink]="['/', 'user', data.creatorRef]" *ngIf="data.creatorRef || data._creatorRef; else tplUnknown">{{ data._creatorRef || data.creatorRef }}</a>
+		</span>
+	</ng-container>
+
+	<ng-container *ngIf="data.modified && (!data.created || (data.modified.getTime() !== data.created.getTime()))">
+		<span class="cell modified">
+			<label>{{ 'Modified:' | translate }}</label>
+			{{ data.modified | date:('format_datetime' | translate) }}
+			<label class="by">{{ 'by' | translate }}</label>
+			<a [routerLink]="['/', 'user', data.modifierRef]" *ngIf="data.modifierRef || data._modifierRef; else tplUnknown">{{ data._modifierRef || data.modifierRef }}</a>
+		</span>
+	</ng-container>
+</ng-container>
+
+<ng-template #tplUnknown>{{ 'N/A' | translate }}</ng-template>
+

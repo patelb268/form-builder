@@ -1,0 +1,58 @@
+<span class="d-flex align-items-baseline ml-2" [ngClass]="params.labelAlign !=='Top'? 'flex-row': 'flex-column'" *ngIf="control['show'] != false">
+	<mat-label class="fixed-label-width mr-1" [ngClass]="params.labelAlign ==='Right'? 'text-right': 'text-left'" [style]="params.labelCss"
+		>{{ params.label
+		}}<span
+			*ngIf="
+				!params.required &&
+				control?.errors &&
+				control?.errors['required']
+			
+			"
+			class="text-danger"
+		>
+			*</span
+		></mat-label
+	>
+	<mat-form-field
+		#thisControl
+		[ngClass]="params.expression ? 'formula-exp' : ''"
+		[ngStyle]="{ width: params.width }"
+		[style]="params.labelCss + 'text-align: left !important'"
+	>
+		<input
+			*ngIf="
+				mode === FORM_MODE.VIEW || params.readonly || params.expression
+			"
+			matInput
+			[value]="control ? format() : null"
+			readonly
+			[style]="params.textCss"
+		/>
+		<input
+			*ngIf="
+				mode !== FORM_MODE.VIEW &&
+				!params.readonly &&
+				!params.expression
+			"
+			[formControl]="control"
+			matInput
+			type="number"
+			[style]="params.textCss"
+			autocomplete="off"
+			[placeholder]="params.placeholder"
+			[step]="params.step"
+			[min]="params.min ? params.min : undefined"
+			[max]="params.max ? params.max : undefined"
+			[required]="params.required"
+			[readonly]="params.readonly || control['readonly']"
+		/>
+		<mat-hint *ngIf="!!params.hint">{{ params.hint }}</mat-hint>
+		<mat-error
+			*ngIf="
+				(mode === FORM_MODE.EDIT || mode === FORM_MODE.ADD) &&
+				control.invalid
+			"
+			>{{ getTranslatedErrorMessage() }}</mat-error
+		>
+	</mat-form-field>
+</span>

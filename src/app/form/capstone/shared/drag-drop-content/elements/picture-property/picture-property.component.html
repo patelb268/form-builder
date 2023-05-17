@@ -1,0 +1,215 @@
+<mat-accordion>
+
+	<mat-expansion-panel class="general-settings-expansion-panel expansion-panel" [expanded]="true">
+		<mat-expansion-panel-header>
+			<mat-panel-title> General Settings </mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="general-settings-content-div settings-content-div">
+      
+      
+
+			<div class="settings-div form-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label">Form Label</mat-label>
+						<input matInput [(ngModel)] = component.element.label/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined" [ngClass]="{disabledIcon: ImagePinColor.FormLabelPin, enabledIcon: !ImagePinColor.FormLabelPin}">push_pin</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.FormLabelPin"
+						(change)="pinSetting($event, 'label name')"></mat-checkbox>
+				</div>
+			
+			</div>
+
+			
+
+			<div class="settings-div form-label-outer-div no-top-label">
+        <div class="setting-form-element">
+					<mat-slide-toggle [(ngModel)]="component.element.is_required" id="is_required">Required</mat-slide-toggle>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						[ngClass]="{ 'disabledIcon': ImagePinColor.RequiredPin,  'enabledIcon': !ImagePinColor.RequiredPin}">push_pin
+					</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.RequiredPin"
+						(change)="pinSetting($event, 'show_required')"></mat-checkbox>
+				</div>
+
+			</div>
+
+      <div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label">Report Label</mat-label>
+						<input matInput [(ngModel)] = component.element.report_label/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						[ngClass]="{ 'disabledIcon': ImagePinColor.ReportLabelPin,  'enabledIcon': !ImagePinColor.ReportLabelPin}">push_pin
+					</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.ReportLabelPin"
+						(change)="pinSetting($event, 'report_label')"></mat-checkbox>
+				</div>
+
+			</div>
+
+      <div class="settings-div form-label-outer-div">
+			<div class="setting-form-element">
+         		<input class = "chooseFile" type="file" accept="image/*" multiple="false" (change)="selectFile($event)">
+				<button class = "upload_image" mat-raised-button>Upload</button>
+        	</div>
+
+			<div class="pin-form-element">
+				<mat-icon class="material-icons-outlined"
+					[ngClass]="{ 'disabledIcon': ImagePinColor.ChooseFilePin,  'enabledIcon': !ImagePinColor.ChooseFilePin}">push_pin
+				</mat-icon>
+				<mat-checkbox [(ngModel)]="!ImagePinColor.ChooseFilePin"
+					(change)="pinSetting($event, 'choose_file')"></mat-checkbox>
+			</div>
+		</div>
+
+      <div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Image Source</mat-label
+						>
+						<input
+							matInput [(ngModel)] = component.element.image_url (blur)="onURLChange($event)"/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						[ngClass]="{ 'disabledIcon': ImagePinColor.ImageURLPin,  'enabledIcon': !ImagePinColor.ImageURLPin}">push_pin
+					</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.ImageURLPin"
+						(change)="pinSetting($event, 'image_url')"></mat-checkbox>
+				</div>
+
+      </div>
+
+      <div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Image Link</mat-label
+						>
+						<input matInput [(ngModel)] = "component.element.image_link"/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						[ngClass]="{ 'disabledIcon': ImagePinColor.ImageLinkin,  'enabledIcon': !ImagePinColor.ImageURLPin}">push_pin
+					</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.ImageLinkin"
+						(change)="pinSetting($event, 'image_link')"></mat-checkbox>
+				</div>
+
+      </div>
+
+      <div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Height</mat-label
+						>
+						<input
+							matInput [(ngModel)] = "component.element.height"/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						[ngClass]="{ 'disabledIcon': ImagePinColor.HeightPin,  'enabledIcon': !ImagePinColor.HeightPin}">push_pin
+					</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.HeightPin"
+						(change)="pinSetting($event, 'height')"></mat-checkbox>
+				</div>
+
+      </div>
+
+      <div class="settings-div report-label-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>width</mat-label
+						>
+						<input matInput [(ngModel)] = "component.element.width"/>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						[ngClass]="{ 'disabledIcon': ImagePinColor.WidthPin,  'enabledIcon': !ImagePinColor.WidthPin}">push_pin
+					</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.WidthPin"
+						(change)="pinSetting($event, 'width')"></mat-checkbox>
+				</div>
+
+      </div>
+
+      <div class="settings-div default-value-type-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label>Align</mat-label>
+						<mat-select>
+							<mat-option value="constant"> Left </mat-option>
+							<mat-option value="formula"> Center </mat-option>
+							<mat-option value="previous"> Right </mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						[ngClass]="{ 'disabledIcon': ImagePinColor.AlignPin,  'enabledIcon': !ImagePinColor.AlignPin}">push_pin
+					</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.AlignPin"
+						(change)="pinSetting($event, 'align')"></mat-checkbox>
+				</div>
+
+			</div>
+
+      <div class="settings-div hover-text-outer-div">
+				<div class="setting-form-element">
+					<mat-form-field appearance="outline">
+						<mat-label class="setting-element-label"
+							>Hover Text</mat-label>
+						<textarea matInput></textarea>
+					</mat-form-field>
+				</div>
+				<div class="pin-form-element">
+					<mat-icon class="material-icons-outlined"
+						[ngClass]="{ 'disabledIcon': ImagePinColor.HoverPin,  'enabledIcon': !ImagePinColor.HoverPin}">push_pin
+					</mat-icon>
+					<mat-checkbox [(ngModel)]="!ImagePinColor.HoverPin"
+						(change)="pinSetting($event, 'hover')"></mat-checkbox>
+				</div>
+				
+			</div>
+    </div>
+  </mat-expansion-panel>
+  
+  <mat-expansion-panel class="styles-expansion-panel expansion-panel">
+		<mat-expansion-panel-header>
+			<mat-panel-title> Styles </mat-panel-title>
+		</mat-expansion-panel-header>
+		<div class="settings-div css-outer-div">
+      		<div class="setting-form-element">
+        		<mat-form-field appearance="outline">
+          		<mat-label class="setting-element-label">CSS</mat-label>
+          			<textarea matInput></textarea>
+        		</mat-form-field>
+      		</div>
+			  <div class="pin-form-element">
+				<mat-icon class="material-icons-outlined"
+					[ngClass]="{ 'disabledIcon': ImagePinColor.CSSPin,  'enabledIcon': !ImagePinColor.CSSPin}">push_pin
+				</mat-icon>
+				<mat-checkbox [(ngModel)]="!ImagePinColor.CSSPin"
+					(change)="pinSetting($event, 'css')"></mat-checkbox>
+			</div>
+
+    	</div>
+	</mat-expansion-panel>
+
+</mat-accordion>

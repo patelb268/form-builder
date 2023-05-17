@@ -1,0 +1,16 @@
+@import 'variables';
+
+:host {
+	max-width: 400px;
+	display: block;
+}
+form {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+
+	.mat-form-field {
+		padding: $padding;
+		width: 100%;
+	}
+}

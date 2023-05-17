@@ -1,0 +1,40 @@
+<mat-toolbar color="primary" class="border-top no-print">
+	<ng-container> </ng-container>
+	<div class="title multi-line">Pick A Template</div>
+	<div class="push"></div>
+	<mat-icon [mat-dialog-close]="true">close</mat-icon>
+</mat-toolbar>
+
+<div class="d-flex flex-row preview-container">
+	<div class="templates-viewer no-print">
+		<div *ngFor="let template of templates" class="template">
+			<mat-card class="example-card p-0">
+				<mat-card-header class="w-100">
+					<mat-card-title class="w-100 m-0 bg-dark text-white">{{
+						template.name
+					}}</mat-card-title>
+				</mat-card-header>
+				<mat-card-content class="p-1" (click)="openTemplate(template)" [ngClass]="template === selectedTemplate? 'selected': ''">
+					<p [innerHTML]="template.meta?.template?.content"></p>
+				</mat-card-content>
+			</mat-card>
+		</div>
+	</div>
+	<div class="html-preview">
+		<div class="ac-btn no-print" *ngIf="selectedTemplate">
+			<button
+				mat-raised-button
+				class="mr-1"
+				(click)="save()"
+				[color]="'accent'"
+			>
+				Save
+			</button>
+			<button mat-raised-button (click)="print()" [color]="'accent'">
+				Print
+			</button>
+		</div>
+		<div [innerHTML]="htmlContent | safe: 'html'"></div>
+        <div [innerHTML]="htmlContent | safe: 'html'" class="print-container"></div>
+	</div>
+</div>

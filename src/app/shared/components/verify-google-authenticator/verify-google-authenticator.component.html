@@ -1,0 +1,26 @@
+<mat-dialog-content>
+
+
+	<mat-dialog-content>
+		<p>
+			{{ 'google_authenticate_instructions' | translate:data }}
+		</p>
+
+		<div class="image-wrapper">
+			<img [src]="data.qrcode | safe:'url'">
+		</div>
+
+		<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+			<mat-form-field class="no-hint">
+				<mat-label>{{ 'verification_code' | translate }}</mat-label>
+				<input matInput formControlName="code" required>
+			</mat-form-field>
+
+			<button type="submit" mat-raised-button [disabled]="form.invalid" color="primary">{{ 'ok' | translate }}</button>
+			<button mat-button color="warn" type="button" [mat-dialog-close]="false">{{ 'cancel' | translate }}</button>
+		</form>
+
+	</mat-dialog-content>
+
+</mat-dialog-content>

@@ -1,0 +1,16 @@
+<mat-dialog-content>
+	<p>
+		{{ '2FA_confirmation_sms_sent_to' | translate:data }}
+	</p>
+
+	<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+		<mat-form-field class="no-hint">
+			<mat-label>{{ 'verification_code' | translate }}</mat-label>
+			<input matInput formControlName="pin" required>
+		</mat-form-field>
+
+		<button type="submit" mat-raised-button [disabled]="form.invalid" color="primary">{{ 'ok' | translate }}</button>
+		<button mat-button color="warn" type="button" [mat-dialog-close]="false">{{ 'cancel' | translate }}</button>
+	</form>
+</mat-dialog-content>

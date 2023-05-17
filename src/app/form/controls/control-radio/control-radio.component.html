@@ -1,0 +1,58 @@
+<span class="d-flex align-items-baseline ml-2" [ngClass]="params.labelAlign !=='Top'? 'flex-row': 'flex-column'" *ngIf="control['show'] != false">
+	<mat-label class="fixed-label-width mr-1" [ngClass]="params.labelAlign ==='Right'? 'text-right': 'text-left'" [style]="params.labelCss"
+		>{{ params.label
+		}}<span
+			*ngIf="
+				params.required ||
+				(control?.errors && control?.errors['required'])
+			"
+			class="text-danger"
+		>
+			*</span
+		></mat-label
+	>
+	<mat-form-field
+		class="control-wrap"
+		[style]="params.labelCss"
+		
+	>
+		<input matInput style="display: none" />
+		<ng-container
+			*ngTemplateOutlet="radio; context: { $implicit: params }"
+		></ng-container>
+	</mat-form-field>
+</span>
+<ng-template #radio let-params>
+	<mat-radio-group
+		aria-labelledby="
+        radio-group-label"
+		class="radio-group mt-0 d-inline-block"
+		[formControl]="control"
+		(ngModelChange)="onChange($event)"
+		[disabled]="
+			mode === FORM_MODE.VIEW || params.readonly || control['readonly']
+		"
+		(click)="check(params)"
+		><div>
+			<mat-radio-button
+				[disableRipple]="true"
+				class="radio-button mt-0 mb-0"
+				[ngClass]="
+					params.spreadCols && idx === 0
+						? 'float-left clear-left'
+						: params.spreadCols && idx < params.spreadCols
+						? 'd-flex float-left'
+						: 'float-left clear-left'
+				"
+				[ngStyle]="{
+					width: params.labelWidth ? params.labelWidth : 'auto'
+				}"
+				*ngFor="let r of params.options; let idx = index"
+				[value]="r._v"
+				[style]="params.textCss"
+			>
+				{{ r._l }}
+			</mat-radio-button>
+		</div>
+	</mat-radio-group>
+</ng-template>

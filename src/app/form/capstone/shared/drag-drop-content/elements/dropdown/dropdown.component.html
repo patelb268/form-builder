@@ -1,0 +1,56 @@
+<div
+  [ngStyle]="{
+    'padding-top': component.componentSettings.padding_top + 'px',
+    'padding-right': component.componentSettings.padding_right + 'px',
+    'padding-bottom': component.componentSettings.padding_bottom + 'px',
+    'padding-left': component.componentSettings.padding_left + 'px',
+    'background-color': component.componentSettings.background_color,
+    'border-radius': component.componentSettings.rounded_corners + 'px',
+    height:
+      component.componentSettings.height > 0
+        ? component.componentSettings.height + 'px'
+        : 'auto'
+  }"
+>
+  <label
+    class="m-0"
+    [ngClass]="{
+      'fw-bold': formDesign.label_font_bold,
+      'fst-italic': formDesign.label_font_italic,
+      'd-none': !component.element.show_label
+    }"
+    [ngStyle]="{
+      color: formDesign.label_font_color,
+      'font-size': formDesign.label_font_size + 'px'
+    }"
+  >
+    {{ component.element.label }}
+    <span *ngIf="component.element.is_required" class="text-danger">*</span>
+  </label>
+  <select
+    class="form-select"
+    name="dropdown_{{ component.id }}"
+    [ngClass]="{
+      'form-select-lg': formDesign.field_size === 'l',
+      'form-select-sm': formDesign.field_size === 's'
+    }"
+    [ngStyle]="{
+      'background-color': formDesign.field_background_color,
+      border:
+        'solid ' +
+        formDesign.field_border_width +
+        'px' +
+        formDesign.field_border_color,
+      'border-radius': formDesign.field_rounded_corners + 'px'
+    }"
+  >
+    <option
+      [value]="option.value"
+      *ngFor="let option of component.element.options"
+      [selected]="option.is_selected"
+    >
+      {{ option.text }}
+    </option>
+  </select>
+  <div>{{component.element.sub_label}}</div>
+</div>

@@ -1,0 +1,102 @@
+:host ::ng-deep {
+	.expansion-panel > .mat-expansion-panel-content > .mat-expansion-panel-body {
+		padding: 1em;
+		margin: 0px;
+	}
+}
+
+// .settings-content-div {
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: flex-start;
+// 	align-items: stretch;
+// 	min-height: 30px;
+// 	margin-top: auto;
+// 	margin-bottom: 1em;
+// }
+
+// .settings-div {
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: flex-start;
+// 	align-items: stretch;
+//     margin-top: 1em;
+// }
+
+
+// .option-key-value {
+// 	min-width: 52px;
+// }
+
+// // ===================CARDS===================
+// .mat-card {
+// 	border-radius: 0;
+// }
+
+// .mat-card-content {
+// 	padding-top: 16px;
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: flex-start;
+// 	align-items: stretch;
+// }
+// // =========================================================
+
+// // ===================CHECKBOX (SHOW LABEL AND REQUIRED)===================
+// .show-label {
+// 	display: flex;
+// 	flex-direction: row;
+// 	justify-content: flex-start;
+// 	align-items: center;
+// }
+
+// :host ::ng-deep {
+// 	.show-label-checkbox > .mat-checkbox-layout,
+// 	.required-checkbox > .mat-checkbox-layout {
+// 		padding: 0px;
+// 		margin: 0px;
+// 	}
+// }
+
+// .show-label-checkbox,
+// .required-checkbox {
+// 	border-radius: 5px;
+// 	background-color: rgba($color: #000000, $alpha: 0.15);
+// 	padding: 0.5rem;
+// }
+// // =========================================================
+
+// // ===================OPTIONS LIST===================
+// .options-list-radio-button-group-divider {
+// 	margin-bottom: 20px;
+// }
+
+// .options-list-outer-div {
+// 	display: flex;
+// 	flex-direction: row;
+// 	justify-content: flex-start;
+// }
+
+// .options-list-radio-button-and-delete-outer-div {
+// 	padding: 0.5em;
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: center;
+// 	align-items: center;
+// }
+
+// .options-list-text-and-value-outer-div {
+// 	padding: 0.5em;
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: flex-start;
+// 	align-items: stretch;
+// 	overflow: auto;
+// }
+
+// :host ::ng-deep {
+// 	.options-list-radio-button > .mat-radio-label > .mat-radio-label-content {
+// 		padding: 0px;
+// 	}
+// }
+// // =========================================================

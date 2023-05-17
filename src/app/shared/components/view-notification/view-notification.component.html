@@ -1,0 +1,45 @@
+<ng-container *ngTemplateOutlet="tplMain; context: {$implicit: data | async}"></ng-container>
+
+<ng-template #tplMain let-d>
+	<ng-container *ngIf="!d">
+		<div class="padded" style="width: 132px; height: 132px;">
+			<mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="!!d">
+		<mat-toolbar color="primary" mat-dialog-title>
+			<div class="multi-line">
+				{{ d.subject }}
+				<div class="meta">
+					<div>
+						{{ 'Type:' | translate }} {{ d.type | translate }}
+					</div>
+					<div *ngIf="d.sent">
+						{{ 'Sent:' | translate }} {{ d.sent | date: ('format_datetime' | translate) }}
+					</div>
+					<div *ngIf="d.sourceSlice">
+						{{ 'Source:' | translate }} {{ d.sourceSlice }}
+					</div>
+					<div>
+						{{ 'From:' | translate }}&nbsp;{{ d._from ? d._from : ('System' | translate) }}
+					</div>
+					<div *ngIf="d._to">
+						{{ 'To:' | translate }}&nbsp;{{ d._to }}
+					</div>
+				</div>
+			</div>
+			<div class="push"></div>
+			<button mat-icon-button mat-dialog-close [matTooltip]="'Close' | translate"><mat-icon>{{ 'icon_close' | translate }}</mat-icon></button>
+		</mat-toolbar>
+		<mat-toolbar *ngIf="d.attachments.length" class="auto-height">
+			<span class="label">{{ 'attachments:' | translate }}</span>
+			<mat-chip-list class="attachments" *ngIf="d.attachments.length">
+				<mat-chip *ngFor="let a of d.attachments" (click)="downloadClick($event, a)" class="clickable">{{ 'file.ext' | translate:a }}</mat-chip>
+			</mat-chip-list>
+		</mat-toolbar>
+		<mat-dialog-content>
+			<div class="html padded" [innerHtml]="html | safe:'html'"></div>
+			<app-record-footer [data]="d"></app-record-footer>
+		</mat-dialog-content>
+	</ng-container>
+</ng-template>

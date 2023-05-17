@@ -1,0 +1,46 @@
+@use 'sass:math';
+@import 'variables';
+
+// .section {
+// 	display: flex;
+// 	flex-direction: column;
+
+// 	label {
+// 		font-size: $font-size-small;
+// 		color: $label-fore;
+// 	}
+// 	.options {
+// 		display: grid;
+// 		grid-template-columns: auto auto auto 1fr;
+// 		gap: 0 $padding;
+// 	}
+// }
+:host {
+	padding: $padding;
+	display: block;
+}
+
+.hidden {
+	display: none;
+}
+
+form {
+	display: grid;
+	grid-template-columns: auto minmax(200px, 1fr) auto;
+	gap: 0 $padding;
+
+	.mat-expansion-panel {
+		grid-column: span 3;
+	}
+
+	dl-input {
+		width: inherit;
+	}
+}
+
+.buttons {
+	display: grid;
+	grid-template-columns: auto;
+	gap: math.div($padding, 2);
+	align-items: flex-start;
+}

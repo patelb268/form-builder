@@ -1,0 +1,94 @@
+
+$pinned-panel-background-color: #8eb5c7;
+$white-color: #ffffff;
+
+.horizontal-panel {
+  display: flex;
+  flex-direction: column;
+  .all-pinned-items {
+    display: flex;
+    align-items: center;
+
+    .pinned-items-div {
+      margin: 5px 5px;
+      .panel-item {
+        display: flex;
+      }
+    }
+      
+  }
+}
+  
+.panel-item {
+
+    // for toggle button
+    .mat-slide-toggle {
+      height: auto;
+      ::ng-deep {
+        .mat-slide-toggle-label {
+          flex-direction: column;
+          margin-bottom: 0px;
+        }
+      }
+    }
+
+    // for dropdowns
+    .mat-form-field {
+      height: auto;
+      width: 140px;
+      top: 4px;
+      
+      ::ng-deep {
+        .mat-form-field-wrapper{
+          padding: 0;
+          margin: 0;
+          
+          .mat-form-field-infix{
+            .mat-form-field-label-wrapper{
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+
+    // for into texbox, open on button click
+    .pin-panel-button {
+      background-color: transparent;
+      color: #000000;
+      width: 60px;
+      min-width: 40px;
+      height: 45px;
+      font-size: 14px;
+      padding: 0 2px;
+      white-space: normal;
+      line-height: normal;
+    }
+}
+
+::ng-deep {
+  .mat-menu-panel.pin-panel-menu {
+    min-height: 30px;
+    .mat-menu-content{
+      padding: 0;
+      background-color: $pinned-panel-background-color;
+      .pin-panel-menu-item {
+        .mat-form-field.pin-panel-menu-form-item {
+          padding: 5px;
+          .mat-form-field-wrapper{
+            padding: 0;
+            margin: 0;
+            background-color: $white-color;
+          }
+        }   
+      }
+    }
+  }
+}
+
+// .defaultvalueclass{
+//   padding-top: 30px;
+//   padding-left:30px;
+//   width: 200px;
+//   height: 76px;
+// }

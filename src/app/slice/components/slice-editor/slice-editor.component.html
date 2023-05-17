@@ -1,0 +1,126 @@
+<div class="loading" *ngIf="loading | async">
+	<mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+<ng-container *ngIf="!(loading | async)">
+	<form [formGroup]="form" autocomplete="off" (submit)="submit()" *ngIf="!error; else tplError" [class.has-no-icon]="!generalMeta?.value?.icon">
+
+		<mat-toolbar>
+			<mat-icon class="slice-icon" *ngIf="generalMeta?.value?.icon">{{ generalMeta.value.icon }}</mat-icon>
+			<div class="multi-line">
+				{{ form.get('name').value || ('new_x' | translate: {x: (form?.value?.category | translate)}) }}
+				<div class="small">
+					{{ ('slice_category_' + form?.value?.category) | translate }}
+				</div>
+			</div>
+			<div class="push"></div>
+			<button type="submit" mat-icon-button color="accent" [disabled]="(!form.dirty && !generalMeta.dirty) || !form.valid || (saving | async)"><mat-icon>{{ 'icon_save' | translate }}</mat-icon></button>
+		</mat-toolbar>
+
+		<div class="container category-{{ form?.value?.category }}">
+
+			<div class="saving-overlay" *ngIf="saving | async"></div>
+
+			<ng-container [ngSwitch]="form?.value?.category">
+				<ng-container *ngSwitchCase="CATEGORIES.MAILING_LIST">
+					<ng-container *ngTemplateOutlet="tplCommon"></ng-container>
+					<ng-container *ngTemplateOutlet="tplParent"></ng-container>
+					<ng-container *ngTemplateOutlet="tplSingleField"></ng-container>
+					<ng-container *ngTemplateOutlet="tplWhere"></ng-container>
+				</ng-container>
+			</ng-container>
+		</div>
+
+		<ng-container *ngIf="gridPreview">
+			<mat-toolbar class="sub-header">
+				{{ 'preview' | translate }}
+				<div class="push description">
+					{{ (previewCount === 1 ? 'x_result' : previewCount || previewCount === 0 ? 'x_results' : '') | translate:{x: previewCount} }}
+				</div>
+			</mat-toolbar>
+			<!-- <pre style="font-size: 11px">{{ form?.value?.query_params | json }}</pre> -->
+			<div class="preview-container">
+				<datalynk-grid
+					#previewGrid
+					*ngIf="canPreview | async; else tplPreviewNA"
+					class="preview-grid"
+					[serialized]="previewGridSerialized"
+					[previewSlice]="form.value"
+					[forceSliceId]="form?.value?.parent"
+					(totalCount)="previewCount = $event"
+					[postQueryTransformFn]="postQueryTransformFn.bind(this)"
+				></datalynk-grid>
+			</div>
+		</ng-container>
+
+
+		<!-- common to "all" slices, (name, desciption, etc..) -->
+		<ng-template #tplCommon>
+
+			<!-- slice.name -->
+			<mat-form-field class="control name no-hint">
+				<mat-label>{{ 'name' | translate }}</mat-label>
+				<input matInput type="text" autocomplete="off" formControlName="name">
+				<span matSuffix>
+					<button type="button" mat-icon-button (click)="openIconPicker()" [matTooltip]="'choose_icon' | translate" class="icon-picker" >
+						<mat-icon>{{ generalMeta?.value?.icon || ('icon_no_icon' | translate) }}</mat-icon>
+					</button>
+				</span>
+			</mat-form-field>
+
+
+
+		</ng-template>
+
+		<!-- slice.parent -->
+		<ng-template #tplParent>
+			<mat-form-field class="control parent no-hint">
+				<mat-label>{{ 'from_application' | translate }}</mat-label>
+				<mat-select formControlName="parent" required>
+					<mat-option *ngFor="let o of applications | async" [value]="o.id">{{ o.name }}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</ng-template>
+
+		<!-- slice.query_params.fields - single mode -->
+		<ng-template #tplSingleField>
+			<mat-form-field class="control field no-hint">
+				<mat-label>{{ (fields.label || 'fields') | translate }}</mat-label>
+				<mat-select [formControl]="form.controls?.query_params?.controls?.fields" required [compareWith]="singleFieldSelected">
+					<mat-option *ngFor="let o of fieldsAvailable | async" [value]="makeObjectPair(o.id)">{{ o.label || o.id }}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</ng-template>
+
+		<!-- slice.query_params.fields - single mode - forced into a expression on a set field name -->
+		<!-- <ng-template #tplSingleFieldAsMappedExpression>
+			<mat-form-field class="control field no-hint">
+				<mat-label>{{ (fields.label || 'fields') | translate }}</mat-label>
+				<mat-select [formControl]="form.controls?.query_params?.controls?.fields" required [compareWith]="singleFieldSelected">
+					<mat-option *ngFor="let o of fieldsAvailable | async" [value]="makeObjectPair(o.id)">{{ o.label || o.id }}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</ng-template> -->
+
+		<ng-template #tplWhere>
+			<app-where
+				class="control where"
+				[formControl]="form?.controls?.query_params?.controls?.where"
+				[slice]="form?.value?.id || form?.value?.parent"
+			></app-where>
+		</ng-template>
+
+	</form>
+</ng-container>
+
+
+
+<ng-template #tplPreviewNA>
+	<div class="preview-na">
+		{{ 'preview_unavailable' | translate }}
+	</div>
+</ng-template>
+
+
+<ng-template #tplError>
+	<app-error [error]="error"></app-error>
+</ng-template>

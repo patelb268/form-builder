@@ -1,0 +1,5 @@
+<mat-dialog-content>
+	<div *ngIf="url">
+		<iframe class="find-replace" [src]="url | safe: 'resourceUrl'"></iframe>
+	</div>
+</mat-dialog-content>

@@ -1,0 +1,53 @@
+<!-- <ng-container *ngIf="mode === FORM_MODE.VIEW; else tplEditor">
+	view
+</ng-container>
+<ng-template #tplEditor>
+	editor
+</ng-template> -->
+<div *ngIf="control['show'] != false">
+	<i
+		*ngIf="mode !== 'view'"
+		class="material-icons pointer"
+		(click)="uploadFileIphone.click()"
+	>
+		camera_alt
+	</i>
+
+	<p [style]="params.labelCss">
+		{{ params.label }}
+	</p>
+	<input hidden [formControl]="control" />
+	<input
+		#uploadFileIphone
+		[formControl]="control"
+		[required]="params.required"
+		type="file"
+		accept="image/*,application/pdf"
+		class="d-none"
+		(change)="onFileChange($event)"
+	/>
+</div>
+
+<div class="img-div" *ngIf="control['show'] != false">
+	<div *ngIf="file || control.value">
+		<span [style]="params.textCss">{{ fileName }}</span>
+		<a [href]="getFile(control)" target="_blank">
+			<img
+				*ngIf="mode !== 'add'"
+				class="preview-size"
+				[src]="getFile(control)"
+			/>
+		</a>
+		<span
+			class="badge badge-danger"
+			[ngClass]="mode !== 'add' ? 'abs' : ''"
+		>
+			<i
+				*ngIf="mode !== 'view'"
+				class="material-icons pointer ft-1"
+				(click)="removeFiles()"
+				>delete</i
+			>
+		</span>
+	</div>
+</div>

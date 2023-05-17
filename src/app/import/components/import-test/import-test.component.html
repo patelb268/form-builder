@@ -1,0 +1,135 @@
+<!-- <mat-toolbar>Import Records From CSV</mat-toolbar> -->
+<mat-label class="mat-label-style p-2">Import Records From CSV</mat-label>
+
+<div class="drop-target">
+	<div class="border top-left"></div>
+	<div class="border top-right"></div>
+	<div class="border bottom-left"></div>
+	<div class="border bottom-right"></div>
+	<div class="ml-3 mt-2" *ngIf="CSVSplitData.length == 0">
+		<input class="file-upload" [(ngModel)]="fileInput" type="file" id="files" name="files" multiple (change)="uploadFile($event)">
+		<!-- <div class="tile tile-add"><mat-icon>{{ 'icon_browse' | translate }}</mat-icon></div> -->
+	</div>
+	<div *ngIf="CSVSplitData.length > 0" class="table-div">
+		<div class="mt-2 load-div">
+			<mat-label class="mt-label">Load Saved Settings:</mat-label>
+			<mat-form-field appearance="fill" floatLabel="never">
+				<mat-select [(ngModel)]="selectedImport" (ngModelChange)="checkLoadImport($event)">
+				<mat-option disabled value="">Select</mat-option>
+				  <mat-option *ngFor="let item of loadSavedNames" [value]="item">{{item}}</mat-option>
+				</mat-select>
+			  </mat-form-field>
+			<!-- <button mat-raised-button color="primary" class="ml-2 import-btns">Load</button> -->
+			<button mat-raised-button color="warn" class="ml-2 import-btns"  [disabled]="selectedImport == ''" (click)="deleteImport()">Delete Selected</button>
+		</div>
+		<mat-label class="mt-label">Import/ Label Option</mat-label>
+		<br>
+
+
+		<mat-form-field appearance="fill" class="mb-2">
+			<select matNativeControl required [(ngModel)]="importLabel" (change)="changeImportOptions()">
+				<option label="--select something --"></option>
+				<option value="import">Import</option>
+				<option value="first_row">Use first row as label</option>
+				<option value="skip_first">Skip first row</option>
+			</select>
+		</mat-form-field>
+		<div style="height:65vh;overflow:auto;">
+			<table>
+				<section>
+					<tr>
+						<th *ngFor="let data of headerData;let ind = index" class="col-def-section">
+							<mat-form-field appearance="fill" class="form-field-col">
+								<mat-select [(ngModel)]="headerDef[ind]" (ngModelChange)="checkColDef($event,data)">
+									<mat-option value="new_column">
+										New Column
+									</mat-option>
+									<mat-option value="existing_column">
+										Exisiting Column
+									</mat-option>
+									<mat-option value="column_identifier">
+										Exisiting Column - Identifier
+									</mat-option>
+									<mat-option value="ignore">
+										Ignore
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</th>
+					</tr>
+					<tr>
+						<th *ngFor="let data of headerData;let ind = index" class="col-def-section pt-0">
+							<mat-form-field appearance="fill" class="form-field-col">
+								<mat-select [(ngModel)]="headerTypeDef[ind]"
+									(ngModelChange)="checkTypeDef($event,data)" [disabled]="(headerDef[ind] == 'existing_column') || (headerDef[ind] == 'column_identifier')">
+									<mat-option value="text">
+										Text(< 120 Characters) </mat-option>
+											<mat-option value="paragraph">
+												Textarea (paragraph)
+											</mat-option>
+											<mat-option value="number">
+												Integer (1,2,3..)
+											</mat-option>
+											<mat-option value="decimal">
+												Decimal (123.44)
+											</mat-option>
+											<mat-option value="date">
+												Date
+											</mat-option>
+											<mat-option value="datetime">
+												Date/Time
+											</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</th>
+					</tr>
+					<tr>
+						<th *ngFor="let data of headerData;let ind = index" class="pt-0 no-border">
+							<mat-form-field appearance="fill" class="form-field-col"
+								*ngIf="(headerDef[ind] == 'new_column')">
+								<input matInput placeholder="Enter a Column Name" [(ngModel)]="headerNameDef[ind]">
+							</mat-form-field>
+							<mat-form-field appearance="fill" class="form-field-col"
+								*ngIf="(headerDef[ind] == 'ignore')">
+								<input matInput placeholder="Ignored" readonly style="pointer-events: none;">
+							</mat-form-field>
+							<mat-form-field appearance="fill" *ngIf="(headerDef[ind] == 'existing_column') || (headerDef[ind] == 'column_identifier')">
+								<mat-select [(ngModel)]="headerexistingCol[ind]" placeholder="Select a Column"
+									floatlLabel="never">
+									<mat-select-trigger>
+										{{headerexistingCol[ind]}}
+									  </mat-select-trigger>
+									<mat-option *ngFor="let data of existingColumnInfo" [value]="data.Name">
+										{{data.Name}} ({{data.Type | titlecase}})
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</th>
+					</tr>
+				</section>
+
+				<tr *ngFor="let main of rowData" class="row-data-tr">
+					<td *ngFor="let sub of main">{{sub}}</td>
+				</tr>
+
+
+			</table>
+			<button mat-raised-button color="primary" (click)="saveFile()" class="mt-2 import-btns">Save</button>
+
+			<div>
+				<mat-checkbox class="example-margin" [(ngModel)]="saveImport">Save Import</mat-checkbox>
+				<mat-form-field class="example-full-width ml-2" *ngIf="saveImport">
+	
+				<input matInput placeholder="Give this import save a name" [(ngModel)]="newImport">
+				</mat-form-field>
+
+			</div>
+
+		</div>
+
+
+	</div>
+</div>
+
+
+<!-- <file-uploader [accept]="fileExtensions" multiple [upload]="false" [formControl]="file"></file-uploader> -->

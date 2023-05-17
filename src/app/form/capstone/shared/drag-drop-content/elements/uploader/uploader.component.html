@@ -1,0 +1,42 @@
+<div
+  [ngClass]="{
+    'justify-content-start': component.element.alignment === 'left',
+    'justify-content-center': component.element.alignment === 'center',
+    'justify-content-end': component.element.alignment === 'right'
+  }"
+  class="d-flex align-items-center"
+>
+  <div
+    class="text-center"
+    [ngStyle]="{
+      'padding-top': component.componentSettings.padding_top + 'px',
+      'padding-right': component.componentSettings.padding_right + 'px',
+      'padding-bottom': component.componentSettings.padding_bottom + 'px',
+      'padding-left': component.componentSettings.padding_left + 'px',
+      'background-color': component.componentSettings.background_color,
+      'border-radius': component.componentSettings.rounded_corners + 'px',
+      'min-height':
+        component.componentSettings.height > 0
+          ? component.componentSettings.height + 'px'
+          : 'auto',
+      'line-height':
+        component.element.line_height > 0
+          ? component.element.line_height
+          : 'auto',
+      'font-family': component.element.font_family,
+      color: component.element.text_color,
+      'border-style': component.element.border_style,
+      'border-width': component.element.border_width + 'px',
+      'border-color': component.element.border_color,
+      'font-size': component.element.font_size + 'px',
+      width:
+        component.element.width_type === 'full-width'
+          ? '100%'
+          : component.element.width_type === 'fixed'
+          ? component.element.width + 'px'
+          : 'auto'
+    }"
+  >
+    {{ component.element.placeholder }}
+  </div>
+</div>

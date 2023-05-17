@@ -1,0 +1,55 @@
+<mat-icon
+	class="text-success mx-1 pointer"
+	*ngIf="!sortIterations.length"
+	(click)="addSortRow()"
+	>add_circle</mat-icon
+>
+<div
+	class="d-flex align-items-center sorting-grouping-container"
+	*ngFor="let itr of sortIterations; let i = index"
+>
+	<div class="d-flex">
+		<i
+			*ngIf="sortIterations.length > i && i > 0"
+			(click)="moveItem(i, i - 1)"
+			style="margin-left: -1em"
+			[ngClass]="
+				i + 1 == sortIterations.length
+					? 'material-icons mt-2 pointer text-success mr-4'
+					: 'material-icons mt-2 pointer text-success'
+			"
+			>arrow_upward</i
+		>
+		<i
+			*ngIf="sortIterations.length > i + 1 && sortIterations.length > 1"
+			class="material-icons mt-2 pointer text-success"
+			(click)="moveItem(i, i + 1)"
+			>arrow_downward</i
+		>
+
+		<mat-icon class="text-danger ml-2 pointer" (click)="deleteSortRow(i)"
+			>remove_circle</mat-icon
+		>
+		<mat-icon class="text-success mx-1 pointer" (click)="addSortRow()"
+			>add_circle</mat-icon
+		>
+	</div>
+	<div class="d-flex align-items-center">
+		<div>
+			<app-parameter-selector
+				[control]="itr.fieldCtrl"
+			></app-parameter-selector>
+		</div>
+		<div class="ml-2">
+			<mat-form-field style="width: 200px">
+				<mat-select [formControl]="itr.orderCtrl">
+					<mat-option
+						*ngFor="let item of orderValues"
+						[value]="item.id"
+						>{{ item.value }}</mat-option
+					>
+				</mat-select>
+			</mat-form-field>
+		</div>
+	</div>
+</div>

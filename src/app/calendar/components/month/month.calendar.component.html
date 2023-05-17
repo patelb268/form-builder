@@ -1,0 +1,52 @@
+<div class="full-view">
+	<ng-container *ngIf="!!slice">
+		<!-- <mat-toolbar class="header" class="primary">
+			{{ slice.name }}
+		</mat-toolbar> -->
+		<mat-toolbar class="nav">
+			<mat-form-field>
+				<input matInput [matDatepicker]="ymPicker" [formControl]="date">
+				<mat-datepicker-toggle [for]="ymPicker" matSuffix></mat-datepicker-toggle>
+				<mat-datepicker
+					#ymPicker
+					startView="multi-year"
+					(yearSelected)="chosenYearHandler($event)"
+					(monthSelected)="chosenMonthHandler($event, ymPicker)"
+				></mat-datepicker>
+			</mat-form-field>
+			<!-- <button mat-button>{{ 'month_' + month | translate }}</button>
+			<button mat-button>{{ year }}</button> -->
+			<span class="push"></span>
+			<button mat-icon-button (click)="onMovePrevious()"><mat-icon>arrow_left</mat-icon></button>
+			<button mat-button (click)="onMoveToday()">{{ 'Today' | translate }}</button>
+			<button mat-icon-button (click)="onMovePrevious()"><mat-icon>arrow_right</mat-icon></button>
+		</mat-toolbar>
+
+		<ng-container *ngIf="view === 'month'">
+			<ng-container *ngTemplateOutlet="monthView"></ng-container>
+		</ng-container>
+	</ng-container>
+</div>
+
+<ng-template #monthView>
+	<div class="view view-month">
+		<div *ngFor="let i of [0,1,2,3,4,5,6]" class="weekday">{{ 'weekday_short_' + i | translate }}</div>
+		<ng-container *ngFor="let i of monthRange">
+			<ng-template *ngTemplateOutlet="monthViewDay; context: {$implicit: i}"></ng-template>
+		</ng-container>
+		<!-- <ng-container *ngFor="let w of [0,1,2,3,4,5]">
+			<ng-container *ngFor="let d of [0,1,2,3,4,5,6]" class="day">
+				<ng-container *ngTemplateOutlet="monthViewDay; context: {date: getMonthDay(w,d), w:w, d:d}"></ng-container>
+			</ng-container>
+		</ng-container> -->
+	</div>
+</ng-template>
+
+
+<ng-template #monthViewDay let-d>
+	<div class="day day-{{ d.getDay() }}" [class.today]="d.getTime() === today" [class.not-current]="d.getMonth() !== date.value.getMonth()">
+		<div class="date">
+			<div class="number">{{ d.getDate() }}</div>
+		</div>
+	</div>
+</ng-template>

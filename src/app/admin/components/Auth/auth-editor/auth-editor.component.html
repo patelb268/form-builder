@@ -1,0 +1,152 @@
+<form [formGroup]="form">
+	<navigate-container>
+
+		<navigate-section *ngIf="form?.value?.expire_password || !form?.value?.active" color="warn">
+			<div class="warnings">
+				<ng-container *ngIf="form?.value?.expire_password">
+					<div *ngIf="form.value.expire_password > (app.now | async); else tplExpiredAlready">&bull; {{ 'warn_password_expires_on_x' | translate: {x: (form.value.expire_password | date: 'medium')} }}</div>
+					<ng-template #tplExpiredAlready>
+						<div>&bull; {{ 'warn_expired_password' | translate }}</div>
+					</ng-template>
+				</ng-container>
+				<div *ngIf="!form?.value?.active">&bull; {{ 'warn_user_inactive' | translate }}</div>
+			</div>
+		</navigate-section>
+
+		<navigate-section [title]="'account' | translate">
+
+			<div class="form">
+
+				<mat-form-field class="first_name">
+					<mat-label>{{ 'first_name' | translate }}</mat-label>
+					<input matInput formControlName="first_name" autocapitalize="words" spellcheck="false" autocomplete="off">
+				</mat-form-field>
+
+				<mat-form-field class="last_name">
+					<mat-label>{{ 'last_name' | translate }}</mat-label>
+					<input matInput formControlName="last_name" autocapitalize="words" spellcheck="false" autocomplete="off">
+				</mat-form-field>
+
+				<mat-form-field class="email">
+					<mat-label>{{ 'email' | translate }}</mat-label>
+					<input matInput formControlName="email" type="email">
+				</mat-form-field>
+
+				<mat-form-field class="login">
+					<mat-label>{{ 'login' | translate }}</mat-label>
+					<input matInput formControlName="login"  autocapitalize="off" spellcheck="false" autocomplete="off">
+				</mat-form-field>
+
+				<mat-form-field class="mobile">
+					<mat-label>{{ 'mobile_phone' | translate }}</mat-label>
+					<input matInput formControlName="mobile_phone" type="tel" autocomplete="off" [required]="required.mobile_phone">
+				</mat-form-field>
+
+				<mat-form-field class="multi">
+					<mat-label>{{ '2FA' | translate }}</mat-label>
+					<mat-select #twoFactor formControlName="2FA">
+						<mat-option [value]="TYPES.NONE">{{ '2FA_none' | translate }}</mat-option>
+						<mat-option [value]="TYPES.SMS">{{ '2FA_' + TYPES.SMS | translate }}</mat-option>
+						<mat-option [value]="TYPES.GOOGLE" disabled>{{ '2FA_' + TYPES.GOOGLE | translate }}</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<mat-checkbox formControlName="sysadmin" class="sysadmin">{{ 'sysadmin_label' | translate }}</mat-checkbox>
+			</div>
+
+		</navigate-section>
+
+		<!-- ROLE MEMBERSHIP -->
+		<navigate-section [title]="'role_membership' | translate">
+			<div class="role-members">
+				<ng-container  *ngFor="let s of roles">
+					<div class="role" *ngIf="showAllRoles || form?.value?.roles?.includes(s.id)">
+						<mat-checkbox [disabled]="form?.disabled || !s.perms?.modify" [checked]="form?.value?.roles?.includes(s.id)" (change)="onRoleChange($event.checked, s.id)" [matTooltip]="'is_user_member_of_x' | translate: {x: 'role' | translate }">{{ s.name }}</mat-checkbox>
+						<ng-container *ngIf="s.perms?.modify">
+							<button [disabled]="working | async" mat-icon-button (click)="legacy.editRole(s.id)" [matTooltip]="'edit_role' | translate" color="primary"><mat-icon>{{ 'icon_edit' | translate }}</mat-icon></button>
+							<button [disabled]="working | async" mat-icon-button (click)="legacy.editPermissions(s.id)" [matTooltip]="'edit_permissions' | translate" color="primary"><mat-icon>{{ 'icon_permissions' | translate }}</mat-icon></button>
+						</ng-container>
+					</div>
+				</ng-container>
+				<button *ngIf="form?.value?.roles?.length !== roles?.length" mat-raised-button (click)="showAllRoles = !showAllRoles;">{{ (showAllRoles ? 'roles_show_qualified' : 'roles_hide_qualified') | translate }}</button>
+			</div>
+		</navigate-section>
+
+		<navigate-section [title]="'active_sessions' | translate">
+			<ng-container *ngIf="(activeSessions | async) as all">
+				<ng-container *ngIf="all.length; else noActiveSessions">
+					<div class="sessions active">
+						<ng-container *ngTemplateOutlet="tplSessionHeaders; context: {$implicit: true}"></ng-container>
+						<ng-container *ngFor="let s of all">
+							<ng-container *ngTemplateOutlet="tplSession; context: {$implicit: s, active: true}"></ng-container>
+						</ng-container>
+					</div>
+				</ng-container>
+			</ng-container>
+		</navigate-section>
+
+		<navigate-section [title]="'session_history' | translate">
+			<ng-container *ngIf="(sessionHistory | async) as all">
+				<ng-container *ngIf="all.length; else noSessionHistory">
+					<div class="sessions">
+						<ng-container *ngTemplateOutlet="tplSessionHeaders; context: {$implicit: false}"></ng-container>
+						<ng-container *ngFor="let s of all">
+							<ng-container *ngTemplateOutlet="tplSession; context: {$implicit: s, active: false}"></ng-container>
+						</ng-container>
+					</div>
+				</ng-container>
+			</ng-container>
+		</navigate-section>
+
+		<!-- <navigate-section title="debug">
+			<pre>{{ form.value | json }}</pre>
+		</navigate-section> -->
+
+		<navigate-actions>
+
+			<button mat-raised-button color="accent" type="submit" [disabled]="form.invalid || !form.dirty">{{ 'save' | translate }}</button>
+			<button mat-button color="primary" (click)="assume()" *ngIf="canAssume()" [disabled]="working | async">{{ 'assume_user' | translate }}</button>
+			<button mat-button color="primary" *ngIf="canExpirePassword()" [disabled]="working | async" (click)="expirePassword()">{{ 'expire_password' | translate }}</button>
+			<button mat-button color="warn" *ngIf="canUnexpirePassword()" [disabled]="working | async" (click)="unexpirePassword()">{{ 'unexpire_password' | translate }}</button>
+			<button mat-button color="primary" *ngIf="canResetPassword()" [disabled]="working | async" (click)="changePassword()">{{ 'change_password' | translate }}</button>
+			<!-- the current auth.expire value isn't being honoured by login on the backend-->
+			<!-- <button mat-button color="primary" *ngIf="canActivate()" [disabled]="working | async">{{ 'activate' | translate }}</button>
+			<button mat-button color="primary" *ngIf="canDeactivate()" [disabled]="working | async">{{ 'deactivate' | translate }}</button> -->
+		</navigate-actions>
+
+	</navigate-container>
+</form>
+
+<ng-template #tplSessionHeaders let-active>
+	<div class="header end-session"></div>
+	<div class="header user-agent">{{ 'user_agent' | translate }}</div>
+	<div class="header ip">{{ 'ip' | translate }}</div>
+	<div class="header started">{{ 'started' | translate }}</div>
+	<div class="header ended">{{ (active ? 'expires' : 'ended') | translate }}</div>
+	<div class="header impersonated">{{ 'assumed_by' | translate }}</div>
+</ng-template>
+
+<ng-template #tplSession let-s let-active="active">
+	<div class="end-session">
+		<button type="button" mat-icon-button color="warn" (click)="expireSession(s)" [disabled]="!active || !!(s.self)" [matTooltip]="(s.self ? 'your_active_session' : 'expire_this_session') | translate" [matTooltipDisabled]="!active"><mat-icon *ngIf="!!active">{{ (s.self ? 'icon_star' : 'icon_delete') | translate }}</mat-icon></button>
+	</div>
+	<div class="user-agent" [matTooltip]="s.agent">
+		<div class="custom-icon {{ s.device.browser.name.toLowerCase() }}" *ngIf="s?.device?.browser?.name"></div>
+		<div class="description" *ngIf="s?.device">
+			<ng-container *ngFor="let p of userAgentProps">
+				<ng-container *ngIf="s?.device[p] as dev">
+					<div *ngIf="dev.name">{{ dev.name }}&nbsp;{{ dev.major || dev.version }}</div>
+				</ng-container>
+			</ng-container>
+		</div>
+	</div>
+	<div class="ip">{{ s.ip }}</div>
+	<div class="started">{{ app.formatDateTime(s.started) }}</div>
+	<div class="ended">{{ app.formatDateTime(s.active ? s.expire : (s.cancel || s.ended)) }}</div>
+	<div class="impersonated">
+		<a *ngIf="s.impersonatedById" [routerLink]="'/admin/users/' + s.impersonatedById">{{ s.impersonatedByEmail || s.impersonatedLogin || s.impersonatedById }}</a>
+	</div>
+</ng-template>
+
+<ng-template #noActiveSessions>{{ 'no_active_sessions' | translate }}</ng-template>
+<ng-template #noSessionHistory>{{ 'no_session_history' | translate }}</ng-template>

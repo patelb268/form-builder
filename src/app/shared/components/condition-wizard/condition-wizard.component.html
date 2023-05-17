@@ -1,0 +1,194 @@
+<div id="page1" style="padding:10px 20px 20px">
+    <!-- b style="font-size: 14px">What should this condition do?</b-->
+    
+    <ul id="condition-types">
+        <li class="active-line">
+            <input type="radio" name="cond" id="field-cond" value="field" checked="checked"> <label class="locale" for="field-cond">Show / Hide a form field</label>
+            <div class="option-description locale">Provide efficient forms to your users according to their choices</div>
+        </li>
+        <li>
+            <input type="radio" name="cond" id="page-cond" value="page"> <label  class="locale" for="page-cond">Skip to a page or end of the form</label>
+            <div class="option-description locale">Allow users to jump to a part of your form according to their choices</div>
+        </li>
+        <li>
+            <input type="radio" name="cond" value="email" id="action-cond-email"> <label  class="locale" for="action-cond-email">Send an e-mail after submission</label>
+            <div class="option-description locale">Redirect your e-mail alerts according to the form entry.</div>
+        </li>
+        <li>
+            <input type="radio" name="cond" value="url" id="action-cond-url"> <label  class="locale" for="action-cond-url">Change Thank You URL after submission</label>
+            <div class="option-description locale">Redirect to a different thank you page according to the form submission</div>
+        </li>
+        <li>
+            <input type="radio" name="cond" value="message" id="action-cond-message"> <label  class="locale" for="action-cond-message">Change Thank You message after submission</label>
+            <div class="option-description locale">Display a customized thank you page according to the form submission</div>
+        </li>
+    </ul>
+</div>
+<div id="page2" style="display:none; padding:10px;">
+    
+    <div id="condition-box">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+            <tr>
+                <td valign="top" id="cond-list">
+                    <table cellpadding="5" cellspacing="0" border="0" width="100%" class="cond-line">
+                        <tr>
+                            <td height="25" class="locale">If</td>
+                            <td>
+                                <select class="field-list"></select>
+                            </td>
+                            <td class="locale">
+                                field
+                            </td>
+                            <td>
+                                <select class="terms-list"></select>
+                            </td>
+                            <td width="100%">
+                                <div class="cond-value">&nbsp;</div>
+                            </td>
+                            <td>
+                                <img src="images/delete.png" class="cond-del-button" />
+                            </td>
+                        </tr>
+                    </table>                    
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <table cellpadding="5" cellspacing="0" width="100%" style=" margin-top:15px;">
+                        <tr>
+                            <td style="border-top:1px solid #ccc;padding:0px; padding-top:8px">
+                                <div id="cond-single" style="padding:4px;">
+                                    
+                                </div>
+                                <div id="cond-multiple" style="display:none">
+                                <table cellpadding="4" cellspacing="0" border="0">
+                                    <tr>
+                                        <td class="locale">If</td>
+                                        <td>
+                                            <select id="cond-link">
+                                                <option value="Any" selected="selected" class="locale">Any</option>
+                                                <option value="All" class="locale">All</option>
+                                            </select>
+                                        </td>
+                                        <td class="locale"> of these conditions are matched</td>
+                                    </tr>
+                                </table>
+                                </div>
+                            </td>
+                        </tr>    
+                        <tr>                            
+                            <td width="100%" style="padding:0">
+                                <div id="cond-action">
+                                    <div class="action-pages" id="action-field" style="display:none;">
+                                        <table cellpadding="4" cellspacing="0" border="0" class="action-line active-line">
+                                            <tr>
+                                                <td class="locale">Then</td>
+                                                <td>
+                                                    <select class="show-hide">
+                                                        <option value="Show" class="locale">Show</option>
+                                                        <option value="Hide" class="locale">Hide</option>
+                                                        <option value="make_required" class="locale">Make it required</option>
+                                                        <option value="prompt" class="locale">Prompt Message</option>
+                                                        <option value="disable" class="locale">Read-Only</option>
+                                                        <option value="enable" class="locale">Editable</option>
+                                                        <!-- <option value="change_value" class="locale">Change Value</option> -->
+
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select class="field-list">
+                                                        <option value="none" class="locale">Please Select</option>
+                                                    </select>
+                                                    <textarea class="field-textarea" rows="4" cols="50">
+                                                    </textarea>
+
+                                                    <div class="field-changevalue" style="margin-right:10px">
+                                                        <span style="position:relative;top:-30px;left:10px">From</span>
+                                                        <select class="field-changevalue-from">
+                                                            <option value="none" class="locale">Please Select</option>
+                                                        </select>
+                                                        <span style="position:relative;top:-30px;left:15px"> To </span> 
+                                                        <textarea style="position:relative;left:15px"class="field-changevalue-to" rows="4" cols="20">
+                                                        </textarea>    
+                                                    </div>        
+                                                </td>
+                                                <td class="locale">Field</td>
+                                                 <td>
+                                						<img src="images/delete.png" class="cond-del-button" />
+                            					</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="action-pages" id="action-page" style="display:none">
+                                        <table cellpadding="4" cellspacing="0" border="0" class="active-line">
+                                            <tr>
+                                                <td class="locale">Then after user clicks "next" button skip to</td>
+                                                <td>
+                                                    <select id="page-list">
+                                                        <option value="none" class="locale">Please Select</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="action-pages" id="action-url" style="display:none">
+                                        <table cellpadding="4" cellspacing="0" border="0" class="active-line">
+                                            <tr>
+                                                <td class="locale">Then redirect to</td>
+                                                <td>
+                                                    <input type="text" size="50" id="cond-url" /> URL
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="action-pages" id="action-email" style="display:none">
+                                        <table cellpadding="4" cellspacing="0" border="0" class="active-line">
+                                            <tr>
+                                                <td class="locale">Then send</td>
+                                                <td>
+                                                    <select id="email-list">
+                                                        <option value="none">Please select</option>
+                                                    </select>
+                                                </td>
+                                                <td class="locale">
+                                                    email to
+                                                </td>
+                                                <td>
+                                                	<select id="email-to">
+                                                		
+                                                	</select>
+                                                	<!--  
+                                                    	<input type="text" size="30" id="email-to" />
+                                                    -->
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="action-pages" id="action-message" style="display:none">
+                                        <table cellpadding="4" cellspacing="0" border="0" class="active-line">
+                                            <tr>
+                                                <td class="locale">Then display this custom message on submit</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <textarea class="locale" cols="30" rows="5" id="cond-message" style="width:515px; height:100px">
+                                                        Thank you for your submission
+                                                    </textarea>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div id="page3" style="display:none; padding:10px;max-height:450px; overflow:auto;">
+    <ul id="saved-cond-list" style="padding:0px; margin:0px; list-style:none; list-style-position:outside;">
+        
+    </ul>
+</div>

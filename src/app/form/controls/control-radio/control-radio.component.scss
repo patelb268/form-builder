@@ -1,0 +1,32 @@
+// .radio-group {
+// 	display: flex;
+// 	//	margin: 15px 0;
+// }
+
+// .radio-button {
+// 	margin: 5px;
+// }
+
+// ::ng-deep .radio-group-label {
+// 	color: rgba(0, 0, 0, 0.6);
+// 	font-size: 14px;
+// }
+.clear-left {
+	clear: left;
+}
+
+::ng-deep {
+	.mat-radio-outer-circle, .mat-radio-inner-circle {
+		height: 16px !important;
+		width: 16px !important;
+	}
+	.mat-radio-label {
+		margin-bottom: 0;
+		padding: 0.3em 0;
+		display: flex !important;
+		align-items: normal !important;
+	}
+	.mat-radio-label-content {
+		padding-left: 8px !important;
+	}
+}

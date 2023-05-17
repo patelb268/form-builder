@@ -1,0 +1,13 @@
+<h1 mat-dialog-title class="mb-0">Please Confirm...</h1>
+<div mat-dialog-content>
+  <p class="info">You are deleting {{records}} selected record in this report
+    You must enter your password to continue.</p>
+  <mat-form-field class="mb-0">
+    <input matInput [(ngModel)]="pswd" type="password">
+  </mat-form-field>
+  <p *ngIf="wrongPassword" class="text-danger">password entered is incorrect</p>
+</div>
+<div mat-dialog-actions class="p-0 mb-1">
+    <button mat-button (click)="onOkClick()">Ok</button>
+  <button mat-button (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+</div>

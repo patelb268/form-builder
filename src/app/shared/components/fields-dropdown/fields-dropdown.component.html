@@ -1,0 +1,39 @@
+<button
+	type="button"
+	*ngIf="!inMenu"
+	[tabindex]="tabindex"
+	mat-icon-button
+	[matMenuTriggerFor]="menu"
+	[matMenuTriggerData]="{$implicit: getFields(slice) | async, path: path}"
+><mat-icon>{{ 'icon_fields' | translate }}</mat-icon></button>
+
+<div
+	*ngIf="!!inMenu"
+	[tabindex]="tabindex"
+	class="hack-child"
+	mat-menu-item
+	[matMenuTriggerFor]="menu"
+	[matMenuTriggerData]="{$implicit: getFields(slice) | async, path: path}"
+>{{ label }}</div>
+
+
+<mat-menu #menu class="dense fields-dropdown-panel">
+	<ng-template matMenuContent let-data let-path="path">
+		<button mat-menu-item [tabindex]="tabindex" *ngFor="let f of data?.fields" (click)="addField(f, path)">{{ f.col }}</button>
+		<ng-container *ngIf="data?.related?.length">
+			<mat-divider></mat-divider>
+			<button type="button" mat-menu-item *ngFor="let x of data.related" class="hack-parent">
+				<app-fields-dropdown
+					#related
+					*ngFor="let rel of x.relationships"
+					[slice]="rel.toSlice"
+					[inMenu]="true"
+					[label]="rel.name"
+					[parentMenu]="menu"
+					[path]="path.slice().concat([rel.name])"
+					(selected)="selected.emit($event)"
+				></app-fields-dropdown>
+			</button>
+		</ng-container>
+	</ng-template>
+</mat-menu>

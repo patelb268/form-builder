@@ -1,0 +1,33 @@
+<ng-container *ngIf="!params.labelHack">
+	<div>{{ params.label }}</div>
+	<span *ngFor="let c of params.children" >
+		<mat-checkbox
+			class="float-left mb-0 mt-0 custom mr-3"
+			*ngIf="control && c.id"
+			[disabled]="
+				mode === FORM_MODE.VIEW ||
+				params.readonly ||
+				control['readonly']
+			"
+			[style]="params.labelCss"
+			#checkboxNode
+			[formControl]="formGroup.get(c.id)"
+			[matTooltip]="params?.label"
+			[ngStyle]="{ width: params.labelWidth }"
+			(click)="onClick($event, params)"
+			><span *ngIf="!hideLabel" [style]="params.textCss"
+				>{{ c.label
+				}}<span
+					*ngIf="
+						!params.required &&
+						control?.errors &&
+						control?.errors['required']
+					"
+					class="text-danger"
+				>
+					*</span
+				></span
+			></mat-checkbox
+		>
+	</span>
+</ng-container>

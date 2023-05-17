@@ -1,0 +1,40 @@
+.customHeaderMenuButton,
+.customHeaderLabel,
+.customSortDownLabel,
+.customSortUpLabel,
+.customSortRemoveLabel {
+	margin: 0 0 0 3px;
+	display: inline-flex;
+	font-size: 14px;
+
+}
+
+.customSortUpLabel {
+	margin: 0;
+}
+
+.customSortRemoveLabel {
+	font-size: 11px;
+}
+
+.c-header {
+	display: block;
+	align-items: center;
+	margin: auto;
+	height: 100%;
+	width: 100%;
+	padding-top: 6px;
+	// background-color: #3F6F85 !important;
+	border-left: 1px solid white;
+
+	.active {
+		display: flex;
+	}
+	.inactive {
+		display: none;
+	}
+}
+:host {
+	height: inherit;
+	width: inherit;
+}

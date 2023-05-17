@@ -1,0 +1,28 @@
+@import 'variables';
+
+:host {
+	display: block;
+	margin-bottom: $padding;
+}
+
+.mat-card.warn {
+	background: $warn;
+	color: $warn-fore;
+}
+
+// .content {
+// 	display: flex;
+// 	flex-direction: column;
+
+// 	&.has-description {
+// 		display: grid;
+// 		align-items: top;
+// 		grid-template-columns: minmax(auto, 25vw) 1fr;
+// 		grid-template-rows: auto;
+// 		gap: $padding;
+
+// 		.description {
+// 			max-width: 250px;
+// 		}
+// 	}
+// }

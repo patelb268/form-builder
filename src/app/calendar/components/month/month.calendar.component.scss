@@ -1,0 +1,57 @@
+@use 'sass:math';
+@import 'variables';
+
+.header,
+.nav {
+	flex: 0 0 auto;
+}
+
+.view {
+	flex: 1 1 auto;
+}
+
+.view.view-month {
+
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto;
+	grid-auto-rows: 1fr;
+
+	.day,
+	.weekday {
+		padding: math.div($padding, 4);
+	}
+	.weekday {
+		text-align: right;
+		padding: (math.div($padding, 2)) + 1px;
+	}
+
+	.day {
+		border-top: $border;
+
+		&.not-current .number {
+			// background-color: darken($background-color, 2);
+			opacity: 0.25;
+		}
+
+		&:not(:nth-child(7)) {
+			border-right: $border;
+		}
+
+		.date {
+			text-align: right;
+			margin: -(math.div($padding, 4) - 1px);
+		}
+
+		.date .number {
+			display: inline-block;
+    		border-radius: 50px;
+			padding: 2px 7px;
+		}
+
+		&.today .number {
+			background-color: $primary;
+			color: $primary-fore;
+		}
+	}
+}

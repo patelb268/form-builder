@@ -1,0 +1,72 @@
+<mat-progress-bar mode="indeterminate" *ngIf="loading | async"></mat-progress-bar>
+
+<mat-toolbar>
+	{{ 'settings' | translate }}
+</mat-toolbar>
+
+<div class="container mx-0 w-100 mw-100 w-normal-anchor" *ngIf="!(loading | async)">
+
+	<a mat-button *ngIf="show?.myaccount" routerLink="/settings/profile">
+		<mat-icon matListIcon>{{ 'icon_account' | translate }}</mat-icon>
+		{{ 'my_account' | translate }}
+	</a>
+
+	<a *ngIf="show?.notifications" mat-button routerLink="/grid/notifications">
+		<mat-icon matListIcon>{{ 'icon_notifications' | translate }}</mat-icon>
+		{{ 'notification_log' | translate }}
+	</a>
+
+	<a *ngIf="show?.clients" mat-button (click)="legacy.clients()">
+		<mat-icon matListIcon>{{ 'icon_clients' | translate }}</mat-icon>
+		{{ 'clients' | translate }}
+	</a>
+
+	<a *ngIf="show?.users" mat-button (click)="legacy.users()">
+		<mat-icon matListIcon>{{ 'icon_users' | translate }}</mat-icon>
+		{{ 'users' | translate }}
+	</a>
+
+	<a *ngIf="show?.roles" mat-button (click)="legacy.rolesAndPermissions()">
+		<mat-icon matListIcon>{{ 'icon_roles_and_permissions' | translate }}</mat-icon>
+		{{ 'roles_and_permissions' | translate }}
+	</a>
+
+	<a *ngIf="show?.dashboards" mat-button (click)="legacy.dashboards()">
+		<mat-icon matListIcon>{{ 'icon_dashboard' | translate }}</mat-icon>
+		{{ 'dashboards' | translate }}
+	</a>
+
+	<a *ngIf="show?.emails" mat-button (click)="legacy.notifications()">
+		<mat-icon matListIcon>{{ 'icon_notifications_and_subscriptions' | translate }}</mat-icon>
+		{{ 'notifications_and_subscriptions' | translate }}
+	</a>
+
+	<ng-container *ngIf="show?.mailinglists?.create || show?.mailinglists?.edit">
+		<button type="button" mat-button *ngIf="show?.mailinglists" color="primary" (click)="toggleExpand('mailinglists')" [class.expanded]="expand.mailinglists">
+			<mat-icon>{{ 'icon_mailinglist' | translate }}</mat-icon>
+			<span [matBadge]="(mailingLists | async).length" matBadgeOverlap="false" [matBadgeHidden]="!(mailingLists | async).length" matBadgeSize="small" matBadgeColor="accent">{{ 'mailing_lists' | translate }}</span>
+		</button>
+		<div class="section mailinglists" [class.expanded]="expand.mailinglists">
+			<a mat-button *ngIf="show?.mailinglists.create" routerLink="/create/mailinglist"><mat-icon>{{ 'icon_add' | translate }}</mat-icon>{{ 'new_x' | translate: {x: ('mailinglist' | translate)} }}</a>
+			<ng-container *ngIf="show?.mailinglists?.edit">
+				<div class="has-delete" *ngFor="let s of mailingLists | async">
+					<a mat-button [routerLink]="'/edit/' + s.id">
+						<mat-icon>{{ 'icon_edit' | translate }}</mat-icon>
+						{{ s.name }}
+					</a>
+					<button *ngIf="s.perms?.modify" class="delete" mat-icon-button (click)="deleteMailingList(s)" color="warn"><mat-icon>{{ 'icon_delete' | translate }}</mat-icon></button>
+				</div>
+			</ng-container>
+		</div>
+	</ng-container>
+
+	<a *ngIf="show?.environment" mat-button (click)="legacy.environment(show.environment)">
+		<mat-icon matListIcon>{{ 'icon_environment' | translate }}</mat-icon>
+		{{ 'environment' | translate }}
+	</a>
+
+	<a *ngIf="show?.keyval" mat-button routerLink="/settings/keyval">
+		<mat-icon matListIcon>{{ 'icon_keyval' | translate }}</mat-icon>
+		{{ 'keyval' | translate }}
+	</a>
+</div>

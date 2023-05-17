@@ -1,0 +1,111 @@
+<div
+	#formElement
+	role="group"
+	[formGroup]="form"
+	class="d-flex p-0 align-items-center justify-content-between"
+	[class.hide-date]="!!hideDate"
+	[class.hide-time]="!!hideTime"
+	[class.no-pointer]="mode === 'view'"
+>
+	<div class="date d-flex align-items-center w-100" *ngIf="!hideDate">
+		<input
+			#dateMask
+			[readOnly]="mode === 'view' || form?.get('date')['readonly']"
+			class="mat-input-element w-100"
+			
+			[value]="form?.get('date')?.value | date: dateFormat"
+			(focus)="showAndFocus(dateInput, dateMask)"
+			[required]="params?.required"
+			[style]="params?.textCss"
+			
+		/>
+		<input
+			#dateInput
+			matInput
+			class="mat-input-element"
+			style="display: none"
+			formControlName="date"
+			[required]="params?.required"
+			[matDatepicker]="picker"
+			[readOnly]="mode === 'view'"
+			(blur)="blur(dateMask, dateInput)"
+			[style]="params?.textCss"
+			(keydown)="dateKeyDown($event, dateInput)"
+		
+		/>
+		<mat-datepicker-toggle *ngIf="mode !== 'view'" [for]="picker"></mat-datepicker-toggle>
+		<mat-datepicker  #picker></mat-datepicker>
+	</div>
+	<div
+		class="time ml-auto d-flex align-items-center"
+		*ngIf="!hideTime"
+	>
+		<input
+			#timeInput
+			[required]="params?.required"
+			matInput
+			class="mat-input-element text-right"
+			[readOnly]="mode === 'view' || form?.get('time')['readonly']"
+			autocomplete="off"
+			[style]="'width: 60px;' + params?.textCss"
+			[value]="form?.get('time')?.value | date: timeFormat"
+			(change)="timeChange($event.target.value)"
+		/>
+		<!-- <ng-container *ngIf="!hideTime &&  mode !== 'view'">
+			<mat-icon
+				class="time-icon"
+				(click)="setDateTime(false, 'now')"
+				[matTooltip]="
+					'Current Time (' +
+					(app.now | async | date: timeFormat) +
+					')'
+				"
+				>schedule</mat-icon
+			>
+		</ng-container> -->
+
+		<button class="time-icon" *ngIf="!hideTime &&  mode !== 'view'" matSuffix mat-icon-button aria-label="schedule">
+			<mat-icon
+				class="time-icon"
+				(click)="setDateTime(false, 'now')"
+				[matTooltip]="
+					'Current Time (' +
+					(app.now | async | date: timeFormat) +
+					')'
+				"
+				>schedule</mat-icon
+			>
+		  </button>
+		<!-- <ng-container *ngIf="!hideDate &&  mode !== 'view'">
+			<mat-icon class="time-icon" [matMenuTriggerFor]="allMenu"
+				>expand_more</mat-icon
+			>
+		</ng-container> -->
+	</div>
+</div>
+
+<mat-menu #allMenu="matMenu">
+	<ng-container>
+		<button
+			mat-menu-item
+			*ngIf="!hideTime"
+			(click)="setDateTime(false, 'now')"
+		>
+			Current Time ({{ app.now | async | date: timeFormat }})
+		</button>
+		<button
+			mat-menu-item
+			*ngIf="!hideDate && !hideTime"
+			(click)="setDateTime(true, 'now')"
+		>
+			Now ({{ app.now | async | date: bothFormat }})
+		</button>
+		<button
+			mat-menu-item
+			*ngIf="!hideDate"
+			(click)="setDateTime(true, null)"
+		>
+			Current Date ({{ app.now | async | date: dateFormat }})
+		</button>
+	</ng-container>
+</mat-menu>

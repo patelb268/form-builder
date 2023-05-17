@@ -1,0 +1,17 @@
+.checkbox-label-align-left-auto {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.checkbox-label-align-right {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.checkbox-label-align-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}

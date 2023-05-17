@@ -1,0 +1,12 @@
+<mat-dialog-content>
+	<div class="group" *ngFor="let g of all">
+		<div class="header">{{ ('_icon_group_' + g.name) | translate }}</div>
+		<div class="children">
+			<mat-icon class="icon" *ngFor="let i of g.icons" [color]="i.id === selected ? 'accent' : ''" [matDialogClose]="i.id">{{ i.id }}</mat-icon>
+		</div>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-raised-button [matDialogClose]="false" color="accent">{{ 'no_icon' | translate }}</button>
+	<button mat-button matDialogClose color="warn">{{ 'cancel' | translate }}</button>
+</mat-dialog-actions>

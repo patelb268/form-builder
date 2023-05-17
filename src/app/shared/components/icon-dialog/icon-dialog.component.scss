@@ -1,0 +1,26 @@
+@use 'sass:math';
+@import 'variables';
+
+.group {
+	.header {
+		&:not(:first-child) {
+			margin-top: math.div($padding, 2);
+		}
+		font-size: $font-size-small;
+		color: $disabled-fore;
+	}
+	.children {
+		display: flex;
+		flex-wrap: wrap;
+
+		.icon {
+			margin: math.div($padding, 2);
+			cursor: pointer;
+			transition: all 100ms ease-in-out;
+
+			&:hover {
+				color: $accent;
+			}
+		}
+	}
+}

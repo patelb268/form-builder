@@ -1,0 +1,25 @@
+<mat-form-field
+	class="font-mat-form-field"
+	appearance="outline"
+	*ngIf="component.hasOwnProperty('element')"
+>
+	<mat-label>Font</mat-label>
+	<mat-select [(ngModel)]="component.element.font_family">
+		<mat-option [value]="font.value" *ngFor="let font of fonts">{{
+			font.name
+		}}</mat-option>
+	</mat-select>
+</mat-form-field>
+
+<mat-form-field
+	class="font-mat-form-field"
+	appearance="outline"
+	*ngIf="!component.hasOwnProperty('element')"
+>
+	<mat-label>Font</mat-label>
+	<mat-select [(ngModel)]="component.font_family">
+		<mat-option [value]="font.value" *ngFor="let font of fonts">{{
+			font.name
+		}}</mat-option>
+	</mat-select>
+</mat-form-field>

@@ -1,0 +1,9 @@
+<mat-card class="section" [class.warn]="color === 'warn'">
+	<mat-card-title class="title" *ngIf="!!title">
+		{{ title }}
+	</mat-card-title>
+	<mat-card-subtitle *ngIf="!!description">{{ description }}</mat-card-subtitle>
+	<mat-card-content>
+		<ng-content></ng-content>
+	</mat-card-content>
+</mat-card>

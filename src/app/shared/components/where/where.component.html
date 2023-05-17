@@ -1,0 +1,19 @@
+<div class="container">
+	<mat-form-field class="no-hint">
+		<mat-label>{{ (label || 'where') | translate }}</mat-label>
+		<textarea
+			#textareaElement
+			class="mono"
+			[formControl]="control"
+			matInput
+			[placeholder]="placeholder"
+			cdkTextareaAutosize
+			[cdkAutosizeMinRows]="minRows"
+			[cdkAutosizeMaxRows]="maxRows"
+			(focus)="focus()"
+			(blur)="blur()"
+			spellcheck="false"
+		></textarea>
+		<app-fields-dropdown [slice]="slice" matSuffix (selected)="inject($event)" tabindex="-1" *ngIf="!!slice"></app-fields-dropdown>
+	</mat-form-field>
+</div>

@@ -1,0 +1,60 @@
+<span class="d-flex align-items-baseline ml-2" [ngClass]="params.labelAlign !=='Top'? 'flex-row': 'flex-column'" *ngIf="control['show'] != false">
+	<mat-label class="fixed-label-width mr-1" [ngClass]="params.labelAlign ==='Right'? 'text-right': 'text-left'" [style]="params.labelCss">
+		<!-- case when we required based on conditions not params required -->
+		{{ params.label
+		}}<span
+			*ngIf="
+				!params.required &&
+				control?.errors &&
+				control?.errors['required']
+			"
+			class="text-danger"
+		>
+			*</span
+		>
+	</mat-label>
+	<mat-form-field
+		#thisControl
+		[ngClass]="params.expression ? 'formula-exp' : ''"
+		[appearance]="inline ? 'standard' : ''"
+		[ngStyle]="{ width: params.width }"
+		[style]="params.labelCss"
+	>
+		<input
+			*ngIf="params.expression"
+			[size]="params.size"
+			matInput
+			[value]="control ? format() : null"
+			readonly
+			[style]="params.textCss"
+			disabled
+		/>
+		<input
+			*ngIf="!params.expression"
+			#focusNode
+			#input
+			[style]="params.textCss"
+			[formControl]="control"
+			appCase
+			[caseType]="params.changecase"
+			matInput
+			[type]="params.inputType"
+			[attr.autocorrect]="params.autocorrect || 'off'"
+			[autocomplete]="params.autocomplete || 'off'"
+			[autocapitalize]="params.autocapitalize || 'off'"
+			[placeholder]="params.placeholder || params.hint"
+			[spellcheck]="params.spellcheck || 'off'"
+			[required]="params.required"
+			[readonly]="
+				mode === FORM_MODE.VIEW ||
+				params.readonly ||
+				control['readonly']
+			"
+			(change)="onChange()"
+		/>
+		<mat-hint *ngIf="params.subLabel">{{ params.subLabel }}</mat-hint>
+		<mat-error *ngIf="control.invalid">{{
+			getTranslatedErrorMessage()
+		}}</mat-error>
+	</mat-form-field>
+</span>

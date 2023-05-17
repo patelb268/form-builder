@@ -1,0 +1,5 @@
+<ng-container *ngIf="ids && ids.length">
+	<!-- <button mat-icon-button *ngFor="let id of ids" (click)="download(id)"><mat-icon>{{ 'icon_file' | translate }}</mat-icon></button> -->
+
+	<a  target="_blank" href="{{'https://sandbox.auxiliumgroup.com/api/file.php?id='+ ids[0] + '&token='+token}}"><img class="odg-file odg-file-image" src="{{'https://sandbox.auxiliumgroup.com/api/file.php?id='+ ids[0] + '&token='+token}}"></a>
+</ng-container>

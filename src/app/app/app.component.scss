@@ -1,0 +1,136 @@
+@use 'sass:math';
+@import "variables";
+
+.debug {
+	font-size: 11px;
+	max-width: 100vw;
+	overflow: auto;
+	margin: 0;
+	padding: (math.div($padding, 4)) (math.div($padding, 2));
+	background-color: #000000dd;
+	color: #ccc;
+}
+
+:host {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	width: 100vw;
+}
+
+.header {
+	flex: 0 0 auto;
+	border-bottom: 0.5px solid gray;
+}
+.container {
+	flex: 1 1 auto;
+}
+.d-flex.wrap-container {
+    flex-wrap: wrap;
+}
+router-outlet {
+	display: none;
+}
+.assumed {
+	background-color: $warn;
+	color: $warn-fore;
+	font-size: $font-size-small;
+	padding: math.div($padding , 5);
+	flex: 0 0 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	.label {
+		cursor: pointer;
+	}
+}
+
+.mat-drawer-side.left-nav {
+	max-width: calc(95vw - #{$padding * 2});
+	min-width: 200px;
+	width: 100%;
+	border-right: 0;
+
+	.resizer {
+		width: 3px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: 100%;
+		background-color: #3F6F85;
+		z-index: 1;
+		transition: background-color 150ms linear;
+
+		&:hover {
+			background-color: lighten($accent, 0.25);
+			cursor: ew-resize;
+		}
+		&.cdk-drag-dragging {
+			background-color: $accent;
+			position: fixed;
+			right: unset;
+			// left will be contorlled by the ... thing
+		}
+	}
+}
+
+::ng-deep .child-env .mat-expansion-panel-content {
+	z-index: 101;
+	position: fixed;
+	background: white none repeat scroll 0% 0%;
+	border: 1px solid rgb(226, 226, 226);
+}
+::ng-deep .mat-drawer-content {
+	overflow: hidden !important;
+}
+
+::ng-deep {
+	.mat-expansion-panel, .mat-expansion-panel-content {
+		min-width: 200px;
+	}
+}
+
+.mat-drawer-container {
+	padding: 0;
+}
+
+::ng-deep {
+	.mat-expansion-panel .mat-expansion-panel-header.mat-expanded {
+		background-color: #3F6F85 !important;
+		.mat-expansion-panel-header-title {
+			color: #ffffff;
+		}
+	}
+}
+
+.mat-expanded-color {
+	background-color: #3F6F85 !important;
+	opacity: 1;
+		.mat-expansion-panel-header-title {
+			color: #ffffff;
+		}
+}
+.icon-expanded-color {
+	background-color: white !important;
+}
+a:not(.mat-menu-item):not(:disabled):not(.disabled), a:any-link:not(.mat-menu-item):not(:disabled):not(.disabled) {
+    // color: #3F6F85;
+    cursor: pointer;
+}
+.opa-full {
+	mat-icon {
+		opacity: 1 !important;
+	}
+}
+.default-text-color{
+	color: black !important;
+}
+.overflow-auto.h-100 {
+	// height: 100vh !important;
+	overflow-x: hidden !important;
+}
+
+.h-97 {
+    height: 97%!important;
+	overflow-x: hidden !important;
+}

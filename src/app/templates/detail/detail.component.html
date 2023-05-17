@@ -1,0 +1,270 @@
+<div class="template-details">
+	<mat-toolbar color="primary" class="border-top">
+		<ng-container> </ng-container>
+		<div class="title multi-line" *ngIf="formParams">
+			<mat-form-field appearance="standard" class="t-name">
+				<input
+					autocomplete="off"
+					required
+					matInput
+					placeholder="Untitled Template"
+					[(ngModel)]="templateName"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="push"></div>
+		<ng-container>
+			<button mat-raised-button (click)="goBack()" [color]="'accent'">
+				Back
+			</button>
+			<button
+				class="ml-2"
+				mat-raised-button
+				(click)="createTemplate()"
+				[color]="'accent'"
+			>
+				Save
+			</button>
+			<button
+				class="ml-2"
+				*ngIf="id"
+				mat-raised-button
+				(click)="deleteTemplate()"
+				[color]="'warn'"
+			>
+				Delete
+			</button>
+		</ng-container>
+	</mat-toolbar>
+	<mat-progress-bar
+		lass="loading blue-progress"
+		mode="indeterminate"
+		*ngIf="loading | async"
+	></mat-progress-bar>
+	<div>
+		<div class="template-content d-flex flex-column">
+			<div class="border-bottom">
+				<button
+					class="rounded-0 border-right"
+					*ngFor="let t of tabButtons"
+					(click)="action(t)"
+					mat-flat-button
+					[color]="selectedTab === t ? 'accent' : ''"
+				>
+					{{ t }}
+				</button>
+			</div>
+			<div class="d-flex flex-row">
+				<div class="left-side">
+					<ckeditor
+						[ngClass]="
+							selectedTab === 'Editor' ||
+							selectedTab === 'Source Editor'
+								? ''
+								: 'd-none'
+						"
+						#editor
+						[editor]="Editor"
+						[(ngModel)]="editorData"
+					></ckeditor>
+					<div
+						*ngIf="pdfPreview"
+						class="pdf-preview"
+						[ngClass]="
+							selectedTab === 'PDF Preview' ? '' : 'd-none'
+						"
+					>
+						<iframe
+							class="w-100 h-100"
+							[src]="pdfPreview | safe: 'resourceUrl'"
+						></iframe>
+					</div>
+					<div *ngIf="showSettings" class="w-100 h-100 mx-2 mt-2">
+						<mat-label
+							>Saved PDFs should attach to the following "File
+							Upload" field:</mat-label
+						><br />
+					
+						<app-formula-field-selector
+							#appFormula
+						></app-formula-field-selector>
+					</div>
+				</div>
+
+				<div
+					class="right-side mx-2"
+					[ngClass]="
+						selectedTab === 'Editor' ||
+						selectedTab === 'Source Editor'
+							? ''
+							: 'd-none'
+					"
+				>
+					<div class="d-flex align-items-start flex-row">
+						<div
+							class="responsive-table mat-elevation-z8 available-cols-table mr-0"
+						>
+							<table
+								mat-table
+								[dataSource]="dataSource"
+								cdkDropList
+								#table1
+								id="table1"
+							>
+								<!--- Note that these columns can be defined in any order.
+                            The actual rendered columns are set as a property on the row definition" -->
+
+								<!-- Position Column -->
+								<ng-container matColumnDef="label">
+									<th mat-header-cell *matHeaderCellDef>
+										Available Columns
+									</th>
+									<td
+										mat-cell
+										*matCellDef="let element; let i = index"
+										class="text-left pl-2"
+									>
+										<span
+											[ngStyle]="{
+												width: getLevelSpace(element)
+											}"
+										></span>
+
+										<ng-container
+											*ngIf="element.relateToSlice"
+										>
+											<span
+												class="ponter d-flex align-items-center user-select-none"
+												><i
+													(click)="
+														onExpandColumnForRelatedDropdown(
+															element,
+															i,
+															$event
+														)
+													"
+													*ngIf="!element.expanded"
+													class="material-icons m-left-icon"
+													>arrow_right</i
+												>
+												<i
+													(click)="
+														onExpandColumnForRelatedDropdown(
+															element,
+															i,
+															$event
+														)
+													"
+													*ngIf="element.expanded"
+													class="material-icons m-left-icon"
+													>arrow_drop_down</i
+												>
+
+												<span>
+													{{ element.Label }}</span
+												></span
+											></ng-container
+										>
+										<ng-container
+											*ngIf="!element.relateToSlice"
+										>
+											<div
+												class="d-flex align-items-center w-100 h-100"
+												(click)="
+													onSelectionFormulaField(
+														element,
+														true
+													)
+												"
+											>
+												{{ element.Label }}
+											</div>
+										</ng-container>
+									</td>
+								</ng-container>
+
+								<tr
+									mat-header-row
+									*matHeaderRowDef="
+										displayedColumns1;
+										sticky: true
+									"
+								></tr>
+								<tr
+									class="pointer hoverClass"
+									mat-row
+									#row
+									*matRowDef="
+										let row;
+										columns: displayedColumns1;
+										let i = index
+									"
+								></tr>
+
+								<tr class="mat-row" *matNoDataRow>
+									<td
+										class="mat-cell"
+										[attr.colspan]="
+											displayedColumns1.length
+										"
+									></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #opts let-group="group" let-i="i">
+	<mat-option *ngIf="group.relateToSlice" [value]="group">
+		<div class="d-flex flex-row">
+			<div class="item-display-height">
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(group) }"
+				></span>
+				<mat-icon
+					class="pointer my-0 mr-0 m-left-icon-in-extra"
+					(click)="
+						onExpandForRelatedDropdownForExtraField(
+							group,
+							i,
+							$event
+						)
+					"
+					>{{
+						group.expanded ? 'arrow_drop_down' : 'arrow_right'
+					}}</mat-icon
+				>
+			</div>
+			<div class="w-100">
+				{{ group.Label }}
+			</div>
+		</div></mat-option
+	>
+	<mat-option *ngIf="!group.relateToSlice" [value]="group">
+		<div class="d-flex flex-row">
+			<div
+				class="item-display-height w-100"
+				(click)="onSelectionFormulaField(group)"
+			>
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(group) }"
+				></span>
+				{{ group.Label }}
+			</div>
+		</div></mat-option
+	>
+
+	<ng-container
+		*ngFor="let sub of filterFileUpload(group.children); let id = index"
+	>
+		<ng-container
+			*ngTemplateOutlet="opts; context: { group: sub, i: id }"
+		></ng-container>
+	</ng-container>
+</ng-template>

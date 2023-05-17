@@ -1,0 +1,16 @@
+<input
+	[formControl]="formControl"
+	[placeholder]="placeholder || ''"
+	[matAutocomplete]="auto"
+	(blur)="_onBlur()"
+	(input)="_onInput($event.target.value)"
+	#trigger
+>
+<mat-autocomplete
+	#auto="matAutocomplete"
+	(optionSelected)="_optionSelected($event.option)"
+	[autoActiveFirstOption]="autoActiveFirstOption"
+>
+	<mat-option *ngFor="let o of filteredOptions | async" [value]="o.value">{{ o.label }}</mat-option>
+</mat-autocomplete>
+<mat-icon *ngIf="!!icon && !hideIcon" (click)="toggleAutocomplete()">{{ icon }}</mat-icon>

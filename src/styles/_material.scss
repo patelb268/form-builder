@@ -1,0 +1,391 @@
+@use 'sass:math';
+@import './variables';
+/**
+ * this is for `material` specific overrides, that will be applied
+ * project wide
+ */
+
+.mat-snack-bar-container {
+
+	&.primary {
+		background: $primary;
+		&, .mat-button-wrapper {
+			color: $primary-fore;
+		}
+	}
+
+	&.accent {
+		background: $accent;
+		&, .mat-button-wrapper {
+			color: $accent-fore;
+		}
+	}
+
+	&.warn {
+		background: $warn;
+		&, .mat-button-wrapper {
+			color: $warn-fore;
+		}
+	}
+}
+
+.mat-form-field,
+.mat-toolbar .mat-form-field {
+	font-size: 14px !important;
+}
+
+.mat-toolbar {
+
+	&.mat-toolbar-single-row {
+		height: 54px;
+	}
+
+
+	&.auto-height {
+		min-height: 54px;
+		height: unset;
+		padding-top: math.div($padding, 2);
+		padding-bottom: math.div($padding, 2);
+	}
+
+	.multi-line {
+
+		line-height: 1;
+		display: flex;
+		flex-direction: column;
+
+		.small {
+			padding-top: math.div($padding, 4);
+			font-size: $font-size-small;
+			font-weight: normal;
+			opacity: 0.8;
+		}
+	}
+
+	&.sub-header {
+		font-size: $font-size;
+		height: unset;
+	}
+
+	.slice-icon {
+		margin-right: math.div($padding, 2);
+	}
+}
+
+// .mat-toolbar {
+// 	.mat-form-field {
+// 		font-size: 14px;
+// 	}
+// }
+.mat-drawer-container {
+	background-color: #fff !important;
+}
+
+.mat-form-field {
+
+	&.mat-form-field-appearance-outline {
+
+		.mat-form-field-flex {
+			padding: 0 0.35em 0 0.35em
+		}
+
+		&.no-hint .mat-form-field-wrapper {
+			padding-bottom: 0;
+			margin-bottom: 0;
+			margin-top: 0;
+		}
+
+		&.no-label {
+
+			.mat-form-field-prefix,
+			.mat-form-field-suffix {
+				top: 5px;
+			}
+
+			.mat-form-field-infix {
+				border-top-width: 4px;
+			}
+		}
+		.mat-form-field-infix {
+			width: auto;
+			border-top: 0.35em solid transparent;
+			padding: 0.35em 0 !important;
+		}
+	}
+}
+
+.mat-expansion-panel {
+
+	.mat-expansion-panel-header {
+		padding: 0 $padding;
+		transition: opacity 150ms ease-in-out;
+
+		&.mat-expanded {
+			opacity: 1;
+		}
+	}
+	.mat-expansion-panel-body {
+		padding: 0 $padding $padding $padding;
+	}
+
+	&.no-boxing {
+		box-shadow: none !important;
+		border-radius: 0;
+	}
+
+	&.no-padding-bottom .mat-expansion-panel-body {
+		padding-bottom: 0;
+	}
+}
+
+.cdk-overlay-container {
+
+	z-index: 99999 !important;
+
+	.cdk-overlay-pane.no-decorate {
+
+		.mat-dialog-container {
+			padding: 0;
+		}
+		.mat-toolbar {
+			margin-bottom: 0;
+			display: flex;
+			align-items: center;
+		}
+		.mat-dialog-content {
+			padding: 0;
+			margin: 0;
+		}
+	}
+}
+
+.mat-expansion-panel.sidenav {
+
+	border-radius: 0;
+	// box-shadow: none !important;
+
+	.mat-expansion-panel-header {
+
+		font-size: $font-size;
+		padding: 0;
+
+
+		.mat-expansion-panel-header-title {
+			padding: (math.div($padding, 2));
+			padding-right: 0;
+		}
+		.mat-expansion-indicator {
+			margin-right: $padding;
+		}
+	}
+
+	.mat-expansion-panel-body {
+		padding: 0 (math.div($padding, 2)) (math.div($padding, 2));
+
+		.link + .mat-expansion-panel {
+			margin-top: math.div($padding, 2); // this MAY need to be adjusted once everything is in place
+		}
+	}
+
+	.container-toolbar {
+		display: flex;
+		margin-left:  -(math.div($padding, 2));
+		margin-right: -(math.div($padding, 2));
+		padding: 0 (math.div($padding, 2)) (math.div($padding, 2)) $padding;
+		border-bottom: $border-width dashed $border-color;
+
+		.link:not(:last-child) .mat-icon {
+			margin-right: math.div($padding, 4);
+		}
+	}
+
+	.link {
+		display: flex;
+		align-items: center;
+	}
+	a.link {
+		text-decoration: none;
+		color: $primary;
+
+		&.link-option {
+			padding: (math.div($padding, 4)) (math.div($padding, 2));
+			font-weight: normal;
+			line-height: 1;
+
+			.mat-icon {
+				opacity: 0.25;
+				transition: opacity 150ms linear;
+				margin-right: math.div($padding, 4);
+			}
+
+			&:hover .mat-icon {
+				opacity: 1;
+			}
+		}
+	}
+
+	&.mat-expanded {
+		background: #f9f9f9;
+	}
+	// progessively darken the containers by a tiny bit...
+	// .mat-expansion-panel {
+	// 	background-color: rgba(0,0,0,0.01);
+	// }
+}
+
+.mat-tab-group {
+
+	&.icon-tab-labels {
+		.mat-tab-label {
+			min-width: unset;
+			padding: 0 (math.div($padding, 2));
+		}
+	}
+	&.last-icon-action {
+		.mat-tab-label:last-child {
+			opacity: 1;
+			cursor: pointer;
+		}
+	}
+}
+
+.mat-icon.mat-menu-trigger {
+	cursor: pointer;
+}
+
+.mat-form-field {
+
+	&.no-bottom-border {
+		.mat-form-field-outline-start {
+			border-bottom: 0;
+			border-bottom-left-radius: 0;
+		}
+		.mat-form-field-outline-gap {
+			border-bottom: 0;
+		}
+		.mat-form-field-outline-end {
+			border-bottom: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+
+	// outline
+	&.mat-form-field-appearance-outline {
+
+		.mat-form-field-wrapper {
+			margin-bottom: math.div($padding, 2); // @checkboxA
+			padding-bottom: $font-size-small + (math.div($padding, 4));
+
+			.mat-error, .mat-hint {
+				font-size: $font-size-small;
+			}
+		}
+
+		// adjust the label
+		.mat-form-field-label-wrapper {
+			top: -1em;
+
+			.mat-form-field-label mat-label {
+				font-size: 18px; //
+			}
+		}
+
+		.mat-form-field-infix {
+			// padding: (math.div($padding, 4)) 0 ($padding * .75) 0;
+			padding: 6px 0 10px 0; // if you hcange this, change the .mat-checkbox below @checkboxA
+		}
+
+		.mat-form-field-subscript-wrapper {
+			margin-top: 3px;
+		}
+	}
+
+	&.control-wrap.mat-form-field-appearance-outline {
+		.mat-form-field-infix {
+			padding: 2px 0 5px 0;
+		}
+	}
+
+	textarea.cdk-textarea-autosize {
+		padding: 0;
+	}
+}
+
+.fitContent .mat-form-field .mat-form-field-infix {
+	width: auto;
+}
+app-control-checkbox.labelHack {
+	height: 0;
+	visibility: hidden;
+
+	.mat-checkbox-inner-container {
+		width: 0;
+		margin-right: 0;
+		overflow: hidden;
+	}
+}
+
+// get the checkboxes to align on the same grid as the controls
+.mat-checkbox {
+	margin-top: calc(6px + 0.25em); // .25em as defined by .mat-form-field-appearance .mat-form-field-appearance-wrapper
+	margin-bottom: math.div($padding, 2);
+}
+
+
+.mat-menu-panel {
+
+	&.dense {
+		.mat-option {
+			height: unset;
+			font-size: $font-size;
+			line-height: 2.25;
+		}
+	}
+
+	input.autocomplete {
+		position: sticky;
+		top: 0;
+		background: #fff;
+		z-index: 1;
+	}
+
+	// used by fields-dropdown-component
+	&.fields-dropdown-panel {
+		width: 400px !important;
+		max-width: 90vw !important;
+	}
+}
+
+// style radio buttons inside .mat-form-field
+.mat-form-field {
+	.mat-radio-group {
+		.mat-radio-outer-circle,
+		.mat-radio-container,
+		.mat-radio-inner-circle  {
+			height: $font-size;
+			width: $font-size;
+		}
+
+		.mat-radio-label-content {
+			padding-left: math.div($padding, 4);
+		}
+
+		.mat-radio-button {
+			margin-right: math.div($padding, 2);
+		}
+	}
+}
+
+.mat-radio-group.no-wrap {
+	display: inline-flex;
+	flex-wrap: nowrap;
+}
+
+
+@media print {
+	.mat-toolbar {
+		.mat-icon-button {
+			display: none;
+		}
+	}
+}

@@ -1,0 +1,360 @@
+<ng-template #recursiveList let-elements>
+	<div dndPlaceholderRef class="dndPlaceholder"></div>
+	<div
+		*ngFor="let component of elements"
+		class="selected-component"
+		[ngClass]="{ 'is-selected': component.isSelected }"
+		(click)="setSelectedComponent($event, component)"
+		dndEffectAllowed="move"
+		[dndDraggable]="component"
+		(dndStart)="onDragStart($event)"
+		(dndCopied)="onDragged(component, elements, 'copy')"
+		(dndLinked)="onDragged(component, elements, 'link')"
+		(dndMoved)="onDragged(component, elements, 'move')"
+		(dndCanceled)="onDragged(component, elements, 'none')"
+		(dndEnd)="onDragEnd($event)"
+		(mousemove)="resizeOnMouseMove($event)"
+		(mouseup)="resizeOnMouseUp($event)"
+		[ngStyle]="{
+			width:
+				component.element.size < component.element.max_size
+					? component.element.size + 'px'
+					: component.element.max_size + 'px'
+		}"
+	>
+		<ng-container [ngSwitch]="component.machineName">
+			<app-text *ngSwitchCase="'text'" [component]="component"></app-text>
+			<app-picture
+        		*ngSwitchCase="'picture'"
+        		[component]="component"
+      		></app-picture>
+			<app-spacer
+				*ngSwitchCase="'spacer'"
+				[component]="component"
+			></app-spacer>
+
+			<app-dropdown
+				*ngSwitchCase="'dropdown'"
+				[component]="component"
+				[formDesign]="subscriptionForm.content_dnd.form_design"
+			></app-dropdown>
+			<app-radios
+				*ngSwitchCase="'radios'"
+				[component]="component"
+				[formDesign]="subscriptionForm.content_dnd.form_design"
+			></app-radios>
+			<app-input
+				*ngSwitchCase="'input'"
+				[component]="component"
+				[formDesign]="subscriptionForm.content_dnd.form_design"
+			></app-input>
+			<app-textarea
+				*ngSwitchCase="'textarea'"
+				[component]="component"
+				[formDesign]="subscriptionForm.content_dnd.form_design"
+			></app-textarea>
+			<app-checkbox
+				*ngSwitchCase="'checkbox'"
+				[component]="component"
+				[formDesign]="subscriptionForm.content_dnd.form_design"
+			></app-checkbox>
+			<app-uploader
+				*ngSwitchCase="'uploader'"
+				[component]="component"
+				[formDesign]="subscriptionForm.content_dnd.form_design"
+			></app-uploader>
+			<app-button *ngSwitchCase="'button'" [component]="component"></app-button>
+		</ng-container>
+		<div dndDragImageRef class="my_placeholder"></div>
+		<div id="drag-handler" class="drag-handler rounded-circle" dndHandle>
+			<mat-icon>drag_handle_outlined</mat-icon>
+		</div>
+		<div class="container-action-wrapper" *ngIf="component.deletable">
+			<button
+				mat-mini-fab 
+				color="warn"
+				class="delete-component-button"
+				placement="bottom"
+				ngbTooltip="{{ 'Delete' }}"
+				(click)="deleteComponent($event, component.id)"
+			>
+			<mat-icon>delete_outlined</mat-icon>
+			</button>
+		</div>
+		<div
+			id="resize-handler"
+			class="resize-handler"
+			(mousedown)="resizeParentOnMouseDown($event)"
+			(mousemove)="resizeParentOnMouseMove($event)"
+			(mouseup)="resizeOnMouseUp($event)"
+		></div>
+	</div>
+</ng-template>
+
+<ng-template #popTitle
+	><span>Add New Section</span>
+	<a class="fas fa-times float-end" (click)="closePopover()"></a
+></ng-template>
+
+<ng-template #popContent>
+	<div class="container-fluid">
+		<div class="row">
+			<div
+				class="col-6 mb-3"
+				*ngFor="let sectionComponent of sectionComponents"
+			>
+				<img
+					[src]="sectionComponent.image"
+					alt=""
+					class="img-fluid"
+					[dndDraggable]="sectionComponent"
+					[dndType]="'se'"
+					(dndStart)="onDragStart($event)"
+					(dndCopied)="
+						onDragged(sectionComponent, addedComponents, 'copy')
+					"
+					(dndLinked)="
+						onDragged(sectionComponent, addedComponents, 'link')
+					"
+					(dndMoved)="
+						onDragged(sectionComponent, addedComponents, 'move')
+					"
+					(dndCanceled)="
+						onDragged(sectionComponent, addedComponents, 'none')
+					"
+					(dndEnd)="onDragEnd($event)"
+				/>
+			</div>
+		</div>
+	</div>
+</ng-template>
+
+<mat-toolbar class="custom-toolbar">
+	<mat-toolbar-row>
+		<div class="toolbar-items"  (click)="generateJson()">
+			<mat-icon>save</mat-icon>
+			<p class="element-title">Save</p>
+		</div>
+		<div class="toolbar-items">
+			<mat-icon>save</mat-icon>
+			<p class="element-title">Save & Exit</p>
+		</div>
+		<div class="toolbar-items">
+			<mat-icon>exit_to_app</mat-icon>
+			<p class="element-title">Exit</p>
+		</div>
+
+		<div class="pinned-items">
+			<app-pinned-panel
+				[selectedComponent]="selectedComponent"
+				[formDesign]="subscriptionForm.content_dnd.form_design"
+			>
+			</app-pinned-panel>
+		</div>
+	</mat-toolbar-row>
+</mat-toolbar>
+
+<section>
+	<div class="p-0 rounded" id="form-builder-wrapper">
+		<div *ngIf="subscriptionForm">
+			<div class="construct-container justify-content-between">
+				<div
+					class="panel-elements pt-0"
+					(mouseover)="resizeOnMouseUp($event)"
+				>
+					<mat-accordion>
+						<mat-expansion-panel [expanded]="true">
+							<mat-expansion-panel-header>
+								<mat-panel-title> Tools </mat-panel-title>
+							</mat-expansion-panel-header>
+							<div
+								class="component section-component rounded"
+								[ngbPopover]="popContent"
+								[popoverTitle]="popTitle"
+								placement="right"
+								container="body"
+								[autoClose]="false"
+								triggers="manual"
+								#popover="ngbPopover"
+								(click)="popover.open()"
+							></div>
+							<div
+								class="component rounded"
+								*ngFor="let component of components"
+								[dndDraggable]="component"
+								[dndType]="'nc'"
+								(dndStart)="onDragStart($event)"
+								(dndCopied)="
+									onDragged(
+										component,
+										addedComponents,
+										'copy'
+									)
+								"
+								(dndLinked)="
+									onDragged(
+										component,
+										addedComponents,
+										'link'
+									)
+								"
+								(dndMoved)="
+									onDragged(
+										component,
+										addedComponents,
+										'move'
+									)
+								"
+								(dndCanceled)="
+									onDragged(
+										component,
+										addedComponents,
+										'none'
+									)
+								"
+								(dndEnd)="onDragEnd($event)"
+							>
+								<mat-icon class="mat-icon-expansion-panel">{{
+									component.matIconName
+								}}</mat-icon>
+
+								<span>{{ component.name }}</span>
+							</div>
+						</mat-expansion-panel>
+						<mat-expansion-panel>
+							<mat-expansion-panel-header>
+								<mat-panel-title>Advanced</mat-panel-title>
+							</mat-expansion-panel-header>
+							<p>Add element Advanced here</p>
+						</mat-expansion-panel>
+
+						<mat-expansion-panel hideToggle>
+							<mat-expansion-panel-header>
+								<mat-panel-title>Fields</mat-panel-title>
+							</mat-expansion-panel-header>
+							<p>Add element Fields here</p>
+						</mat-expansion-panel>
+					</mat-accordion>
+					<div class="email-structure"></div>
+				</div>
+				<div class="form-body flex-grow-1">
+					<div
+						class="email-body d-flex content-droppable-zone {{
+							dragStartClass
+						}} dndList"
+						[ngClass]="{
+							'align-items-start':
+								subscriptionForm.content_dnd.form_design
+									.page_alignment === 'top',
+							'align-items-center':
+								subscriptionForm.content_dnd.form_design
+									.page_alignment === 'center',
+							'align-items-end':
+								subscriptionForm.content_dnd.form_design
+									.page_alignment === 'bottom'
+						}"
+						[ngStyle]="{
+							'font-family':
+								subscriptionForm.content_dnd.form_design
+									.font_family,
+							'font-size':
+								subscriptionForm.content_dnd.form_design
+									.font_size + 'px',
+							background:
+								subscriptionForm.content_dnd.form_design
+									.background_color,
+							padding:
+								subscriptionForm.content_dnd.form_design
+									.page_paddings + 'px'
+						}"
+					>
+						<div
+							id="form-container"
+							class="form-container mx-auto"
+							dndDropzone
+							(mousemove)="resizeOnMouseMove($event)"
+							(mouseup)="resizeOnMouseUp($event)"
+							(dndDrop)="
+								onDrop(
+									$event,
+									subscriptionForm.content_dnd
+										.added_components
+								)
+							"
+							[ngStyle]="{
+								width: subscriptionForm.content_dnd.form_design
+									.fullWidth
+									? '100%'
+									: subscriptionForm.content_dnd.form_design
+											.width + 'px',
+								height:
+								subscriptionForm.content_dnd.form_design
+										.height === 0 ? 'auto'
+									: subscriptionForm.content_dnd.form_design
+										.height + 'px',
+								'background-color':
+									subscriptionForm.content_dnd.form_design
+										.container_background_color,
+								'border-radius':
+									subscriptionForm.content_dnd.form_design
+										.rounded_corners + 'px',
+								padding:
+									subscriptionForm.content_dnd.form_design
+										.form_paddings + 'px',
+								border:
+									'solid ' +
+									subscriptionForm.content_dnd.form_design
+										.form_border_width +
+									'px ' +
+									subscriptionForm.content_dnd.form_design
+										.form_border_color
+							}"
+						>
+							<ng-container
+								*ngTemplateOutlet="
+									recursiveList;
+									context: {
+										$implicit:
+											subscriptionForm.content_dnd
+												.added_components
+									}
+								"
+							></ng-container>
+						</div>
+					</div>
+				</div>
+				<div
+					class="panel-options property-column"
+					(mouseover)="resizeOnMouseUp($event)"
+				>
+					<div class="property-column-inner">
+						<mat-tab-group mat-align-tabs="start">
+							<mat-tab label="Current Element">
+								<ng-template matTabContent>
+									<app-current-element
+										[selectedComponent]="selectedComponent"
+										[formDesign]="
+											subscriptionForm.content_dnd.form_design
+										"
+										(onPinSettingChange)="updatePin($event)"
+									></app-current-element>
+								</ng-template>
+								
+							</mat-tab>
+							<mat-tab label="Form Design">
+								<ng-template matTabContent>
+
+									<app-form-design-property
+									[formDesign]="
+									subscriptionForm.content_dnd.form_design
+									"
+									></app-form-design-property>
+								</ng-template>
+							</mat-tab>
+						</mat-tab-group>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

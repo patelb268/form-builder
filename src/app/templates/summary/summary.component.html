@@ -1,0 +1,32 @@
+<mat-toolbar color="primary" class="border-top">
+	<ng-container> </ng-container>
+	<div class="title multi-line" *ngIf="formParams">
+		{{ formParams?.slice.name + ' Templates' }}
+	</div>
+	<div class="push"></div>
+	<ng-container>
+		<button mat-raised-button (click)="createTemplate()" [color]="'accent'">
+			Create a Template
+		</button>
+	</ng-container>
+</mat-toolbar>
+
+<mat-progress-bar
+	mode="indeterminate"
+	class="loading blue-progress"
+	*ngIf="loading | async"
+></mat-progress-bar>
+<div class="templates-viewer">
+	<div *ngFor="let template of templates" class="template">
+		<mat-card class="example-card p-0">
+			<mat-card-header class="w-100">
+				<mat-card-title class="w-100 m-0 bg-dark text-white">{{
+					template.name
+				}}</mat-card-title>
+			</mat-card-header>
+			<mat-card-content class="p-1" (click)="openTemplate(template)">
+				<p [innerHTML]="template.meta?.template?.content" ></p>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>

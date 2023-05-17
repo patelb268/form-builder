@@ -1,0 +1,8 @@
+version: '3'
+services:
+  datalynk_modules:
+    image: gitlab.auxiliumgroup.com:4567/auxilium/datalynk-modules/datalynk-modules:master
+    ports:
+      - "9923:80"
+    deploy:
+      replicas: 1

@@ -1,0 +1,120 @@
+@use 'sass:math';
+@import 'variables';
+
+.loading {
+	min-width: 100px;
+}
+
+:host {
+	height: inherit;
+	overflow: hidden;
+	display: block;
+}
+.tabs {
+	height: inherit;
+}
+
+.search {
+	display: flex;
+	flex-direction: column;
+	height: inherit;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 100%;
+
+	.header {
+		padding: math.div($padding, 2);
+		flex: 0 0 auto;
+		border-bottom: $border;
+
+		.mat-form-field {
+			width: 100%;
+		}
+	}
+	.results {
+		flex: 1 1 auto;
+		overflow: auto;
+		white-space: nowrap;
+
+		.result-row {
+			display: grid;
+			grid-template-columns: auto 1fr;
+			grid-template-rows: auto auto;
+			grid-template-areas:
+				'icon link'
+				'. in';
+			align-items: center;
+			gap: 0 (math.div($padding, 4));
+			padding: (math.div($padding, 4));
+			margin: (math.div($padding, 4)) 0;
+			border: 0;
+			border-bottom: $border;
+			border-style: dotted;
+
+			.mat-icon {
+				grid-area: icon;
+				color: $primary;
+			}
+			a {
+				grid-area: link;
+				font-size: $font-size;
+				color: $primary;
+				text-decoration: none;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			label {
+				grid-area: in;
+				font-size: $font-size-small;
+			}
+		}
+	}
+}
+
+.tabs {
+	::ng-deep .mat-tab-label:last-child {
+		margin-left: auto;
+	}
+}
+
+::ng-deep {
+	.mat-tab-group.icon-tab-labels .mat-tab-label {
+		height: 35px;
+	}
+	.mat-expansion-panel .mat-expansion-panel-body {
+		padding: 0 6px 0px 20px;
+	}
+	.mat-expansion-panel.sidenav .mat-expansion-panel-body {
+		padding: 0 7px 0px;
+	}
+	
+	
+	.blue-progress .mat-progress-bar-fill::after {
+		background-color: #3F6F85 !important;
+	}
+	.mat-expansion-panel .mat-expansion-panel-header.mat-expanded {
+		background: #3F6F85 !important;
+		.mat-expansion-panel-header-title {
+			color: #ffffff;
+		}
+	}
+	.mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+		margin-right: 0px !important;
+	}
+	.mat-expansion-panel.sidenav .mat-expansion-panel-header .mat-expansion-panel-header-title {
+		padding: 8px;
+		padding-right: 0;
+		padding-bottom: 4px;
+		padding-top: 4px;
+	}
+}
+
+.opa-full {
+	mat-icon {
+		opacity: 1 !important;
+	}
+}
+a:not(.mat-menu-item):not(:disabled):not(.disabled), a:any-link:not(.mat-menu-item):not(:disabled):not(.disabled) {
+    color: #3F6F85;
+    cursor: pointer;
+}

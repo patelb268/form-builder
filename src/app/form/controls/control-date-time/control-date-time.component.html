@@ -1,0 +1,39 @@
+<span class="d-flex align-items-baseline ml-2" [ngClass]="params.labelAlign !=='Top'? 'flex-row': 'flex-column'" *ngIf="control['show'] != false">
+	<mat-label class="fixed-label-width mr-1" [ngClass]="params.labelAlign ==='Right'? 'text-right': 'text-left'" [style]="params.labelCss"
+		>{{ params.label
+		}}<span
+			*ngIf="
+				params.required ||
+				(control?.errors && control?.errors['required'])
+			"
+			class="text-danger"
+		>
+			*</span
+		></mat-label
+	>
+	<mat-form-field
+		#thisControl
+		class="root"
+		[ngClass]="params.expression ? 'formula-exp' : ''"
+		[ngStyle]="{ width: params.width }"
+		[appearance]="inline ? 'standard' : ''"
+		
+		[style]="params.labelCss"
+	>
+		<dl-date-time
+			[mode]="mode"
+			[params]="params"
+			[formControl]="control"
+			[dateFormat]="
+				mode === FORM_MODE.VIEW
+					? params.datalynk_timeformat
+					: params.dateFormatEdit
+			"
+		></dl-date-time>
+
+		<mat-hint *ngIf="!!params.hint">{{ params.hint }}</mat-hint>
+		<mat-error *ngIf="control.invalid">{{
+			getTranslatedErrorMessage()
+		}}</mat-error>
+	</mat-form-field>
+</span>

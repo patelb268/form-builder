@@ -1,0 +1,50 @@
+@import 'variables';
+
+:host {
+	display: inline-flex;
+}
+
+.datetime-hack {
+	display: flex;
+}
+
+input::-webkit-calendar-picker-indicator {
+	margin: 0;
+	padding: 0;
+	text-indent: 0;
+}
+
+.input {
+	&.datetime {
+		min-width: calc(13rem + 2px + 1rem);
+
+		.hack {
+			display: flex;
+
+			input[type="date"] {
+				width: 7rem;
+				margin-right: 1rem;
+			}
+			input[type="time"] {
+				width: 6rem;
+			}
+		}
+	}
+}
+
+.mat-form-field {
+	flex: auto;
+}
+
+mat-form-field:not(.mat-form-field-disabled) .clickable {
+	cursor: pointer;
+}
+
+.autocomplete {
+	padding: $padding;
+	border-bottom: $border;
+}
+
+// input[type="date"]::-webkit-input-placeholder{
+//     visibility: hidden !important;
+// }

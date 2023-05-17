@@ -1,0 +1,7 @@
+.btn-outline-primary {
+  height: auto;
+
+  & > .separator-style {
+    width: 80% !important;
+  }
+}

@@ -1,0 +1,89 @@
+@use 'sass:math';
+@import 'variables';
+
+$width-half: math.div($target-form-width , 2);
+
+:host, form {
+	display: block;
+	width: inherit;
+	height: inherit;
+	overflow: hidden;
+}
+
+.form {
+
+	display: grid;
+	flex-direction: column;
+	gap: $padding;
+
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto auto auto;
+
+	.first_name, .last_name {
+		grid-column: span 3;
+	}
+	.email {
+		grid-column: span 4;
+	}
+	.login {
+		grid-column: span 2;
+	}
+	.multi, .sysadmin, .mobile {
+		grid-column: span 2;
+	}
+
+}
+
+.role-members {
+
+	.role {
+		display: flex;
+		align-items: center;
+
+		.name {
+			flex: 1 1 auto;
+			padding-left: 8px;
+
+			.environment {
+				font-size: $font-size-small;
+				opacity: 0.5;
+
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
+
+		.mat-checkbox {
+			margin-right: 8px;
+		}
+	}
+
+}
+
+.sessions {
+
+	.header {
+		color: $disabled-fore;
+	}
+
+	display: inline-grid;
+	grid-template-columns: auto auto auto auto auto auto;
+	gap: (math.div($padding, 2)) $padding;
+	align-items: center;
+
+	.user-agent {
+
+		display: inline-flex;
+		align-items: center;
+
+		.custom-icon {
+			margin-right: math.div($padding, 2);
+		}
+
+		.description {
+			display: inline-block;
+			font-size: $font-size-small;
+		}
+	}
+}

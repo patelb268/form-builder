@@ -1,0 +1,43 @@
+<div [ngStyle]="{
+  'padding-top': component.componentSettings.padding_top + 'px',
+  'padding-right': component.componentSettings.padding_right + 'px',
+  'padding-bottom': component.componentSettings.padding_bottom + 'px',
+  'padding-left': component.componentSettings.padding_left + 'px',
+  'background-color': component.componentSettings.background_color,
+  'border-radius': component.componentSettings.rounded_corners + 'px',
+  height: component.componentSettings.height > 0 ? component.componentSettings.height + 'px' : 'auto'
+}">
+<table [ngStyle]="{
+    'border-radius': component.element.rounded_corners + 'px',
+    'line-height': component.element.line_height,
+    background: component.element.gradient_top_color ?
+      'linear-gradient(to top, ' + component.element.gradient_bottom_color + ', ' +
+      component.element.gradient_top_color + ')' : component.element.button_color,
+    height: component.element.height + 'px',
+    width: component.element.button_size_type === 'full-width' ? '100%' :
+      component.element.button_size_type === 'fixed' ? component.element.button_size + 'px' : 'auto',
+    'box-shadow': component.element.box_shadow_color ?
+      component.element.box_shadow_color + ' 0px -3px 0px 0px inset' : 'none'
+  }" [align]="component.element.alignment">
+  <tr>
+    <td [ngStyle]="{ 'vertical-align': component.element.vertical_align }">
+      <button [type]="component.element.button_type" [ngStyle]="{
+          color: component.element.text_color,
+          'font-family': component.element.font_family,
+          'font-size': component.element.font_size + 'px',
+          'font-weight': component.element.font_bold ? 'bold' : 'normal',
+          'font-style': component.element.font_italic ? 'italic' : 'inherit',
+          'text-decoration': 'none',
+          display: 'block',
+          padding: '0 15px',
+          'text-align': 'center',
+          'border': 0,
+          background: 'none'
+        }">
+        {{ component.element.content }}
+      </button>
+    </td>
+  </tr>
+</table>
+<div style="clear: both;"></div>
+</div>

@@ -1,0 +1,68 @@
+<span class="d-flex align-items-baseline ml-2" [ngClass]="params.labelAlign !=='Top'? 'flex-row': 'flex-column'" *ngIf="control['show'] != false">
+	<mat-label class="fixed-label-width mr-1" [ngClass]="params.labelAlign ==='Right'? 'text-right': 'text-left'" [style]="params.labelCss"
+		>{{ params.label
+		}}<span
+			*ngIf="
+				!params.required &&
+				control?.errors &&
+				control?.errors['required']
+			"
+			class="text-danger"
+		>
+			*</span
+		></mat-label
+	>
+
+	<mat-form-field
+		class="root"
+		[style]="params.labelCss"
+		[ngStyle]="{ width: params.width }"
+	>
+		<input
+			matInput
+			[formControl]="control"
+			[matAutocomplete]="auto"
+			(change)="onChange()"
+			[readonly]="
+				mode === FORM_MODE.VIEW ||
+				params.readonly ||
+				control['readonly']
+			"
+			[required]="params.required"
+			[size]="params.size"
+			[style]="params.textCss"
+		/>
+		<mat-autocomplete
+			#auto="matAutocomplete"
+			[displayWith]="dropdownDisplayFn.bind(this)"
+			autoActiveFirstOption
+		>
+			<mat-option
+				*ngFor="let o of filteredOptions | async"
+				[style]="params.textCss"
+				[value]="o._v"
+			>
+				<ng-container *ngIf="o.translate"
+					><span [style]="params.textCss">{{
+						o._l | translate
+					}}</span></ng-container
+				>
+				<ng-container *ngIf="!o.translate"
+					><span [style]="params.textCss"
+						>{{ o._l }}
+					</span></ng-container
+				>
+			</mat-option>
+			<mat-option
+				*ngIf="control.value && !params.required"
+				class="empty"
+			></mat-option>
+		</mat-autocomplete>
+		<mat-error *ngIf="!control.value && control.invalid">{{
+			getTranslatedErrorMessage()
+		}}</mat-error>
+		<mat-icon *ngIf="mode !== FORM_MODE.VIEW" matSuffix>{{
+			'icon_dropdown' | translate
+		}}</mat-icon>
+	</mat-form-field>
+</span>

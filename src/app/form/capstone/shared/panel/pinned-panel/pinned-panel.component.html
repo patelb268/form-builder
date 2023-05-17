@@ -1,0 +1,279 @@
+<div class="horizontal-panel" *ngIf="selectedComponent">
+    <div class="all-pinned-items" *ngIf="selectedComponent.pinData.length > 0">
+		<div class="pinned-items-div" *ngFor="let pin of selectedComponent.pinData">
+			<!-- Common for all-->
+			<div class="panel-item" *ngIf="pin == 'show_required'">	
+				<mat-slide-toggle 
+					[(ngModel)]="selectedComponent.element.is_required"
+					id="is_required"
+				>
+				Required
+				</mat-slide-toggle>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'show label'">
+				<mat-slide-toggle 
+					[(ngModel)]="selectedComponent.element.show_label"
+					id="show_label"
+				>
+					Show Label
+				</mat-slide-toggle>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'label name'">
+				<button class="pin-panel-button" mat-button [matMenuTriggerFor]="field_name_menu" mat-raised-button color="primary">Field name</button>
+				<mat-menu class="pin-panel-menu" #field_name_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<input matInput 
+								type="text"
+								name="field_name"
+								[(ngModel)]="selectedComponent.element.label"
+								(click) = "$event.stopPropagation()"
+								>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'report_label'">
+				<button class="pin-panel-button" mat-button [matMenuTriggerFor]="field_name_menu" mat-raised-button color="primary">Report Label</button>
+				<mat-menu class="pin-panel-menu" #field_name_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<input matInput 
+								type="text"
+								name="report_label"
+								[(ngModel)]="selectedComponent.element.report_label"
+								(click) = "$event.stopPropagation()"
+								>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+		
+			<div class="panel-item" *ngIf="pin == 'sub_label'">
+				<button 
+				class="pin-panel-button" 
+				mat-button [matMenuTriggerFor]="sub_label_menu" 
+				mat-raised-button color="primary">Sub Label</button>
+				
+				<mat-menu class="pin-panel-menu" #sub_label_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<input matInput 
+								type="text"
+								name="sub_label"
+								[(ngModel)]="selectedComponent.element.sub_label"
+								(click) = "$event.stopPropagation()"
+								/>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+			
+			<div class="panel-item" *ngIf="pin == 'Default Type'">
+				<mat-form-field class="defaultvalueclass" appearance="outline">
+					<mat-label>Default Value Type</mat-label>
+					<mat-select name = "default_type" [(ngModel)] = "selectedComponent.element.default_value_type" (ngModelChange)="onDefaultValueTypeChange()">
+						<mat-option value="constant"> Constant </mat-option>
+						<mat-option value="formula"> Formula </mat-option>
+						<mat-option value="previous">
+							Previous Submission Value
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'label_align'">
+				<mat-form-field class="defaultvalueclass" appearance="outline">
+					<mat-label>Label Align</mat-label>
+					<mat-select 
+					name = "label_align" 
+					[(ngModel)] = "formDesign.label_alignment">
+						<mat-option value="auto"> Auto </mat-option>
+						<mat-option value="left"> Left </mat-option>
+						<mat-option value="right"> Right </mat-option>
+						<mat-option value="top"> Top </mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'Default Value'">
+				<button 
+				class="pin-panel-button" 
+				mat-button [matMenuTriggerFor]="default_value_menu" 
+				mat-raised-button color="primary">Default Value</button>
+				
+				<mat-menu class="pin-panel-menu" #default_value_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<textarea matInput 
+								type="text"
+								name="default_value"
+								[(ngModel)]="selectedComponent.element.default_value"
+								(click) = "$event.stopPropagation()"
+								></textarea>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'Validation'">
+				<mat-form-field class="defaultvalueclass"   appearance="outline">
+					<mat-label class="setting-element-label">Validation</mat-label>
+					<mat-select name="Validation" [(ngModel)]="selectedComponent.element.validation">
+						<mat-option value="none"> None </mat-option>
+						<mat-option value="email"> Email </mat-option>
+						<mat-option value="phone"> Phone </mat-option>
+						<mat-option value="extension"> Extension </mat-option>
+						<mat-option value="alphaNumeric">
+							AlphaNumeric
+						</mat-option>
+						<mat-option value="alphabetic"> Alphabetic </mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
+			<div class='panel-item' *ngIf="pin == 'selected_option'">
+				<mat-form-field appearance="outline">
+					<mat-label>Selected Option</mat-label>
+					<mat-select  [(ngModel)]="selectedComponent.selectedOptionId" (selectionChange)="changeSelectedOption($event)">
+						<mat-option 
+							*ngFor="let option of selectedComponent.element.options"
+							[value]="option.id"
+						> {{ option.text}} </mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			
+			<!-- Radio Button Items-->
+			<div class='panel-item' *ngIf="pin == 'radio_option'">
+				<button 
+				class="pin-panel-button" 
+				mat-button [matMenuTriggerFor]="options_menu" 
+				mat-raised-button color="primary">Options</button>
+				
+				<mat-menu class="pin-panel-menu" #options_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<textarea 
+								matInput 
+								[value]="selectedComponent.optionsTextarea"	
+								(blur)="updateOptionList()"
+								(click) = "$event.stopPropagation()"
+								[(ngModel)]="selectedComponent.optionsTextarea"
+							></textarea>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+
+			<div class='panel-item' *ngIf="pin == 'dropdown_option'">
+				<button 
+				class="pin-panel-button" 
+				mat-button [matMenuTriggerFor]="options_menu" 
+				mat-raised-button color="primary">Options</button>
+				
+				<mat-menu class="pin-panel-menu" #options_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<textarea 
+								matInput 
+								[value]="selectedComponent.optionsTextarea"	
+								(blur)="updateOptionList()"
+								(click) = "$event.stopPropagation()"
+								[(ngModel)]="selectedComponent.optionsTextarea"
+							></textarea>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'image_url'">
+				<button class="pin-panel-button" mat-button [matMenuTriggerFor]="field_name_menu" mat-raised-button color="primary">Image Source</button>
+				<mat-menu class="pin-panel-menu" #field_name_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<input matInput 
+								type="text"
+								name="image_url"
+								[(ngModel)]="selectedComponent.element.image_url"
+								(click) = "$event.stopPropagation()"
+								>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'image_link'">
+				<button class="pin-panel-button" mat-button [matMenuTriggerFor]="field_name_menu" mat-raised-button color="primary">Image Link</button>
+				<mat-menu class="pin-panel-menu" #field_name_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<input matInput 
+								type="text"
+								name="image_url"
+								[(ngModel)]="selectedComponent.element.image_link"
+								(click) = "$event.stopPropagation()"
+								>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'width'">
+				<button class="pin-panel-button" mat-button [matMenuTriggerFor]="field_name_menu" mat-raised-button color="primary">width</button>
+				<mat-menu class="pin-panel-menu" #field_name_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<input matInput 
+								type="text"
+								name="image_url"
+								[(ngModel)]="selectedComponent.element.width"
+								(click) = "$event.stopPropagation()"
+								>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+
+			<div class="panel-item" *ngIf="pin == 'height'">
+				<button class="pin-panel-button" mat-button [matMenuTriggerFor]="field_name_menu" mat-raised-button color="primary">Height</button>
+				<mat-menu class="pin-panel-menu" #field_name_menu="matMenu">
+					<div class="pin-panel-menu-item">
+						<mat-form-field class="pin-panel-menu-form-item" appearance="outline">
+							<input matInput 
+								type="text"
+								name="image_url"
+								[(ngModel)]="selectedComponent.element.height"
+								(click) = "$event.stopPropagation()"
+								>
+						</mat-form-field>
+					</div>
+				</mat-menu>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+
+<!-- <mat-toolbar class="custom-toolbar">
+    <mat-toolbar-row>
+        <div class="toolbar-items">
+            <mat-icon>save</mat-icon>
+            <p class="element-title">Save</p>
+        </div>
+        <div class="toolbar-items">
+            <mat-icon>exit_to_app</mat-icon>
+            <p class="element-title">Exit</p>
+        </div>
+
+		<div class="pinned-items">
+			<app-pinned-panel [selectedComponent]="selectedComponent"> </app-pinned-panel>
+		</div>	
+    </mat-toolbar-row>
+
+</mat-toolbar> -->

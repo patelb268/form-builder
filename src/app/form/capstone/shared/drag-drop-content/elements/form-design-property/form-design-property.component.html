@@ -1,0 +1,254 @@
+<div class="form-desig-outer-div">
+	<div class="settings-div page-background-outer-div color-element-outer-div">
+		<div class="setting-form-element">
+			<div class="setting-form-element">
+				<app-custom-color-palette
+					label="Page Background Color"
+					[colorControl]="background_color"
+					[(bgColor)]="formDesign.background_color"
+				></app-custom-color-palette>
+			</div>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div
+		class="settings-div form-border-color-outer-div color-element-outer-div"
+	>
+		<div class="setting-form-element">
+			<div class="setting-form-element">
+				<app-custom-color-palette
+					label="Form Border Color"
+					[colorControl]="form_border_color"
+					[(bgColor)]="formDesign.form_border_color"
+					[selectedColor]="formDesign.form_border_color"
+				></app-custom-color-palette>
+			</div>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div form-background-outer-div color-element-outer-div">
+		<div class="setting-form-element">
+			<div class="setting-form-element">
+				<app-custom-color-palette
+					label="Form Background Color"
+					[colorControl]="container_background_color"
+					[(bgColor)]="formDesign.container_background_color"
+				></app-custom-color-palette>
+			</div>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div font--color-outer-div color-element-outer-div">
+		<div class="setting-form-element">
+			<div class="setting-form-element">
+				<app-custom-color-palette
+					label="Font Color"
+					[colorControl]="font_color"
+					[(bgColor)]="formDesign.font_color"
+					[selectedColor]="formDesign.font_color"
+				></app-custom-color-palette>
+			</div>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div page-alignment-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label"
+					>Page alignment</mat-label
+				>
+				<mat-select [(ngModel)]="formDesign.page_alignment">
+					<mat-option value="top"> Top </mat-option>
+					<mat-option value="center"> Center </mat-option>
+					<mat-option value="bottom"> Bottom </mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div page-padding-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label"
+					>Page padding</mat-label
+				>
+				<input
+					matInput
+					[(ngModel)]="formDesign.page_paddings"
+					type="number"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div form-width-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label">Form width</mat-label>
+				<input matInput [(ngModel)]="formDesign.width" type="number" />
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div form-height-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label">Form height</mat-label>
+				<input matInput [(ngModel)]="formDesign.height" type="number" />
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div form-padding-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label"
+					>Form padding</mat-label
+				>
+				<input
+					matInput
+					[(ngModel)]="formDesign.form_paddings"
+					type="number"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div form-border-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label">Form border</mat-label>
+				<input
+					matInput
+					[(ngModel)]="formDesign.form_border_width"
+					type="number"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div font-outer-div">
+		<div class="setting-form-element">
+			<app-font-options
+				class="app-font-options"
+				[component]="formDesign"
+			></app-font-options>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div font-size-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label">Font size</mat-label>
+				<input
+					matInput
+					[(ngModel)]="formDesign.font_size"
+					type="number"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div label-width-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label">Label width</mat-label>
+				<input
+					matInput
+					[(ngModel)]="formDesign.label_width"
+					type="number"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<div class="settings-div label-align-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label">Label align</mat-label>
+				<mat-select [(ngModel)]="formDesign.label_alignment">
+					<mat-option value="auto"> Auto </mat-option>
+					<mat-option value="left"> Left </mat-option>
+					<mat-option value="right"> Right </mat-option>
+					<mat-option value="top"> Top </mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<div class="pin-form-element">
+				<mat-icon class="material-icons-outlined">push_pin </mat-icon>
+			</div>
+		</div>
+	</div>
+
+	<div class="settings-div rounded-corners-outer-div">
+		<div class="setting-form-element">
+			<mat-form-field appearance="outline">
+				<mat-label class="setting-element-label"
+					>Rounded Corners</mat-label
+				>
+				<input
+					matInput
+					[(ngModel)]="formDesign.field_rounded_corners"
+					type="number"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div>
+
+	<!-- <div class="settings-div full-width-outer-div toggle-div">
+		<div class="setting-form-element toggle-form-element">
+			<mat-slide-toggle
+				[(ngModel)]="formDesign.fullWidth"
+				id="is_required"
+			>
+				Full Width
+			</mat-slide-toggle>
+		</div>
+		<div class="pin-form-element">
+			<mat-icon class="material-icons-outlined">push_pin</mat-icon>
+		</div>
+	</div> -->
+</div>

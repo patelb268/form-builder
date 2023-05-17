@@ -1,0 +1,89 @@
+<ng-container *ngIf="!inGrid; else tplInGrid">
+	<span
+		class="d-flex align-items-baseline ml-2"
+		[ngClass]="params.labelAlign !=='Top' ? 'flex-row' : 'flex-column'"
+		*ngIf="control['show'] != false"
+	>
+		<mat-label class="fixed-label-width mr-1" [ngClass]="params.labelAlign ==='Right'? 'text-right': 'text-left'" [style]="params.labelCss"
+			>{{ params.label
+			}}<span
+				*ngIf="
+					!params.required &&
+					control?.errors &&
+					control?.errors['required']
+				"
+				class="text-danger"
+			>
+				*</span
+			></mat-label
+		>
+		<mat-form-field
+			class="root"
+			[ngClass]="params.expression ? 'formula-exp' : ''"
+			[style]="params.labelCss"
+			[ngStyle]="{ width: params.width }"
+			*ngIf="control['show'] != false"
+		>
+			<textarea
+				#focusNode
+				*ngIf="params.staticSize"
+				[style]="params.textCss"
+				matInput
+				[formControl]="control"
+				[readonly]="
+					(mode === FORM_MODE.VIEW || params.readonly
+						? true
+						: false) || control['readonly']
+				"
+				[attr.autocorrect]="params.autocorrect || 'off'"
+				[autocapitalize]="params.autocapitalize || 'off'"
+				[placeholder]="params.placeholder"
+				[spellcheck]="params.spellcheck || 'off'"
+				[required]="params.required"
+				[rows]="params.maxRows || 4"
+			></textarea>
+			<textarea
+				#focusNode
+				*ngIf="!params.staticSize"
+				matInput
+				[style]="params.textCss"
+				cdkTextareaAutosize
+				#autosize="cdkTextareaAutosize"
+				[formControl]="control"
+				[readonly]="mode === FORM_MODE.VIEW || params.readonly"
+				[attr.autocorrect]="params.autocorrect || 'off'"
+				[autocapitalize]="params.autocapitalize || 'off'"
+				[placeholder]="params.placeholder"
+				[spellcheck]="params.spellcheck || 'off'"
+				[required]="params.required"
+				[cdkAutosizeMinRows]="params.minRows || 4"
+				[cdkAutosizeMaxRows]="params.maxRows || 0"
+			></textarea>
+			<mat-hint *ngIf="!!params.hint">{{ params.hint | json }}</mat-hint>
+			<mat-error *ngIf="control.invalid">{{
+				getTranslatedErrorMessage()
+			}}</mat-error>
+		</mat-form-field>
+	</span>
+</ng-container>
+<ng-template #tplInGrid>
+	<textarea
+		style="line-height: 1.25"
+		#focusNode
+		#resizeSourceNode
+		*ngIf="!params.staticSize"
+		matInput
+		cdkTextareaAutosize
+		#autosize="cdkTextareaAutosize"
+		[formControl]="control"
+		[readonly]="mode === FORM_MODE.VIEW || params.readonly"
+		[attr.autocorrect]="params.autocorrect || 'off'"
+		[autocapitalize]="params.autocapitalize || 'off'"
+		[placeholder]="params.placeholder"
+		[spellcheck]="params.spellcheck || 'off'"
+		[required]="params.required"
+		[cdkAutosizeMinRows]="params.minRows || 1"
+		[cdkAutosizeMaxRows]="params.maxRows || 0"
+		(keydown)="keyDown($event)"
+	></textarea>
+</ng-template>

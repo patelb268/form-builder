@@ -1,0 +1,24 @@
+:host ::ng-deep {
+	.expansion-panel > .mat-expansion-panel-content > .mat-expansion-panel-body {
+		padding: 1em;
+		margin: 0px;
+	}
+}
+
+// .settings-content-div {
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: flex-start;
+// 	align-items: stretch;
+// 	min-height: 30px;
+// 	margin-top: auto;
+// 	margin-bottom: 1em;
+// }
+
+// .settings-div {
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: flex-start;
+// 	align-items: stretch;
+//     margin-top: 1em;
+// }

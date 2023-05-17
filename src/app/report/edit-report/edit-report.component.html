@@ -1,0 +1,537 @@
+<div class="m-1 report">
+	<!-- <div class="d-flex align-items-end justify-content-end">
+		<button
+			class="ac-icon-btn"
+			mat-icon-button
+			(click)="saveReport()"
+			color="accent"
+		>
+			<mat-icon class="header-color">{{
+				'icon_save' | translate
+			}}</mat-icon>
+		</button>
+	</div> -->
+	<div class="d-flex w-100 mb-2 ml-2">
+		<div class="mr-5">
+			<mat-label class="mat-label-style">Application Name</mat-label>
+			<h6 class="report-head">{{ applicationName }}</h6>
+		</div>
+		<div class="d-flex flex-column w-25 mr-5">
+			<mat-label class="mat-label-style">Report name</mat-label>
+			<!-- <div class="report-name pl-1">List All</div> -->
+			<input required matInput class="report-name pl-1" type="text" autocomplete="off" spellcheck="false"
+				[(ngModel)]="name" />
+		</div>
+		<div class="d-flex flex-column mr-5">
+			<mat-label class="mat-label-style">Font</mat-label>
+			<div class="d-flex flex-row selected-font-div align-items-center justif-content-center">
+				<mat-checkbox class="mx-1 pt-1" [(ngModel)]="isBold">
+					Bold</mat-checkbox>
+				<!-- <div class="font-box ml-2"></div>
+				<div class="ml-2">Bold</div> -->
+			</div>
+		</div>
+		<div class="d-flex flex-column mr-5">
+			<mat-label class="mat-label-style">Font Color</mat-label>
+			<!-- <div class="selected-color-div">
+				<div
+					class="selected-color my-1 ml-2"
+					[ngStyle]="{ 'background-color': selectedColor }"
+				></div>
+			</div> -->
+			<app-custom-color-palette [colorControl]="color" [label]="'Color'"></app-custom-color-palette>
+		</div>
+		<div class="d-flex align-items-end justify-content-end">
+			<button class="ac-icon-btn" mat-icon-button (click)="saveReport()" color="accent">
+				<mat-icon class="header-color">{{
+					'icon_save' | translate
+					}}</mat-icon>
+			</button>
+		</div>
+	</div>
+
+	<mat-tab-group class="custom-tab" animationDuration="0ms">
+		<mat-tab label="Where">
+			<ng-template mat-tab-label>
+				<!-- <mat-icon class="example-tab-icon pt-3" style="position:absolute; z-index:1">thumb_up</mat-icon> -->
+				Filtering
+			</ng-template>
+			<div class="d-flex align-items-start flex-row ml-4 mt-4" *ngIf="formParams">
+				<app-where-condition #whe reRef></app-where-condition>
+			</div>
+		</mat-tab>
+
+		<mat-tab label="Sharing">
+			<div class="d-flex flex-row mt-4">
+				<div class="ml-4">
+					<mat-label class="mat-label-font">Make Reports Available In</mat-label>
+					<div class="d-flex align-items-start flex-row m-2" *ngIf="formParams">
+						<div class="responsive-table mat-elevation-z8 display-col-table rp-table mt-3">
+							<table mat-table [dataSource]="navData" class="w-100" id="tablere">
+								<!--- Note that these columns can be defined in any order.
+						The actual rendered columns are set as a property on the row definition" -->
+
+								<!-- Position Column -->
+								<ng-container matColumnDef="srNo">
+									<th class="d-none" mat-header-cell *matHeaderCellDef>
+										#
+									</th>
+									<td class="text-left" mat-cell *matCellDef="let element; let i = index">
+										<div class="d-flex align-items-center">
+											<span class="ml-1 mr-2"><i (click)="
+														element.selected =
+															!element.selected
+													" [ngClass]="
+														element.selected
+															? 'text-success'
+															: 'text-gray'
+													" class="material-icons user-select-none pointer">check_circle</i></span>{{ element.name }}
+										</div>
+									</td>
+								</ng-container>
+
+								<tr mat-row *matRowDef="
+										let row;
+										columns: displayedColumnsReport
+									"></tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="mx-5">
+					<mat-label cass="mat-label-font">Sharing</mat-label>
+					<div class="d-flex align-items-start flex-row m-2" *ngIf="formParams">
+						<div class="responsive-table mat-elevation-z8 rp-table mt-3">
+							<table mat-table [dataSource]="rolesData" class="w-100" id="tablere">
+								<!--- Note that these columns can be defined in any order.
+						The actual rendered columns are set as a property on the row definition" -->
+
+								<!-- Position Column -->
+								<ng-container matColumnDef="srNo">
+									<th class="d-none" mat-header-cell *matHeaderCellDef>
+										#
+									</th>
+									<td class="text-left" mat-cell *matCellDef="let element; let i = index">
+										<div class="d-flex align-items-center">
+											<span class="ml-1 mr-2"><i [ngClass]="
+														element.selected
+															? 'text-success'
+															: 'text-gray'
+													" class="material-icons user-select-none pointer">check_circle</i></span>{{ element.name }}
+										</div>
+									</td>
+								</ng-container>
+
+								<tr mat-row *matRowDef="
+										let row;
+										columns: displayedColumnsReport
+									" (click)="row.selected = !row.selected" class="pointer"></tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</mat-tab>
+
+		<mat-tab label="General">
+			<div class="mb-1 mt-3 ml-4">
+				<div class="d-flex flex-row">
+					<div>
+						<div class="d-flex flex-row">
+							<!-- <div>
+								<mat-form-field class="input text">
+									<mat-label>Name: </mat-label>
+									<input
+										required
+										matInput
+										type="text"
+										autocomplete="off"
+										spellcheck="false"
+										[(ngModel)]="name"
+									/>
+								</mat-form-field>
+							</div> -->
+							<!-- <div class="ml-2">
+								<mat-checkbox class="mr-2" [(ngModel)]="isBold">
+									Bold</mat-checkbox
+								>
+							</div> -->
+							<!-- <div class="ml-2 mr-5">
+								<app-custom-color-palette
+									[colorControl]="color"
+									[label]="'Color'"
+								></app-custom-color-palette>
+							</div> -->
+						</div>
+						<div class="d-flex flex-column pt-3">
+							<mat-checkbox class="checkbox" #checkboxNode [(ngModel)]="showDescription">Show Description
+							</mat-checkbox>
+							<mat-checkbox class="checkbox" #checkboxNode class="mr-4" [(ngModel)]="hideSummaryGrid">
+								Summary Grid</mat-checkbox>
+						</div>
+					</div>
+
+					<div class="hide-features px-2 pt-2 ml-2">
+						<div class="text-head">Hide Features</div>
+						<mat-checkbox #checkboxNode class="mr-4 checkbox pt-2" [(ngModel)]="hideView">
+							View</mat-checkbox>
+						<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideEdit">Edit</mat-checkbox>
+						<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideAddRelated">Add Related
+						</mat-checkbox>
+					</div>
+					<div class="hide-options ml-3 px-2 pt-2">
+						<div class="text-head">Hide Options</div>
+						<div class="d-flex flex-row mt-2">
+							<div>
+								<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideHeader">Header
+								</mat-checkbox>
+								<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideHeaderButtons">Header
+									Buttons</mat-checkbox>
+								<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideTitle">Header Title
+								</mat-checkbox>
+
+								<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideAddRecord">Add Record
+								</mat-checkbox>
+							</div>
+
+							<div>
+								<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideExport">Export
+								</mat-checkbox>
+								<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideSubscribe">Subscribe
+								</mat-checkbox>
+								<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideDeleteData">Delete
+									Data</mat-checkbox>
+
+								<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hidePrint">Print
+								</mat-checkbox>
+							</div>
+						</div>
+					</div>
+					<div class="settings ml-3 px-2 pt-2">
+						<div class="text-head">Settings</div>
+						<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="hideOnLeftNav">Hide on Left/Top
+							Nav</mat-checkbox>
+						<mat-checkbox #checkboxNode class="mr-4 checkbox" [(ngModel)]="refreshAuto">Refresh Report When
+							Record Change</mat-checkbox>
+						<mat-form-field class="input text mr-4">
+							<mat-label>Refresh Seconds: </mat-label>
+							<input required matInput type="number" autocomplete="off" spellcheck="false"
+								[(ngModel)]="refreshInterval" />
+						</mat-form-field>
+					</div>
+				</div>
+				Description
+				<div class="editor-height mb-4">
+					<ckeditor [editor]="Editor" [(ngModel)]="description"></ckeditor>
+				</div>
+			</div>
+		</mat-tab>
+
+		<mat-tab label="Reporting">
+			<div class="ml-3 my-2">
+				<mat-label class="mat-label-font"> Columns </mat-label>
+				<div class="d-flex align-items-start flex-row mt-2" *ngIf="formParams">
+					<div class="responsive-table mat-elevation-z8 available-cols-table mr-0"
+						(cdkDropListDropped)="dropByRight($event, true)">
+						<table mat-table [dataSource]="dataSource" cdkDropList #table1 #list1="cdkDropList"
+							[cdkDropListData]="dataSource.data" [cdkDropListConnectedTo]="[list2]"
+							(cdkDropListDropped)="dropByRight($event, true)" cdkDropListGroup id="table1">
+							<!--- Note that these columns can be defined in any order.
+							The actual rendered columns are set as a property on the row definition" -->
+
+							<!-- Position Column -->
+							<ng-container matColumnDef="label">
+								<th mat-header-cell *matHeaderCellDef>
+									Available Columns
+								</th>
+								<td mat-cell *matCellDef="let element; let i = index" class="text-left pl-2">
+									<span [ngStyle]="{
+											width: getLevelSpace(element)
+										}"></span>
+
+									<ng-container *ngIf="element.relateToSlice">
+										<span class="ponter d-flex align-items-center user-select-none"><i (click)="
+													onExpandColumnForRelatedDropdown(
+														element,
+														i,
+														$event
+													)
+												" *ngIf="!element.expanded" class="material-icons m-left-icon">arrow_right</i>
+											<i (click)="
+													onExpandColumnForRelatedDropdown(
+														element,
+														i,
+														$event
+													)
+												" *ngIf="element.expanded" class="material-icons m-left-icon">arrow_drop_down</i>
+
+											{{ element.Label }}</span>
+									</ng-container>
+									<ng-container *ngIf="!element.relateToSlice">
+										{{ element.Label }}
+									</ng-container>
+								</td>
+							</ng-container>
+
+							<tr mat-header-row *matHeaderRowDef="
+									displayedColumns1;
+									sticky: true
+								"></tr>
+							<tr mat-row #row *matRowDef="
+									let row;
+									columns: displayedColumns1;
+									let i = index
+								" cdkDrag (click)="selectLeft($event, i, row, dataSource)" [ngClass]="{
+									selected: isSelected(
+										i,
+										selectionOfLeftItems
+									),
+									'hide-visibility':
+										isSelected(i, selectionOfLeftItems) &&
+										dragInProgressLeftItems
+								}" (cdkDragStarted)="
+									dragStartToRight($event, i, row)
+								"></tr>
+
+							<tr class="mat-row" *matNoDataRow>
+								<td class="mat-cell" [attr.colspan]="displayedColumns1.length"></td>
+							</tr>
+						</table>
+					</div>
+					<div class="d-flex flex-column action-div">
+						<i class="material-icons mt-2 pointer p-color" (click)="moveToRight()">arrow_circle_right</i>
+
+						<i class="material-icons mt-2 pointer p-color" (click)="moveToLeft()">arrow_circle_left</i>
+					</div>
+
+					<div class="display-col-extra-table mat-elevation-z8">
+						<div class="responsive-table mat-elevation-z8 display-col-table ml-0" cdkDropList #table2
+							#list2="cdkDropList" [cdkDropListData]="dataSource2.data" [cdkDropListConnectedTo]="[list1]"
+							(cdkDropListDropped)="dropByLeft($event)" cdkDropListGroup>
+							<table mat-table [dataSource]="dataSource2" class="w-100" id="table2">
+								<!--- Note that these columns can be defined in any order.
+							The actual rendered columns are set as a property on the row definition" -->
+
+								<!-- Position Column -->
+								<ng-container matColumnDef="srNo">
+									<th mat-header-cell *matHeaderCellDef style="width: 100px">
+										#
+									</th>
+									<td mat-cell *matCellDef="let element; let i = index">
+										{{ i + 1 }}
+									</td>
+								</ng-container>
+
+								<!-- Name Column -->
+								<ng-container matColumnDef="label">
+									<th mat-header-cell *matHeaderCellDef>
+										Label
+									</th>
+									<td mat-cell *matCellDef="let element">
+										{{ element.customFormula ? '* ' : '' }}
+										{{
+										element.relationName
+										? element.relationName
+										: element.Label
+										}}
+									</td>
+								</ng-container>
+
+								<!-- Weight Column -->
+								<ng-container matColumnDef="hidden">
+									<th mat-header-cell *matHeaderCellDef style="width: 100px">
+										Hidden
+									</th>
+									<td mat-cell class="text-center" *matCellDef="let element">
+										<mat-checkbox [(ngModel)]="element.display">
+										</mat-checkbox>
+									</td>
+								</ng-container>
+
+								<!-- Symbol Column -->
+								<ng-container matColumnDef="align">
+									<th mat-header-cell *matHeaderCellDef style="width: 150px">
+										Align
+									</th>
+									<td mat-cell *matCellDef="let element">
+										<mat-select placeholder="" [(ngModel)]="element.textAlign">
+											<mat-option *ngFor="
+													let dep of [
+														'left',
+														'center',
+														'right',
+														'auto'
+													]
+												" [value]="dep">
+												{{ dep | uppercase }}
+											</mat-option>
+										</mat-select>
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="wrap">
+									<th mat-header-cell *matHeaderCellDef style="width: 100px">
+										wrap
+									</th>
+									<td mat-cell class="text-center" *matCellDef="let element">
+										<mat-checkbox [(ngModel)]="element.wrap">
+										</mat-checkbox>
+									</td>
+								</ng-container>
+
+								<ng-container matColumnDef="total">
+									<th mat-header-cell *matHeaderCellDef style="width: 150px">
+										total
+									</th>
+									<td mat-cell *matCellDef="let element">
+										<mat-select class="px-1" placeholder="" [(ngModel)]="element.aggregate">
+											<mat-option *ngFor="
+													let dep of aggregateList
+												" [value]="dep">
+												{{ dep.label | uppercase }}
+											</mat-option>
+										</mat-select>
+									</td>
+								</ng-container>
+
+								<tr mat-header-row *matHeaderRowDef="
+										displayedColumns;
+										sticky: true
+									"></tr>
+								<tr mat-row *matRowDef="
+										let row;
+										columns: displayedColumns;
+										let i = index
+									" cdkDrag (cdkDragStarted)="
+										dragStartToLeft($event, i, row)
+									" (click)="
+										selectRight($event, i, row, dataSource2)
+									" (dblclick)="doubleClick(row)" [ngClass]="{
+										selected: isSelected(
+											i,
+											selectionOfRightItems
+										),
+										'hide-visibility':
+											isSelected(
+												i,
+												selectionOfRightItems
+											) && dragInProgressRightItems
+									}"></tr>
+
+								<tr class="mat-row" *matNoDataRow>
+									<td class="mat-cell" [attr.colspan]="displayedColumns.length">
+										No Column to display
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div class="insert-field-div">
+							<mat-card>
+								<mat-form-field style="width: 300px" class="mr-1">
+									<input matInput placeholder="Label" [(ngModel)]="customFormulaLabel" />
+								</mat-form-field>
+								<mat-form-field style="width: 300px">
+									<mat-label><i>Insert Field</i></mat-label>
+									<mat-select panelClass="custom-panel-extra-item-class" class="c-custom"
+										[(ngModel)]="insertField" (keydown)="onKeydown($event)"
+										(keyup)="onKeydown($event)" #matSelect>
+										<!-- <mat-option
+												*ngFor="let element of allFields"
+												[value]="element"
+											>
+												{{ element.Label }}
+											</mat-option> -->
+										<ng-container *ngFor="
+												let group of allFields;
+												let i = index
+											">
+											<mat-option [hidden]="true"></mat-option>
+											<ng-container *ngTemplateOutlet="
+													opts;
+													context: {
+														group: group,
+														i: i
+													}
+												"></ng-container>
+										</ng-container>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field class="w-100">
+									<textarea [(ngModel)]="textFormulaElement" #textBlockElement matInput
+										placeholder="Custom Formula"></textarea>
+								</mat-form-field>
+								<button mat-raised-button class="mt-1" (click)="saveCustomFormula()" color="primary">
+									{{ formulaSaveUpdateBtnLabel }}
+								</button>
+							</mat-card>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ml-3 mt-5">
+				<mat-label class="mat-label-font">
+					Sorting & Grouping
+				</mat-label>
+				<div class="d-flex align-items-start flex-row m-2" *ngIf="formParams">
+					<app-sorting-grouping #sortGroup></app-sorting-grouping>
+				</div>
+			</div>
+		</mat-tab>
+
+		<mat-tab label="Formating">
+			<div class="mt-4 ml-4">
+				<mat-label class="mat-label-font"> Cell Formatting</mat-label>
+				<div class="d-flex align-items-start flex-row m-2" *ngIf="formParams">
+					TO DO
+				</div>
+			</div>
+
+			<div class="ml-4 mt-4">
+				<mat-label class="mat-label-font">Row Formatting</mat-label>
+				<div class="d-flex align-items-start flex-row m-2" *ngIf="formParams">
+					<app-row-formatting #rowFormatting></app-row-formatting>
+				</div>
+			</div>
+		</mat-tab>
+
+		<mat-tab label="Exporting" class="exporting-tab">
+			<div class="d-flex align-items-start flex-row mt-4">
+				<app-export-options #exportOptions></app-export-options>
+			</div>
+		</mat-tab>
+	</mat-tab-group>
+</div>
+
+<ng-template #opts let-group="group" let-i="i">
+	<mat-option *ngIf="group.relateToSlice">
+		<div class="d-flex flex-row align-items-center">
+			<div class="item-display-height">
+				<span class="d-inline-block" [ngStyle]="{ width: getLevelSpace(group) }"></span>
+				<mat-icon class="pointer my-0 mr-0 m-left-icon-in-extra" (click)="
+						onExpandForRelatedDropdownForExtraField(
+							group,
+							i,
+							$event
+						)
+					">{{
+					group.expanded ? 'arrow_drop_down' : 'arrow_right'
+					}}</mat-icon>
+			</div>
+			<div (click)="onSelectionFormulaField(group)">
+				{{ !onShift ? group.Label : group.idWithType }}
+			</div>
+		</div>
+	</mat-option>
+	<mat-option *ngIf="!group.relateToSlice">
+		<div class="d-flex flex-row align-items-center">
+			<div class="item-display-height" (click)="onSelectionFormulaField(group)">
+				<span class="d-inline-block" [ngStyle]="{ width: getLevelSpace(group) }"></span>
+				{{ !onShift ? group.Label : group.idWithType }}
+			</div>
+		</div>
+	</mat-option>
+
+	<ng-container *ngFor="let sub of group.children; let id = index">
+		<ng-container *ngTemplateOutlet="opts; context: { group: sub, i: id }"></ng-container>
+	</ng-container>
+</ng-template>

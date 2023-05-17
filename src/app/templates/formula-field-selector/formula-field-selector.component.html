@@ -1,0 +1,86 @@
+<div class="formula-component">
+	<div>
+        <mat-label>Give this a filename: (expression syntax is allowed)</mat-label><br>
+
+		<mat-form-field style="width: 300px">
+			
+			<mat-select
+				panelClass="custom-panel-extra-item-class"
+                placeholder="Insert Field..."
+				class="c-custom"
+				[(ngModel)]="insertField"
+				#matSelect
+			>
+				<ng-container *ngFor="let group of allFields; let i = index">
+					<mat-option [hidden]="true"></mat-option>
+					<ng-container
+						*ngTemplateOutlet="
+							opts;
+							context: { group: group, i: i }
+						"
+					></ng-container>
+				</ng-container>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div>
+		<mat-form-field class="w-100 pr-5">
+			<textarea
+				[(ngModel)]="textFormulaElement"
+				#textBlockElement
+				matInput
+				placeholder="Custom Formula"
+			></textarea>
+		</mat-form-field>
+	</div>
+</div>
+
+
+<ng-template #opts let-group="group" let-i="i">
+	<mat-option *ngIf="group.relateToSlice" [value]="group">
+		<div class="d-flex flex-row">
+			<div class="item-display-height">
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(group) }"
+				></span>
+				<mat-icon
+					class="pointer my-0 mr-0 m-left-icon-in-extra"
+					(click)="
+						onExpandForRelatedDropdownForExtraField(
+							group,
+							i,
+							$event
+						)
+					"
+					>{{
+						group.expanded ? 'arrow_drop_down' : 'arrow_right'
+					}}</mat-icon
+				>
+			</div>
+			<div class="w-100" >
+				{{ group.Label }}
+			</div>
+		</div></mat-option
+	>
+	<mat-option *ngIf="!group.relateToSlice" [value]="group">
+		<div class="d-flex flex-row">
+			<div
+				class="item-display-height w-100"
+				(click)="onSelectionFormulaField(group)"
+			>
+				<span
+					class="d-inline-block"
+					[ngStyle]="{ width: getLevelSpace(group) }"
+				></span>
+				{{ group.Label  }} 
+			</div>
+		</div></mat-option
+	>
+
+	<ng-container *ngFor="let sub of group.children; let id = index">
+		<ng-container
+			*ngTemplateOutlet="opts; context: { group: sub, i: id }"
+		></ng-container>
+	</ng-container>
+</ng-template>
